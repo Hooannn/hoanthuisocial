@@ -314,7 +314,6 @@ export default {
   border-radius: 5px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
   position: relative;
-  margin-bottom:50px;
 }
 .app__overview .header {
   padding: 10px;
@@ -378,6 +377,7 @@ export default {
   background-color:white;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
   transition:all .2s ease-in-out;
+  border-radius: 3px;
 }
 .app__overview .users-overview .user:hover{
   cursor: pointer;

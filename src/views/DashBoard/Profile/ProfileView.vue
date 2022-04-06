@@ -16,7 +16,7 @@
                   </div>
               </div>
               <div class="more-inf">
-                  <button class='btn btn-dark btn-sm edit'>Edit Profile</button>
+                  <button @click='$router.push({name:"personal"}),isSelect="Edit"' class='btn btn-dark btn-sm edit'>Edit Profile</button>
                   <button class="btn btn-danger btn-sm market">View Market</button>
                   <div class="friends">
                       <span>Friends</span>
@@ -31,22 +31,25 @@
           </div>
           <div class="container">
               <div class="profile__nav">
-                  <div @click='$router.push("/profile/post"),isSelect="Post"' class="post" :class="{active:isSelect=='Post'}">Post</div>
-                  <div @click='isSelect="About"' class="about" :class="{active:isSelect=='About'}">About</div>
+                  <div @click='$router.push({name:"post"}),isSelect="Post"' class="post" :class="{active:isSelect=='Post'}">Post</div>
+                  <div @click='$router.push({name:"about"}),isSelect="About"' class="about" :class="{active:isSelect=='About'}">About</div>
                   <div @click='isSelect="Friends"' class="friends-list" :class="{active:isSelect=='Friends'}">Friends</div>
                   <div @click='isSelect="Image"' class="images" :class="{active:isSelect=='Image'}">Image</div>
                   <div @click='isSelect="Follows"' class="follows-list" :class="{active:isSelect=='Follows'}">Follows</div>
                   <div @click='isSelect="See more"' class="more" :class="{active:isSelect=='See more'}">See more <ion-icon style="marginLeft:5px" name="chevron-down-outline"></ion-icon></div>
               </div>
-              <router-view></router-view>
+              <router-view ></router-view>
           </div>
+          <footer-com/>
       </div>
   </div>
 </template>
 
 <script>
+import FooterCom from '../../../components/General/FooterCom.vue'
 import db from './../../../plugins/firebase'
 export default {
+  components: { FooterCom },
     data() {
         return {
             user: {},

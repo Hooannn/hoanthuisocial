@@ -34,9 +34,36 @@ const actions = {
           username: "Unset",
           dob: "Unset",
           avatarImg:
-            "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
+            "https://www.placidsoftware.com/assets/images/user-img.png",
           role: "Member",
           status:'Offline',
+          phone:'Unset',
+          /*
+          education: {
+            title:'Title',
+            from:"From",
+            to:"to",
+            website:"www.website.com"
+          },
+          employment: {
+            title:'Title',
+            from:"From",
+            to:"to",
+            website:"www.website.com"
+          },
+          */
+          description:"Description",
+          coverImg:'https://wallpaperaccess.com/full/99810.jpg',
+          socialAccounts: {
+            facebook:'https://www.facebook.com/',
+            github:'https://www.github.com/',
+            instagram:'https://www.instagram.com/',
+            pinterest:'https://www.pinterest.com/',
+            twitter:'https://www.twitter.com/',
+            youtube:'https://www.youtube.com/channel/'
+          },
+          gender:'Other',
+          statusrel:'Single',
           registerDate:new Date().toLocaleDateString(),
         });
       })

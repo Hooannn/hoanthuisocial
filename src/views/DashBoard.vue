@@ -1,17 +1,15 @@
 <template>
   <div @click="closeMoreInfo" class="dash-board">
     <dashboard-nav />
-        <router-view></router-view>
-    <footer-com />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import DashboardNav from "../components/DashBoard/DashboardNav.vue";
-import FooterCom from "./../components/General/FooterCom.vue";
 import store from "./../store/store";
 export default {
-  components: { DashboardNav, FooterCom },
+  components: { DashboardNav },
   methods: {
       closeMoreInfo(e) {
           this.$store.dispatch('closeMoreInfo',e)
@@ -28,6 +26,8 @@ export default {
 <style>
 .dash-board {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+  height: auto;
+  position: relative;
 }
 </style>

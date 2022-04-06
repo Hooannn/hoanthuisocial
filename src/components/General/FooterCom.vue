@@ -1,14 +1,14 @@
 <template>
   <div id="footer">
       <div class='footer__left'>
-          <div class="footer__github">Github</div>
-          <div class="footer__fb">Facebook</div>
+          <a target="_blank" href='https://github.com/Hooannn' class="footer__github">Github</a>
+          <div class="footer__about">About</div>
           <div class="footer__faqs">FAQs</div>
       </div>
       <div class="footer__right">
           <div class="footer__tos">Terms of Service</div>
           <div class="pp">Privacy Policy</div>
-          <div class="copyright" style='opacity:0.7'><i style='fontWeight:100' class="fas fa-copyright"></i> hoanthui's Social</div>
+          <div class="copyright" style='opacity:0.7'><img style='opacity:1;height:30px;width:30px;marginRight:5px' src="https://imgkub.com/images/2022/04/06/imageab269462ca213400.png" class='small-logo'><i style='fontWeight:100;marginRight:2px' class="fas fa-copyright"></i> hoanthui's Social</div>
       </div>
   </div>
 </template>
@@ -22,10 +22,11 @@ export default {
 <style>
 #footer {
     position: static;
-    width: 100%;
-    height: 35px;
+    margin-top:auto;
     bottom: 0;
     left:0;
+    width: 100%;
+    min-height: 35px;
     background-color:white;
     color:rgba(15, 8, 8, 0.8);
     display: flex;
@@ -34,12 +35,15 @@ export default {
     font-weight: bolder;
     box-shadow: 1px 0 5px rgba(0,0,0,0.2);
 }
+#footer a {
+    text-decoration: none;
+}
 .footer__left {
     position: absolute;
     left:0;
     display: flex;
 }
-.footer__left div{
+.footer__left div,.footer__left a{
     margin:0 10px;
     transition: .2s;
 }
@@ -48,11 +52,14 @@ export default {
     right:0;
     display:flex;
 }
-.footer__right div{
+.footer__right div, .footer__right a{
     margin:0 10px;
     transition: .2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.footer__left div:hover,.footer__right div:hover:not(.copyright){
+.footer__left div:hover,.footer__right div:hover:not(.copyright),.footer__left a:hover{
    color:#ff7555;
    cursor: pointer;
 }

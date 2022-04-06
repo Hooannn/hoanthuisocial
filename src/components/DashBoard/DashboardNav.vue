@@ -13,7 +13,7 @@
           <div class="dbnav__notifications">
               <span>Notifications</span>
           </div>
-          <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger'>Market</button>
+          <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm'>Market</button>
         <div class="dbnav__short-info">
           <div @click='showMoreInfo' class="more-setting">
               <div class="user-avatar">
@@ -70,12 +70,13 @@ export default {
 <style>
 .dbnav {
     position: fixed;
+    z-index:10;
     width: 100vw;
     height: 50px;
     background-color:#313131;
 }
 .dbnav__logo {
-    height: 100%;
+    height: 50px;
     margin-top:20px;
 }
 .dbnav__logo img{
