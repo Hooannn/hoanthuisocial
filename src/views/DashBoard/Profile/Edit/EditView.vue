@@ -29,7 +29,7 @@ export default {
         { title: "Change Password", name: "change-password" },
         { title: "Deactivate Account", name: "deactivate-account" },
       ],
-      selected:'Personal Info',
+      selected:'',
     };
   },
 };

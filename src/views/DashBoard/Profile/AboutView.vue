@@ -15,12 +15,12 @@
           <div class="social">
               <button style='marginTop:1px' @click='$router.push({name:"social-networks"})' class="btn btn-sm btn-secondary">Edit</button>
               <h5>Social Accounts</h5>
-              <a v-if='user.socialAccounts.facebook!=""' target="_blank" :href='user.socialAccounts.facebook' class="fb"><i style='marginRight:5px;borderRadius:50%;color:#3B5998' class="fab fa-facebook-f"></i>{{user.socialAccounts.facebook}}</a>
-              <a v-if='user.socialAccounts.youtube!=""' target="_blank" :href='user.socialAccounts.youtube' class="yt"><i style='marginRight:5px;borderRadius:50%;color:#E50914' class="fab fa-youtube"></i>{{user.socialAccounts.youtube}}</a>
-              <a v-if='user.socialAccounts.twitter!=""' target="_blank" :href='user.socialAccounts.twitter' class="tw"><i style='marginRight:5px;borderRadius:50%;color:#1DA1F2' class="fab fa-twitter"></i>{{user.socialAccounts.twitter}}</a>
-              <a v-if='user.socialAccounts.github!=""' target="_blank" :href='user.socialAccounts.github' class="github"><i style='marginRight:5px;borderRadius:50%;color:black' class="fab fa-github"></i>{{user.socialAccounts.github}}</a>
-              <a v-if='user.socialAccounts.pinterest!=""' target="_blank" :href='user.socialAccounts.pinterest' class="pinterest"><i style='marginRight:5px;borderRadius:50%;color:#792b2b;#E9EBEE' class="fab fa-pinterest"></i>{{user.socialAccounts.pinterest}}</a>
-              <a v-if='user.socialAccounts.instagram!=""' target="_blank" :href='user.socialAccounts.instagram' class="insta"><i style='marginRight:5px;borderRadius:50%;color:#CD486B;#E9EBEE' class="fab fa-instagram"></i>{{user.socialAccounts.instagram}}</a>
+              <a v-if='socialAccounts.facebook!=""' target="_blank" :href='socialAccounts.facebook' class="fb"><i style='marginRight:5px;borderRadius:50%;color:#3B5998' class="fab fa-facebook-f"></i>{{socialAccounts.facebook}}</a>
+              <a v-if='socialAccounts.youtube!=""' target="_blank" :href='socialAccounts.youtube' class="yt"><i style='marginRight:5px;borderRadius:50%;color:#E50914' class="fab fa-youtube"></i>{{socialAccounts.youtube}}</a>
+              <a v-if='socialAccounts.twitter!=""' target="_blank" :href='socialAccounts.twitter' class="tw"><i style='marginRight:5px;borderRadius:50%;color:#1DA1F2' class="fab fa-twitter"></i>{{socialAccounts.twitter}}</a>
+              <a v-if='socialAccounts.github!=""' target="_blank" :href='socialAccounts.github' class="github"><i style='marginRight:5px;borderRadius:50%;color:black' class="fab fa-github"></i>{{socialAccounts.github}}</a>
+              <a v-if='socialAccounts.pinterest!=""' target="_blank" :href='socialAccounts.pinterest' class="pinterest"><i style='marginRight:5px;borderRadius:50%;color:#792b2b;#E9EBEE' class="fab fa-pinterest"></i>{{socialAccounts.pinterest}}</a>
+              <a v-if='socialAccounts.instagram!=""' target="_blank" :href='socialAccounts.instagram' class="insta"><i style='marginRight:5px;borderRadius:50%;color:#CD486B;#E9EBEE' class="fab fa-instagram"></i>{{socialAccounts.instagram}}</a>
           </div>
       </div>
       <div class="second-col">
@@ -57,11 +57,13 @@ export default {
     data() {
         return {
             user:{},
+            socialAccounts:{},
         }
     },
     
     mounted() {
         this.$rtdbBind('user',db.ref('usersInformation').child(this.$store.state.ukey))
+        this.$rtdbBind('socialAccounts',db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts'))
     }
 }
 </script>
