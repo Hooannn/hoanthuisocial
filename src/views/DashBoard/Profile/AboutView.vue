@@ -27,7 +27,7 @@
           <div style='borderRadius:2px;overflow:hidden;textOverflow:ellipsis;background-color:white;fontSize:13px;boxShadow:0px 0px 4px 1px rgba(0, 0, 0, 0.2)' class="about">
               <button style='width:100%;marginTop:1px;marginLeft:auto;marginRight:auto' @click='$router.push({name:"personal"})' class="btn btn-sm btn-secondary">Edit</button>
               <h5>About</h5>
-              <pre style='max-width:100%;fontFamily:inherit;minHeight:50px;padding:20px;fontSize:15px;wordWrap:break-word;overflowX:auto'>{{user.description}}</pre>
+              <pre style='max-width:100%;minHeight:50px;padding:20px;fontSize:15px;wordWrap:break-word;overflowX:auto'>{{user.description}}</pre>
           </div>
           <div class="work">
               <div class="education">
@@ -74,6 +74,9 @@ pre {
     white-space: -moz-pre-wrap;
     white-space: -pre-wrap;
     white-space: -o-pre-wrap;
+    font-family: "Poppins", sans-serif;
+    margin:0;
+    padding:0;
 }
 .about-view h5 {
   margin: 0;

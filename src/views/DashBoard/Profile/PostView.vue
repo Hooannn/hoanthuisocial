@@ -13,15 +13,25 @@
       </div>
       <div class='second-col'>
           <div class='make-post'>
-              <div style='display:flex' class="content">
-                  <div style='borderRadius:50%;width:35px;height:35px;overflow:hidden'><img style='width:100%;height:100%;objectFit:cover' :src="$store.state.avatarImg"></div>
-                  <textarea style='minHeight:100px;width:100%;outline:none;border:none;marginLeft:10px;marginBottom:10px' :placeholder="placeholder" ></textarea>
+              <div style='display:flex;flexDirection:column' class="content">
+                  <div style='display:flex'>
+                      <div style='borderRadius:50%;width:35px;height:35px;overflow:hidden'><img style='width:100%;height:100%;objectFit:cover' :src="$store.state.avatarImg"></div>
+                      <textarea v-model='postContent' style='fontSize:14px;minHeight:100px;width:100%;outline:none;border:none;marginLeft:10px;marginBottom:10px' :placeholder="placeholder" ></textarea>
+                  </div>
+                  <div style='display:flex;flexWrap:wrap;width:100%;justifyContent:space-around;padding:15px' class="images-pre">
+                      <div v-for='(img,index) in imagesUpload' :key='index' style='width:30%;marginTop:10px' class="image-pre">
+                          <img style='width:100%;height:100%;objectFit:cover;border:2px solid orange' :src="img" @click='removeImg(img)'>
+                      </div>
+                  </div>
               </div>
-              <div style='width:100%;display:flex;justifyContent:flex-end' class="control">
-                  <button style='color:white;fontWeight:900' class="btn btn-sm btn-warning">Upload Post</button>
+              <div style='width:100%;display:flex;justifyContent:flex-end;height:30px' class="control">
+                  <ion-icon @click='uploadImages' style='height:100%;fontSize:30px;width:30px;backgroundColor:grey;color:white;borderRadius:2px;cursor:pointer' name="image-outline"></ion-icon>
+                  <button @click='postPost' style='color:white;fontWeight:900;height:100%' class="btn btn-sm btn-warning">Post</button>
               </div>
           </div>
-          <div class="posts-list"></div>
+          <div class="posts-list">
+              <post-com :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
+          </div>
       </div>
       <div class='third-col'>
           <div class="market-introduce">
@@ -37,22 +47,82 @@
 </template>
 
 <script>
+import PostCom from '../../../components/Post/PostCom.vue'
 import db from './../../../plugins/firebase'
+import client from '../../../plugins/filestack'
 export default {
+  components: { PostCom },
     data() {
         return {
             socialAccounts:{},
+            posts:[],
             placeholder:'What is new, '+this.$store.state.username + " ?",
+            postContent:'',
+            imagesUpload:[],
+        }
+    },
+    methods: {
+        postPost() {
+            //handle add notification soon
+            if ((this.postContent==null || this.postContent.trim()=='') && (this.imagesUpload.length==0)) {
+                alert('You are posting an empty post !')
+            }
+            else {
+                let newPost= {
+                    author:this.$store.state.ukey,
+                    date:new Date().toLocaleString(),
+                    time: new Date().getTime(),
+                    content:this.postContent,
+                    images:this.imagesUpload,
+                }
+                db.ref('usersInformation').child(this.$store.state.ukey).child('posts').push(newPost).then(res => {
+                    db.ref('usersInformation').child(this.$store.state.ukey).child('posts').child(res.key).child('key').set(res.key)
+                })
+                this.postContent=''
+                this.imagesUpload=[]
+            }
+        },
+        removeImg(img) {
+            let index=this.imagesUpload.indexOf(img)
+            this.imagesUpload.splice(index,1)
+        },
+        uploadImages() {
+            const options = {
+            accept: ["image/*"],
+            maxFiles: 20,
+            uploadInBackground: false,
+            onUploadDone: (res) => {
+            let images = res.filesUploaded.map((item) => item.url);
+            if (images.length == 1 ) {
+                this.imagesUpload.push(images[0]);
+            } else if (images.length > 1 ) {
+                this.imagesUpload = [...this.imagesUpload, ...images];
+            }
+            },
+            };
+            client.picker(options).open();
         }
     },
     mounted() {
         this.$rtdbBind('socialAccounts', db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts'))
-        
+        this.$rtdbBind('posts',db.ref('usersInformation').child(this.$store.state.ukey).child('posts'))
     }
 }
 </script>
 
 <style>
+.image-pre img:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+pre {
+     white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    margin:0;
+    padding:0;
+}
 .post-view {
     margin-top:50px;
     margin-bottom:50px;
@@ -114,7 +184,11 @@ export default {
     flex-direction: column;
     padding:20px;    
 }
-
+.posts-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
 
 /* 3 */
 .market-introduce {

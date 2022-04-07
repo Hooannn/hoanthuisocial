@@ -237,6 +237,18 @@ const actions = {
       dropDown.classList.remove('show')
       shortInfo.classList.remove('show')
     }
+    let controlPost=document.querySelectorAll('#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com > div.post-header > div.control')
+    let controlComment=document.querySelectorAll('#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com > div.post-comments.show > div.post-comment > div.comment-header > div.control')
+    controlPost.forEach(control => {
+      if (e.target.parentElement!=control && e.target!=control) {
+        control.children[1].classList.remove('show')
+      }
+    });
+    controlComment.forEach(control => {
+      if (e.target.parentElement!=control && e.target!=control) {
+        control.children[1].classList.remove('show')
+      }
+    });
   }
 };
 export default actions;
