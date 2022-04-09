@@ -118,7 +118,7 @@ export default {
     this.$store.dispatch("setDob", dob);
     this.$store.dispatch("setCover", cover);
     if (this.$store.state.user!=null) {
-      this.$router.push('/')
+      this.$router.push({name:'dhome'})
     }
     else if (this.$store.state.user==null) {
       this.$router.push('/home')

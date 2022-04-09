@@ -11,8 +11,8 @@
         <div class="control">
             <i @click='showControl' class="grey fas fa-ellipsis-v"></i>
             <div class="drop-down">
-                <span>Delete</span>
-                <span>Report</span>
+                <span v-if='$store.state.ukey==authorCommentKey || $store.state.ukey==authorPostKey'>Delete</span>
+                <span v-if='$store.state.ukey!=authorCommentKey'>Report</span>
             </div>
         </div>
       </div>
@@ -41,7 +41,7 @@ export default {
     },
     methods: {
         showControl() {
-            let dd=document.querySelector(`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com.${this.postKey} > div.post-comments.show > div.post-comment.${this.commentKey} > div.comment-header > div.control > div`)
+            let dd=document.querySelector(`div.post-com.${this.postKey} > div.post-comments.show > div.post-comment.${this.commentKey} > div.comment-header > div.control > div`)
             dd.classList.toggle('show')
         }
     },

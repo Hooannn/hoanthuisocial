@@ -95,7 +95,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     if (store.state.user != null) {
-      next({ path: "/" });
+      next({ name: "dhome" });
     } else next();
   },
 };

@@ -5,13 +5,13 @@
           <img :src="logo">
             </div>
           <div class="dbnav__home">
-              <span>Home</span>
+              <span @click='$router.push({name:"dhome"}),selected="Home"' :class='{selected:selected=="Home"}'>Home</span>
           </div>
           <div class="dbnav__messages">
-              <span>Messages</span>
+              <span @click='$router.push({name:"messages"}),selected="Messages"' :class='{selected:selected=="Messages"}'>Messages</span>
           </div>
           <div class="dbnav__notifications">
-              <span>Notifications</span>
+              <span @click='selected="Notifications"' :class='{selected:selected=="Notifications"}'>Notifications</span>
           </div>
           <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm'>Market</button>
         <div class="dbnav__short-info">
@@ -26,7 +26,7 @@
               ></ion-icon>
           </div>
           <div class="drop-down">
-            <div @click='$router.push("/profile/post")'><span>Profile</span></div>
+            <div @click='$router.push({name:"post"})'><span>Profile</span></div>
             <div><span>Credit</span></div>
             <div><span>Friends</span></div>
             <div><span>Invite</span></div>
@@ -46,6 +46,7 @@ export default {
     data() {
         return {
             logo:logo,
+            selected:'Home',
         }
     },
     methods: {
@@ -91,6 +92,15 @@ export default {
     align-items: center;
     height: 100%;
     font-size: 14px;
+}
+.dbnav .dbnav__content .dbnav__home span:hover, .dbnav .dbnav__content .dbnav__messages span:hover,.dbnav .dbnav__content .dbnav__notifications span:hover {
+    color:white;
+    text-shadow: 2px 2px 3px rgba(255,255,255,0.3);
+    cursor: pointer;
+}
+.dbnav .dbnav__content .dbnav__home span.selected, .dbnav .dbnav__content .dbnav__messages span.selected,.dbnav .dbnav__content .dbnav__notifications span.selected {
+    color:white;
+    text-shadow: 2px 2px 3px rgba(255,255,255,0.3);
 }
 /* */
 .dbnav .dbnav__short-info {

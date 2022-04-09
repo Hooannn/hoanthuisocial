@@ -38,7 +38,7 @@
                   <div @click='isSelect="Follows"' class="follows-list" :class="{active:isSelect=='Follows'}">Follows</div>
                   <div @click='isSelect="See more"' class="more" :class="{active:isSelect=='See more'}">See more <ion-icon style="marginLeft:5px" name="chevron-down-outline"></ion-icon></div>
               </div>
-              <router-view ></router-view>
+              <router-view></router-view>
           </div>
           <footer-com/>
       </div>

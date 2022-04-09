@@ -128,7 +128,7 @@ export default {
       }
     },
     showControl() {
-      let dd=document.querySelector(`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com.${this.post.key} > div.post-header > div.control > div`)
+      let dd=document.querySelector(`div.post-com.${this.post.key} > div.post-header > div.control > div`)
       dd.classList.toggle('show')
     },
     showPostComment() {
@@ -193,13 +193,13 @@ export default {
     //style image
       //`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com.${this.postKey} > div.post-content > div.images > div.image`
     if (this.post.images.length%3==0) {
-      let images=document.querySelectorAll(`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list div.post-com.${this.postKey} > div.post-content > div.images div.image`)
+      let images=document.querySelectorAll(`div.post-com.${this.postKey} > div.post-content > div.images div.image`)
       images.forEach(image => {
         image.style.width='33.3%'
       });
     }
     else if (this.post.images.length%3==1) {
-      let images=document.querySelectorAll(`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list div.post-com.${this.postKey} > div.post-content > div.images div.image`)
+      let images=document.querySelectorAll(`div.post-com.${this.postKey} > div.post-content > div.images div.image`)
       if (this.post.images.length==1) {
         images[0].style.width='100%'
       }
@@ -212,7 +212,7 @@ export default {
       }
     }
     else if (this.post.images.length%3==2) {
-      let images=document.querySelectorAll(`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list div.post-com.${this.postKey} > div.post-content > div.images div.image`)
+      let images=document.querySelectorAll(`div.post-com.${this.postKey} > div.post-content > div.images div.image`)
       if (this.post.images.length==2) {
         images[0].style.width='50%'
         images[1].style.width='50%'

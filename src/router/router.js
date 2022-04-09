@@ -5,57 +5,67 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/dashboard',
     name: 'dashboard',
     component: () => import('../views/DashBoard.vue'),
     children: [
       {
-        path:'/profile',
+        path:'/dashboard/home',
+        name:'dhome',
+        component:() => import ('../views/DashBoard/Home/HomeView.vue')
+      },
+      {
+        path:'/dashboard/messages',
+        name:'messages',
+        component:() => import ('../views/DashBoard/Messages/MessagesView.vue')
+      },
+      {
+        path:'/dashboard/profile',
         name:'profile',
         component:() => import('../views/DashBoard/Profile/ProfileView.vue'),
         children:[
           {
-            path:'/profile/post',
+            path:'/dashboard/profile/post',
             name:'post',
             component:() => import('../views/DashBoard/Profile/PostView.vue')
           },
           {
-            path:'/profile/about',
+            path:'/dashboard/profile/about',
             name:'about',
             component:() => import('../views/DashBoard/Profile/AboutView.vue')
           },
           {
-            path:'/profile/edit',
+            path:'/dashboard/profile/edit',
             name:'edit',
             component:() => import('../views/DashBoard/Profile/Edit/EditView.vue'),
             children: [
               {
-                path:"/profile/edit/personal",
+                path:"/dashboard/profile/edit/personal",
                 name:'personal',
                 component:() => import('../views/DashBoard/Profile/Edit/PersonalInfo.vue')
               },
               {
-                path:"/profile/edit/profile",
+                path:"/dashboard/profile/edit/profile",
                 name:'profile',
                 component:() => import('../views/DashBoard/Profile/Edit/ProfileEdit.vue')
               },
               {
-                path:"/profile/edit/social-networks",
+                path:"/dashboard/profile/edit/social-networks",
                 name:'social-networks',
                 component:() => import('../views/DashBoard/Profile/Edit/SocialNetworks.vue')
               },
               {
-                path:"/profile/edit/email-setting",
+                path:"/dashboard/profile/edit/email-setting",
                 name:'email-setting',
                 component:() => import('../views/DashBoard/Profile/Edit/EmailSetting.vue')
               },
               {
-                path:"/profile/edit/change-password",
+                path:"/dashboard/profile/edit/change-password",
                 name:'change-password',
                 component:() => import('../views/DashBoard/Profile/Edit/ChangePassword.vue')
               },
               {
-                path:"/profile/edit/deactivate-account",
+                path:"/dashboard/profile/edit/deactivate-account",
                 name:'deactivate-account',
                 component:() => import('../views/DashBoard/Profile/Edit/DeactivateAccount.vue')
               },
