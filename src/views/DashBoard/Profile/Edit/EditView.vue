@@ -18,12 +18,14 @@
 </template>
 
 <script>
+import store from '../../../../store/store'
+import router from '../../../../router/router'
 export default {
   data() {
     return {
       yourDetails: [
         { title: "Personal Info", name: "personal" },
-        { title: "Profile", name: "profile" },
+        { title: "Profile", name: "profile-edit" },
         { title: "Social Networks", name: "social-networks" },
         { title: "Email Setting", name: "email-setting"},
         { title: "Change Password", name: "change-password" },
@@ -31,7 +33,7 @@ export default {
       ],
       selected:'',
     };
-  },
+  }
 };
 </script>
 

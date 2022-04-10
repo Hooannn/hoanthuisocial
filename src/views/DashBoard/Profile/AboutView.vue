@@ -2,7 +2,7 @@
   <div class="about-view">
       <div class="first-col">
           <div class="personal">
-              <button style='marginTop:1px' @click='$router.push({name:"personal"})' class="btn btn-sm btn-secondary">Edit</button>
+              <button v-if='$store.state.ukey==$route.params.key' style='marginTop:1px' @click='$router.push({name:"personal"})' class="btn btn-sm btn-secondary">Edit</button>
               <h5>Personal Info</h5>
               <div style='display:flex;justifyContent:space-between'><span style='fontWeight:bolder'>Member Since</span><span>{{user.registerDate}}</span></div>
               <div style='display:flex;justifyContent:space-between'><span style='fontWeight:bolder'>Lives in</span><span>Viet Nam</span></div>
@@ -13,7 +13,7 @@
               <div style='display:flex;justifyContent:space-between'><span style='fontWeight:bolder'>Phone</span><span>{{user.phone}}</span></div>
           </div>
           <div class="social">
-              <button style='marginTop:1px' @click='$router.push({name:"social-networks"})' class="btn btn-sm btn-secondary">Edit</button>
+              <button v-if='$store.state.ukey==$route.params.key' style='marginTop:1px' @click='$router.push({name:"social-networks"})' class="btn btn-sm btn-secondary">Edit</button>
               <h5>Social Accounts</h5>
               <a v-if='socialAccounts.facebook!=""' target="_blank" :href='socialAccounts.facebook' class="fb"><i style='marginRight:5px;borderRadius:50%;color:#3B5998' class="fab fa-facebook-f"></i>{{socialAccounts.facebook}}</a>
               <a v-if='socialAccounts.youtube!=""' target="_blank" :href='socialAccounts.youtube' class="yt"><i style='marginRight:5px;borderRadius:50%;color:#E50914' class="fab fa-youtube"></i>{{socialAccounts.youtube}}</a>
@@ -25,7 +25,7 @@
       </div>
       <div class="second-col">
           <div style='borderRadius:2px;overflow:hidden;textOverflow:ellipsis;background-color:white;fontSize:13px;boxShadow:0px 0px 4px 1px rgba(0, 0, 0, 0.2)' class="about">
-              <button style='width:100%;marginTop:1px;marginLeft:auto;marginRight:auto' @click='$router.push({name:"personal"})' class="btn btn-sm btn-secondary">Edit</button>
+              <button v-if='$store.state.ukey==$route.params.key' style='width:100%;marginTop:1px;marginLeft:auto;marginRight:auto' @click='$router.push({name:"personal"})' class="btn btn-sm btn-secondary">Edit</button>
               <h5>About</h5>
               <pre style='max-width:100%;minHeight:50px;padding:20px;fontSize:15px;wordWrap:break-word;overflowX:auto'>{{user.description}}</pre>
           </div>
@@ -60,10 +60,9 @@ export default {
             socialAccounts:{},
         }
     },
-    
     mounted() {
-        this.$rtdbBind('user',db.ref('usersInformation').child(this.$store.state.ukey))
-        this.$rtdbBind('socialAccounts',db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts'))
+        this.$rtdbBind('user',db.ref('usersInformation').child(this.$route.params.key))
+        this.$rtdbBind('socialAccounts',db.ref('usersInformation').child(this.$route.params.key).child('socialAccounts'))
     }
 }
 </script>

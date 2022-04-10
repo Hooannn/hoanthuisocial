@@ -20,19 +20,24 @@ const routes = [
         component:() => import ('../views/DashBoard/Messages/MessagesView.vue')
       },
       {
-        path:'/dashboard/profile',
+        path:'/dashboard/profile/:key',
         name:'profile',
         component:() => import('../views/DashBoard/Profile/ProfileView.vue'),
         children:[
           {
-            path:'/dashboard/profile/post',
+            path:'/dashboard/profile/:key/post',
             name:'post',
             component:() => import('../views/DashBoard/Profile/PostView.vue')
           },
           {
-            path:'/dashboard/profile/about',
+            path:'/dashboard/profile/:key/about',
             name:'about',
             component:() => import('../views/DashBoard/Profile/AboutView.vue')
+          },
+          {
+            path:'/dashboard/profile/:key/friends',
+            name:'friends',
+            component:() => import('../views/DashBoard/Profile/FriendsView.vue')
           },
           {
             path:'/dashboard/profile/edit',
@@ -46,7 +51,7 @@ const routes = [
               },
               {
                 path:"/dashboard/profile/edit/profile",
-                name:'profile',
+                name:'profile-edit',
                 component:() => import('../views/DashBoard/Profile/Edit/ProfileEdit.vue')
               },
               {

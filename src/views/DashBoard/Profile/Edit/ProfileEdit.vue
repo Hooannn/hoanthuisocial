@@ -71,7 +71,7 @@ export default {
                     db.ref('usersInformation').child(this.$store.state.ukey).child('coverImg').set(this.newBackground)
                     this.$store.dispatch('setCover',this.newBackground)
                 }
-                this.$router.push({name:'about'})
+                this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
             }   
             else {
                 return

@@ -8,7 +8,7 @@
         <i @click.prevent='closeImgPreview' @click='next' style='position:absolute;fontSize:18px;border:1px solid white;padding:5px;top:50%;right:0;transform:translateY(-50%)' class="fas fa-chevron-right"></i>
       </div>
       <div class="post-header">
-        <div class="author">
+        <div @click='viewAuthorProfile' class="author">
           <div class="avatar"><img style='width:100%;height:100%;objectFit:cover' :src="author.avatarImg"></div>
           <div class="infor">
             <div class="username">{{author.username}}</div>
@@ -139,6 +139,14 @@ export default {
       comment.classList.toggle('show')
       commentInput.classList.toggle('show')
     },
+    viewAuthorProfile() {
+      if (this.$store.state.ukey!=this.authorKey && this.$route.params.key!=this.authorKey) {
+        this.$router.push({name:"post",params:{key:this.authorKey}})
+      }
+      else {
+        return
+      }
+    },
     postComment() {
       //handle add notification soon
       if (this.comment!=null && this.comment.trim()!="") {
@@ -228,6 +236,10 @@ export default {
     }
     
     //style image
+    if (this.$store.state.ukey!=this.authorKey) {
+      let authorElement=document.querySelector(`div.post-com.${this.postKey} .post-header .author`)
+      authorElement.style.cursor='pointer'
+    }
 
   },
   destroyed() {

@@ -1,39 +1,42 @@
 <template>
-  <div class="profile-view">
+  <div class="profile-view" :key='$route.params.key'>
       <div class="profile__cover">
-          <img :src="$store.state.coverImg" alt="Cover img">
+          <img :src="user.coverImg" alt="Cover img">
       </div>
       <div class="profile__content ">
           <div class="profile__header">
               <div class="container">
                   <div class="inf">
                   <div class='avatar'>
-                      <img :src="$store.state.avatarImg">
+                      <img :src="user.avatarImg">
+                      <div :class='{online:user.status=="Online"}' class="status"></div>
                   </div>
                   <div class="detail">
-                      <div class="username"><strong style='fontSize:20px'>{{$store.state.username}}</strong></div>
+                      <div class="username"><strong style='fontSize:20px'>{{user.username}}</strong></div>
                       <div class="member" style='fontSize:14px'>Member since {{user.registerDate}}</div>
                   </div>
               </div>
               <div class="more-inf">
-                  <button @click='$router.push({name:"personal"}),isSelect="Edit"' class='btn btn-dark btn-sm edit'>Edit Profile</button>
-                  <button class="btn btn-danger btn-sm market">View Market</button>
+                  <button v-if='$store.state.ukey==profileKey' @click='$router.push({name:"personal"}),isSelect="Edit"' class='btn btn-dark btn-sm edit'>Edit Profile</button>
+                  <button v-if='$store.state.ukey!=profileKey' @click='isSelect="Add Friend"' class='btn btn-dark btn-sm edit'>Add Friend</button>
+                  <button v-if='$store.state.ukey==profileKey' class="btn btn-danger btn-sm market">View Market</button>
+                  <button v-if='$store.state.ukey!=profileKey' class="btn btn-danger btn-sm market">Follow</button>
                   <div class="friends">
                       <span>Friends</span>
-                      <span style='fontSize:20px'><strong>0</strong></span>
+                      <span style='fontSize:20px'><strong>{{friends.length}}</strong></span>
                   </div>
                   <div class="follows">
                       <span>Follows</span>
-                      <span style='fontSize:20px'><strong>0</strong></span>
+                      <span style='fontSize:20px'><strong>{{follows.length}}</strong></span>
                   </div>
               </div>
               </div>
           </div>
           <div class="container">
               <div class="profile__nav">
-                  <div @click='$router.push({name:"post"}),isSelect="Post"' class="post" :class="{active:isSelect=='Post'}">Post</div>
-                  <div @click='$router.push({name:"about"}),isSelect="About"' class="about" :class="{active:isSelect=='About'}">About</div>
-                  <div @click='isSelect="Friends"' class="friends-list" :class="{active:isSelect=='Friends'}">Friends</div>
+                  <div @click='$router.push({name:"post",params:{key:profileKey}}),isSelect="Post"' class="post" :class="{active:isSelect=='Post'}">Post</div>
+                  <div @click='$router.push({name:"about",params:{key:profileKey}}),isSelect="About"' class="about" :class="{active:isSelect=='About'}">About</div>
+                  <div @click='$router.push({name:"friends",params:{key:profileKey}}),isSelect="Friends"' class="friends-list" :class="{active:isSelect=='Friends'}">Friends</div>
                   <div @click='isSelect="Image"' class="images" :class="{active:isSelect=='Image'}">Image</div>
                   <div @click='isSelect="Follows"' class="follows-list" :class="{active:isSelect=='Follows'}">Follows</div>
                   <div @click='isSelect="See more"' class="more" :class="{active:isSelect=='See more'}">See more <ion-icon style="marginLeft:5px" name="chevron-down-outline"></ion-icon></div>
@@ -52,12 +55,20 @@ export default {
   components: { FooterCom },
     data() {
         return {
-            user: {},
+            user: {
+                
+            },
+            friends:[],
+            follows:[],
             isSelect:"Post",
+            profileKey:''
         }
     },
     mounted() {
-        this.$rtdbBind('user',db.ref('usersInformation').child(this.$store.state.ukey))
+        this.$rtdbBind('user',db.ref('usersInformation').child(this.$route.params.key))
+        this.$rtdbBind('friends',db.ref('usersInformation').child(this.$route.params.key).child('friends').child('isfriend'))
+        this.$rtdbBind('follows',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
+        this.profileKey=this.$route.params.key
     }
 }
 </script>
@@ -113,13 +124,25 @@ export default {
     height: 120px;
     border:2px solid white;
     border-radius: 50%;
-    overflow: hidden;
     position: absolute;
     top:-35px;
 }
 .profile__header .container .inf .avatar img{
     width: 100%;
     height: 100%;
+    border-radius: 50%;
+}
+.profile__header .container .inf .avatar .status{
+    width:23px;
+    height:23px;
+    border-radius: 50%;
+    position:absolute;
+    bottom:0px;
+    right:10px;
+    background-color:grey;
+}
+.profile__header .container .inf .avatar .status.online{
+    background-color: green;
 }
 .profile__header .container .more-inf {
     display: flex;

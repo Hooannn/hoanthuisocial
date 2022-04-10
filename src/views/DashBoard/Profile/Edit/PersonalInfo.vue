@@ -97,6 +97,7 @@ import db from './../../../../plugins/firebase'
 export default {
   data() {
     return {
+      profileKey:'',
       user:{
 
       },
@@ -133,7 +134,7 @@ export default {
        ) 
       {
         if (this.phone !=this.user.phone || this.username!=this.user.username || this.gender!=this.user.gender||this.statusrel!=this.user.statusrel || this.dob!=this.user.dob) {
-        this.$router.push({name:'about'})
+        this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
         db.ref('usersInformation').child(this.$store.state.ukey).child('username').set(this.username)
         this.$store.dispatch('setUsername',this.username)
         db.ref('usersInformation').child(this.$store.state.ukey).child('phone').set(this.phone)

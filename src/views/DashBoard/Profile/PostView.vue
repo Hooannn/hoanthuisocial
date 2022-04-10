@@ -12,10 +12,10 @@
           </div>
       </div>
       <div class='second-col'>
-          <div class='make-post'>
+          <div v-if='$store.state.ukey==$route.params.key' class='make-post'>
               <div style='display:flex;flexDirection:column' class="content">
                   <div style='display:flex'>
-                      <div style='borderRadius:50%;width:35px;height:35px;overflow:hidden'><img style='width:100%;height:100%;objectFit:cover' :src="$store.state.avatarImg"></div>
+                      <div style='borderRadius:50%;width:35px;height:35px;overflow:hidden'><img style='width:100%;height:100%;objectFit:cover' :src="user.avatarImg"></div>
                       <textarea v-model='postContent' style='fontSize:14px;minHeight:100px;width:100%;outline:none;border:none;marginLeft:10px;marginBottom:10px' :placeholder="placeholder" ></textarea>
                   </div>
                   <div style='display:flex;flexWrap:wrap;width:100%;justifyContent:space-around;padding:15px' class="images-pre">
@@ -59,6 +59,7 @@ export default {
             placeholder:'What is new, '+this.$store.state.username + " ?",
             postContent:'',
             imagesUpload:[],
+            user:{},
         }
     },
     methods: {
@@ -104,8 +105,9 @@ export default {
         }
     },
     mounted() {
-        this.$rtdbBind('socialAccounts', db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts'))
-        this.$rtdbBind('posts',db.ref('usersInformation').child(this.$store.state.ukey).child('posts'))
+        this.$rtdbBind('user', db.ref('usersInformation').child(this.$route.params.key))
+        this.$rtdbBind('socialAccounts', db.ref('usersInformation').child(this.$route.params.key).child('socialAccounts'))
+        this.$rtdbBind('posts',db.ref('usersInformation').child(this.$route.params.key).child('posts'))
     }
 }
 </script>

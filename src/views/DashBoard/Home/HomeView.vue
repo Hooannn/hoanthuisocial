@@ -25,25 +25,29 @@
             <span>0</span>
           </div>
         </div>
-        <button @click='$router.push({name:"post"})' style='{textDecoration:none;color:black;padding:10px;}' class="btn btn-link btn-sm">View Profile</button>
+        <button @click='$router.push({name:"post",params:{key:$store.state.ukey}})' style='{textDecoration:none;color:black;padding:10px;}' class="btn btn-link btn-sm">View Profile</button>
       </div>
       <!-- -->
       <!-- -->
       <div class="people-overview">
         <h5>People</h5>
-        <div v-for='person in people' :key="person['.key']" class="person" v-show='$store.state.ukey!=person[".key"]'>
+        <div @click='$router.push({name:"post",params:{key:person[".key"]}})' v-for='person in people' :key="person['.key']" class="person" v-show='$store.state.ukey!=person[".key"]'>
           <div style='width:30px;height:30px;borderRadius:50%;overflow:hidden' class='person-avatar'>
             <img style='width:100%;height:100%;objectFit:cover' :src="person.avatarImg">
           </div>
           <div style='width:45%;fontSize:14px;fontWeight:800' class='person-username'>
             {{person.username}}
           </div>
-          <div style='borderRadius:2px;width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;boxShadow:0px 0px 5px rgba(0,0,0,0.3)' class="add-fr"><i class="fas fa-user-plus"></i></div>
+          <div @click='$router.go("#")' style='borderRadius:2px;width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;boxShadow:0px 0px 5px rgba(0,0,0,0.3)' class="add-fr"><i class="fas fa-user-plus"></i></div>
         </div>
       </div>
       <!-- -->
     </div>
     <div class="second-col">
+      <div style='width:100%;height:40px;display:flex;alignItems:center;boxShadow:1px 1px 4px rgba(0,0,0,0.4);overflow:hidden;borderRadius:3px' class="search-bar">
+        <input placeholder="Search something..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;border:none;outline:none;backgroundColor:white;' type="text">
+        <div class='btn-search' style='color:white;width:20%;height:100%;display:flex;justifyContent:center;alignItems:center;'><i class="fas fa-search"></i></div>
+      </div>
       <div class="posts-list">
         <post-com :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
       </div>
@@ -101,6 +105,16 @@ export default {
 </script>
 
 <style>
+.home-view ::placeholder {
+  font-size: 15px;
+}
+.home-view .btn-search {
+  background-color:#FB5252;
+  cursor:pointer;
+}
+.home-view .btn-search:hover {
+  background-color:#fb5252e5;
+}
 .home-view .container{
     padding-top:100px;
     width: 100%;
@@ -163,6 +177,7 @@ export default {
     padding:10px 0;
     border-bottom: 1px solid rgba(0,0,0,0.2);
     align-items: center;
+    cursor: pointer;
 }
 .home-view .first-col .people-overview .person .add-fr:hover{
     cursor: pointer;
