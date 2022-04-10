@@ -1,43 +1,83 @@
 <template>
   <div class="signup-page">
     <form action="/">
-    <div style='position:absolute;width:250px;height:250px;top:-60px;right:80px;' class="logo"><img style='width:100%;height:100%;objectFit:cover' :src="logo"></div>
-      <span @click='$router.push("/home")' style='display:flex;alignsItem:center;cursor:pointer'><ion-icon style='marginRight:5px' name="return-down-back-outline"></ion-icon> Back to Home</span>
-      <h2><strong style='fontSize:25px'>Account Details:</strong></h2>
-      <div
-        class="result"
-        :class="{ success: getStatus != null }"
-        v-if="getMessage"
-      >
-        {{ getMessage }}<i @click="setMessage(null)" class="fas fa-times"></i>
+      <div class="account">
+        <!--  <div style='position:absolute;width:250px;height:250px;top:-60px;right:80px;' class="logo"><img style='width:100%;height:100%;objectFit:cover' :src="logo"></div> -->
+        <span
+          @click="$router.push('/home')"
+          style="display: flex; alignsItem: center; cursor: pointer"
+          ><ion-icon
+            style="marginRight: 5px"
+            name="return-down-back-outline"
+          ></ion-icon>
+          Back to Home</span
+        >
+        <h2><strong style="fontSize: 25px">Account Details:</strong></h2>
+        <div
+          class="result"
+          :class="{ success: getStatus != null }"
+          v-if="getMessage"
+        >
+          {{ getMessage }}<i @click="setMessage(null)" class="fas fa-times"></i>
+        </div>
+        <ul v-if="this.errmsgs.length" class="err-notice">
+          <li v-for="(err, index) in errmsgs" :key="index">
+            <strong>{{ err }}</strong>
+          </li>
+          <i @click="resetErrMsgs" class="fas fa-times"></i>
+        </ul>
+        <label for="email">Email:</label>
+        <input v-model="email" type="email" id="email" />
+        <label for="password">Password:</label>
+        <input v-model="password" type="password" id="password" />
+        <label for="password">Confirm Password:</label>
+        <input
+          v-model="passwordConfirm"
+          type="password"
+          id="password-confirm"
+        />
+        <button id="signup" @click.prevent="validateSignup" type="submit">
+          Sign Up <i class="fas fa-angle-double-right"></i>
+        </button>
       </div>
-      <ul v-if="this.errmsgs.length" class="err-notice">
-        <li v-for="(err, index) in errmsgs" :key="index">
-          <strong>{{ err }}</strong>
-        </li>
-        <i @click="resetErrMsgs" class="fas fa-times"></i>
-      </ul>
-      <label for="email">Email:</label>
-      <input v-model="email" type="email" id="email" />
-      <label for="password">Password:</label>
-      <input v-model="password" type="password" id="password" />
-      <label for="password">Confirm Password:</label>
-      <input v-model="passwordConfirm" type="password" id="password-confirm" />
-      <button id="signup" @click.prevent="validateSignup" type="submit">
-        Sign Up <i class="fas fa-angle-double-right"></i>
-      </button>
+      <div class="information">
+        <h2><strong style="fontSize: 25px">Information:</strong></h2>
+        <label for="username">Username:</label>
+        <input v-model="username" type="text" id="username" />
+        <label for="password">Date of Birth:</label>
+        <input v-model="dob" type="date" id="dob" />
+        <div class='gender-status'>
+          <label for="gender">Gender:</label>
+          <select v-model="gender" id="gender" >
+            <option selected value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <label for="status">Status:</label>
+          <select v-model="status" id="status" >
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+            <option value="In a relationship">In a relationship</option>
+            <option value="It's complicated">It's complicated</option>
+          </select>
+        </div>
+        <label for="location">Location:</label>
+          <select v-model="location" id="location" >
+            <option value="Viet Nam">Viet Nam</option>
+          </select>
+      </div>
     </form>
-    <div id='to-login'>
-        <h3>Already has an account?</h3>
-        <span @click="$router.push('/login')">Login here</span>
-      </div>
+    <div id="to-login">
+      <h3>Already has an account?</h3>
+      <span @click="$router.push('/login')">Login here</span>
+    </div>
   </div>
 </template>
 
 <script>
 import store from "./../store/store";
 import router from "./../router/router";
-import logo from "./../assets/images/logo.png"
+import logo from "./../assets/images/logo.png";
 import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
@@ -46,7 +86,7 @@ export default {
       password: null,
       passwordConfirm: null,
       errmsgs: [],
-      logo:logo
+      logo: logo,
     };
   },
   computed: {
@@ -113,7 +153,7 @@ a:hover {
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color:rgba(229, 240, 248, 0.904);
+  background-color:rgba(119, 107, 107, 0.2);
 }
 .signup-page div.result {
   color: white;
@@ -136,21 +176,36 @@ a:hover {
   background-color: green;
 }
 .signup-page form {
+  width: 80%;
+  background-color: whitesmoke;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  display: flex;
+}
+/* account */
+.signup-page form .account {
   display: flex;
   flex-direction: column;
-  width: 80%;
   padding: 50px;
-  background-color: whitesmoke;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
   position: relative;
+  width: 50%;
+}
+.signup-page form .account::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-color: #fb5252;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 .signup-page form * {
   margin: 5px 0;
 }
-.signup-page form label {
+.signup-page form .account label {
   font-size: 16px;
 }
-.signup-page form input {
+.signup-page form .account input {
   outline: none;
   border: none;
   background-color: transparent;
@@ -158,10 +213,10 @@ a:hover {
   font-size: 17px;
   padding: 10px;
 }
-.signup-page form #signup {
+.signup-page form .account #signup {
   outline: none;
   border: none;
-  background-color: red;
+  background-color: #fb5252;
   font-size: 16px;
   padding: 10px;
   width: 100%;
@@ -171,10 +226,62 @@ a:hover {
   margin: 0 auto;
   margin-top: 20px;
 }
-.signup-page form #signup:hover {
-  background-color: rgba(85, 3, 3, 0.8);
+.signup-page form .account #signup:hover {
+  background-color: rgb(255, 51, 0);
   cursor: pointer;
 }
+/* information */
+.signup-page form .information {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  position: relative;
+  width: 50%;
+  background-color: #fb5252;
+  color:white;
+}
+.signup-page form .information::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-color: white;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+.signup-page form .information select {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid white;
+  font-size: 17px;
+  padding: 10px;
+  color:white;
+}
+.signup-page form .information .gender-status {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+}
+.signup-page form * {
+  margin: 5px 0;
+}
+.signup-page form .information label {
+  font-size: 16px;
+}
+.signup-page form .information input {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid white;
+  font-size: 17px;
+  padding: 10px;
+  color:white;
+}
+/*  */
 .err-notice {
   background-color: orangered;
   color: white;
@@ -193,11 +300,11 @@ a:hover {
   cursor: pointer;
 }
 #to-login {
-  margin-top:15px;
+  margin-top: 15px;
   width: 100%;
   text-align: center;
 }
-#to-login h3{
+#to-login h3 {
   font-size: 18px;
 }
 #to-login span {
@@ -206,11 +313,12 @@ a:hover {
   font-weight: bolder;
   font-size: 15px;
 }
-#to-login span:hover{
+#to-login span:hover {
   border-bottom: 1px solid blue;
 }
+
 @media only screen and (max-width: 768px) {
-  
+  /*
   .signup-page form .logo {
     top:unset;
     left:50%;
@@ -219,5 +327,6 @@ a:hover {
   .signup-page form .logo img{
     transform: scale(0.6);
   }
+  */
 }
 </style>

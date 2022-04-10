@@ -34,6 +34,9 @@ const mutations = {
   },
   SET_COVER(state,cover) {
     state.coverImg=cover
+  },
+  SET_LOCATION(state,location) {
+    state.location=location
   }
 };
 export default mutations;

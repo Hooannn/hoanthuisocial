@@ -5,7 +5,7 @@
               <button v-if='$store.state.ukey==$route.params.key' style='marginTop:1px' @click='$router.push({name:"personal"})' class="btn btn-sm btn-secondary">Edit</button>
               <h5>Personal Info</h5>
               <div style='display:flex;justifyContent:space-between'><span style='fontWeight:bolder'>Member Since</span><span>{{user.registerDate}}</span></div>
-              <div style='display:flex;justifyContent:space-between'><span style='fontWeight:bolder'>Lives in</span><span>Viet Nam</span></div>
+              <div style='display:flex;justifyContent:space-between'><span style='fontWeight:bolder'>Lives in</span><span>{{user.location}}</span></div>
               <div style='display:flex;justifyContent:space-between'><span style='fontWeight:bolder'>Birthday</span><span>{{user.dob}}</span> </div>
               <div style='display:flex;justifyContent:space-between'><span style='fontWeight:bolder'>Gender</span><span>{{user.gender}}</span></div>
               <div style='display:flex;justifyContent:space-between'><span style='fontWeight:bolder'>Status</span><span>{{user.statusrel}}</span></div>

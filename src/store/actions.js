@@ -14,7 +14,8 @@ const objectToArray = (obj) =>
       avatarImg:obj[key].avatarImg,
       status:obj[key].status,
       dob:obj[key].dob,
-      coverImg:obj[key].coverImg
+      coverImg:obj[key].coverImg,
+      location:obj[key].location
     }));
 const usersInf = db.ref("usersInformation");
 
@@ -102,6 +103,7 @@ const actions = {
             commit("SET_DOB", user[0].dob);
             commit("SET_USERSTATUS", user[0].status);
             commit("SET_COVER", user[0].coverImg);
+            commit("SET_LOCATION", user[0].location);
             db.ref("usersInformation")
               .child(user[0].key)
               .child("status")
@@ -117,6 +119,7 @@ const actions = {
             sessionStorage.setItem("status", user[0].status);
             sessionStorage.setItem("avatar", user[0].avatarImg);
             sessionStorage.setItem("cover", user[0].coverImg);
+            sessionStorage.setItem("location", user[0].location);
           })
           .catch((err) => console.log(err));
       })
@@ -150,57 +153,6 @@ const actions = {
     commit("SET_STATUS", null);
     sessionStorage.clear();
   },
-  getBlogData({ commit }, blogsDB) {
-    commit("SET_BLOGDATA", blogsDB);
-  },
-  warning(context, message) {
-    Vue.$toast.warning(message, {
-      position: "top-right",
-      timeout: 2000,
-      closeOnClick: true,
-      pauseOnFocusLoss: true,
-      pauseOnHover: true,
-      draggable: true,
-      draggablePercent: 0.6,
-      showCloseButtonOnHover: false,
-      hideProgressBar: false,
-      closeButton: "button",
-      icon: true,
-      rtl: false,
-    });
-  },
-  success(context, message) {
-    Vue.$toast.success(message, {
-      position: "top-right",
-      timeout: 2000,
-      closeOnClick: true,
-      pauseOnFocusLoss: true,
-      pauseOnHover: true,
-      draggable: true,
-      draggablePercent: 0.6,
-      showCloseButtonOnHover: false,
-      hideProgressBar: false,
-      closeButton: "button",
-      icon: true,
-      rtl: false,
-    });
-  },
-  error(context, message) {
-    Vue.$toast.error(message, {
-      position: "top-right",
-      timeout: 2000,
-      closeOnClick: true,
-      pauseOnFocusLoss: true,
-      pauseOnHover: true,
-      draggable: true,
-      draggablePercent: 0.6,
-      showCloseButtonOnHover: false,
-      hideProgressBar: false,
-      closeButton: "button",
-      icon: true,
-      rtl: false,
-    });
-  },
   setUser({ commit }, user) {
     commit("SET_USER", user);
   },
@@ -228,6 +180,9 @@ const actions = {
   setCover({commit},cover) {
     commit("SET_COVER",cover)
   },
+  setLocation({commit},location) {
+    commit("SET_LOCATION",location)
+  },
   closeMoreInfo({commit,state},e) {
     let dropDown=document.querySelector('#app > div > div.dbnav > div > div.dbnav__short-info > div.drop-down')   
     let btn=document.querySelector('#app > div > div.dbnav > div > div.dbnav__short-info > div.more-setting')
@@ -248,6 +203,13 @@ const actions = {
     });
     controlComment.forEach(control => {
       if (e.target.parentElement!=control && e.target!=control) {
+        control.children[1].classList.remove('show')
+      }
+    });
+    let option=document.querySelectorAll('div.friend-com div.option')
+    option.forEach(control => {
+      console.log(e.target.parentElement.parentElement)
+      if (e.target.parentElement.parentElement!=control) {
         control.children[1].classList.remove('show')
       }
     });

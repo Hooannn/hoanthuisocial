@@ -109,6 +109,7 @@ export default {
     let dob=sessionStorage.getItem('dob')
     let status=sessionStorage.getItem('status')
     let cover=sessionStorage.getItem('cover')
+    let location=sessionStorage.getItem('location')
     this.$store.dispatch('setUsername',username)
     this.$store.dispatch("setUser", account);
     this.$store.dispatch("setRole", role);
@@ -117,6 +118,7 @@ export default {
     this.$store.dispatch('setStatus', status);
     this.$store.dispatch("setDob", dob);
     this.$store.dispatch("setCover", cover);
+    this.$store.dispatch("setLocation", location);
     if (this.$store.state.user!=null) {
       this.$router.push({name:'dhome'})
     }

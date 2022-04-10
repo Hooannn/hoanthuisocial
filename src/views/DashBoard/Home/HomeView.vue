@@ -13,7 +13,7 @@
         <div style='fontSize:15px;marginBottom:2px' >
           <span style='fontWeight:800;'>{{$store.state.username}}</span><span style='fontSize:14px'> ({{$store.state.role}})</span>
         </div>
-        <div style='color:grey'><i style='color:orangered'  class="fas fa-map-marker-alt"></i> Viet Nam</div>
+        <div style='color:grey'><i style='color:orangered'  class="fas fa-map-marker-alt"></i> {{$store.state.location}}</div>
         <div style='borderBottom:1px solid gainsboro;display:flex;alignItems:center;justifyContent:space-around;width:100%;height:80px'>
           <div style='heigth:100%;width:45%;display:flex;justifyContent:space-between;;flexDirection:column;alignItems:center'>
             <span style='fontSize:14.5px;fontWeight:700'>Friends</span>

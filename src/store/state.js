@@ -10,5 +10,6 @@ const state = {
   dob:null,
   userstatus:null,
   coverImg:null,
+  location:null,
 };
 export default state;

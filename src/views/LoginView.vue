@@ -153,7 +153,7 @@ a:hover {
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: rgba(229, 240, 248, 0.904);
+  background-color:rgba(119, 107, 107, 0.2);
 }
 .login-page div.result {
   color: white;
@@ -201,7 +201,7 @@ a:hover {
 .login-page form #login {
   outline: none;
   border: none;
-  background-color: red;
+  background-color: #FB5252;
   font-size: 16px;
   padding: 10px;
   width:100%;
@@ -212,7 +212,7 @@ a:hover {
   margin-top: 20px;
 }
 .login-page form #login:hover {
-  background-color: rgba(85, 3, 3, 0.8);
+  background-color: rgb(255, 51, 0);
   cursor: pointer;
 }
 #more-authencation {

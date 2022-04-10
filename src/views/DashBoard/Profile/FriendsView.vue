@@ -2,22 +2,30 @@
   <div class="friends-view container">
       <div class="current-friends">
           <h5 @click='yfSlide'><div>Your Friends <span style='fontSize:13px'>({{friends.length}})</span></div><i class="fas" :class='{"fa-chevron-down":slide.fr==false,"fa-chevron-up":slide.fr==true}'></i></h5>
-          <div class='list'></div>
+          <div class='list'>
+              <friend-com :type="'friend'" :class='friend[".key"]' v-for='friend in friends' :key='friend[".key"]' :ukey='friend[".value"]' :fKey='friend[".key"]'/>
+          </div>
       </div>
       <div class="requested-friends">
           <h5 @click='frqedSlide'><div>Friend Requested Sent <span style='fontSize:13px'>({{friendsRequested.length}})</span></div><i class="fas" :class='{"fa-chevron-down":slide.frqed==false,"fa-chevron-up":slide.frqed==true}'></i></h5>
-          <div class='list'></div>
+          <div class='list'>
+              <friend-com :type='"friendsrequested"' :class='friend[".key"]' v-for='friend in friendsRequested' :key='friend[".key"]' :ukey='friend[".value"]' :fKey='friend[".key"]'/>
+          </div>
       </div>
       <div class="requesting-friends">
           <h5 @click='frqingSlide'><div>Friend Requesting <span style='fontSize:13px'>({{friendsRequesting.length}})</span></div><i class="fas" :class='{"fa-chevron-down":slide.frqing==false,"fa-chevron-up":slide.frqing==true}'></i></h5>
-          <div class='list'></div>
+          <div class='list'>
+              <friend-com :type='"friendsrequesting"' :class='friend[".key"]' v-for='friend in friendsRequesting' :key='friend[".key"]' :ukey='friend[".value"]' :fKey='friend[".key"]'/>
+          </div>
       </div>
   </div>
 </template>
 
 <script>
+import FriendCom from '../../../components/Friend/FriendCom.vue'
 import db from '../../../plugins/firebase'
 export default {
+  components: { FriendCom },
     data() {
         return {
             friends:[],
@@ -104,21 +112,31 @@ div.friends-view.container > div > h5 > i:hover{
     width: 100%;
     height: 0;
     background-color:white;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    flex-wrap: wrap;
 }
 @keyframes slide-down {
     0% {
         height: 0;
+        opacity: 0;
+        visibility: hidden;
     }
     100% {
-        height: 500px;
+        height: auto;
+        opacity: 1;
+        visibility: visible;
     }
 }
 @keyframes slide-up {
     0% {
-        height: 500px;
+        height: auto;
+        visibility: visible;
     }
     100% {
         height: 0;
+        visibility: hidden;
     }
 }
 </style>
