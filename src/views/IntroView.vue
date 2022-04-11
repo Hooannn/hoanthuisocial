@@ -1,5 +1,5 @@
 <template>
-<div class='home-view'>
+<div class='intro-view'>
   <div class="app__introduce">
       <div class="content">
         <h1 style="fontSize: 50px; fontWeight: bolder">Join Us</h1>
@@ -110,7 +110,7 @@ export default {
     },
     mounted() {
     //carouse text introduce
-    let carouselItem=document.querySelectorAll('#app > div.home-view > div.app__introduce > div.content > div div')
+    let carouselItem=document.querySelectorAll('#app > div.intro-view > div.app__introduce > div.content > div div')
     setTimeout(()=>{
       carouselItem[2].classList.remove('active')
       carouselItem[0].classList.add('active')
@@ -139,7 +139,7 @@ export default {
     },9000)
     ///
     
-    let wrapper=document.querySelector('#app > div.home-view > div.app__overview > div.users-overview')
+    let wrapper=document.querySelector('#app > div.intro-view > div.app__overview > div.users-overview')
     this.usersInterval=setInterval(()=>{
       setTimeout(()=>{
       var interval=setInterval(()=>{
@@ -157,12 +157,12 @@ export default {
     methods: {
     next() {
       clearInterval(this.usersInterval)
-      let wrapper=document.querySelector('#app > div.home-view > div.app__overview > div.users-overview')
+      let wrapper=document.querySelector('#app > div.intro-view > div.app__overview > div.users-overview')
       wrapper.scrollLeft = wrapper.scrollLeft + 100
     },
     previous() {
       clearInterval(this.usersInterval)
-      let wrapper=document.querySelector('#app > div.home-view > div.app__overview > div.users-overview')
+      let wrapper=document.querySelector('#app > div.intro-view > div.app__overview > div.users-overview')
       wrapper.scrollLeft = wrapper.scrollLeft - 100
     },
   },
@@ -175,44 +175,44 @@ export default {
 </script>
 
 <style>
-#app .home-view {
+#app .intro-view {
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-#app .home-view .app__introduce {
+#app .intro-view .app__introduce {
   width: 100%;
   height: 60%;
   position: relative;
   background: url("https://idgadvertising.com/wp-content/uploads/2020/09/iStock-1199773764-scaled.jpg")
     no-repeat center/cover;
 }
-.home-view .app__introduce .content {
+.intro-view .app__introduce .content {
   position: absolute;
   top: 40%;
   left: 4%;
   transform: translateY(-50%);
 }
-.home-view .app__introduce .content .carousel{
+.intro-view .app__introduce .content .carousel{
   display: flex;
   position: relative;
   height: 100px;
 }
-.home-view .app__introduce .content .carousel div{
+.intro-view .app__introduce .content .carousel div{
   position: absolute;
   opacity: 0;
   visibility: hidden;
   transform: translate(100%);
 }
-.home-view .app__introduce .content .carousel div.active{
+.intro-view .app__introduce .content .carousel div.active{
   opacity: 1;
   visibility: visible;
   transform:translate(0);
   transition:all 1s ease-in-out;
 }
-.home-view .app__introduce .content button {
+.intro-view .app__introduce .content button {
   font-family: "Poppins", sans-serif;
   border: none;
   outline: none;
@@ -226,20 +226,20 @@ export default {
   align-items: center;
   transition: all 0.2s ease-in-out;
 }
-.home-view .app__introduce .content button * {
+.intro-view .app__introduce .content button * {
   transition: all 0.2s ease-in-out;
 }
-.home-view .app__introduce .content button *:not(span) {
+.intro-view .app__introduce .content button *:not(span) {
   margin-left: 3px;
 }
-.home-view .app__introduce .content button:hover {
+.intro-view .app__introduce .content button:hover {
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0.5);
 }
-.home-view .app__introduce .content button:hover > * {
+.intro-view .app__introduce .content button:hover > * {
   transform: translateX(2px);
 }
-#app .home-view .app__introduce .nav {
+#app .intro-view .app__introduce .nav {
   position: absolute;
   top: 10px;
   left: 0;
@@ -305,7 +305,7 @@ export default {
   font-weight: bolder;
   cursor: pointer;
 }
-#app .home-view .app__overview {
+#app .intro-view .app__overview {
   margin-top: 20px;
   width: 95%;
   height: 30%;

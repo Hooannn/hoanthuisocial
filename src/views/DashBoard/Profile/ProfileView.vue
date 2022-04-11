@@ -18,7 +18,10 @@
               </div>
               <div class="more-inf">
                   <button v-if='$store.state.ukey==profileKey' @click='$router.push({name:"personal"}),isSelect="Edit"' class='btn btn-dark btn-sm edit'>Edit Profile</button>
-                  <button v-if='$store.state.ukey!=profileKey' @click='isSelect="Add Friend"' class='btn btn-dark btn-sm edit'>Add Friend</button>
+                  <button :disabled='userFriend.find((user)=>(user[".value"]==$route.params.key))||userFriendRequesting.find((user)=>(user[".value"]==$route.params.key))||userFriendRequested.find((user)=>(user[".value"]==$route.params.key))' @click='$store.dispatch("sentFriendRequest",$route.params.key),isSelect="Add Friend"' v-if='$store.state.ukey!=profileKey' class='btn btn-dark btn-sm edit'>
+                      <span v-if='!userFriend.find((user)=>(user[".value"]==$route.params.key))'>Add Friend</span>
+                      <span v-if='userFriend.find((user)=>(user[".value"]==$route.params.key))'>Friend</span>
+                  </button>
                   <button v-if='$store.state.ukey==profileKey' class="btn btn-danger btn-sm market">View Market</button>
                   <button v-if='$store.state.ukey!=profileKey' class="btn btn-danger btn-sm market">Follow</button>
                   <div class="friends">
@@ -61,13 +64,21 @@ export default {
             friends:[],
             follows:[],
             isSelect:"Post",
-            profileKey:''
+            profileKey:'',
+            //friend handle
+            userFriendRequesting:[],
+            userFriendRequested:[],
+            userFriend:[],
+            //
         }
     },
     mounted() {
         this.$rtdbBind('user',db.ref('usersInformation').child(this.$route.params.key))
         this.$rtdbBind('friends',db.ref('usersInformation').child(this.$route.params.key).child('friends').child('isfriend'))
         this.$rtdbBind('follows',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
+        this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
+        this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
+        this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
         this.profileKey=this.$route.params.key
     }
 }

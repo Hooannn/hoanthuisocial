@@ -20,14 +20,15 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 .loading-page .loader {
   width: 6vw;
   height: 6vw;
   border: 1vw solid #f3f3f3;
   border-radius: 50%;
-  border-top: 1vw solid blue;
+  border-top: 1vw solid orange;
   animation: spin 0.7s infinite;
 }
 @keyframes spin {

@@ -31,14 +31,14 @@
       <!-- -->
       <div class="people-overview">
         <h5>People</h5>
-        <div @click='$router.push({name:"post",params:{key:person[".key"]}})' v-for='person in people' :key="person['.key']" class="person" v-show='$store.state.ukey!=person[".key"]'>
+        <div @click='viewProfile(person[".key"])' v-for='person in people' :key="person['.key']" class="person" v-show='$store.state.ukey!=person[".key"] && !userFriend.find((user)=> (user[".value"]==person[".key"]))'>
           <div style='width:30px;height:30px;borderRadius:50%;overflow:hidden' class='person-avatar'>
             <img style='width:100%;height:100%;objectFit:cover' :src="person.avatarImg">
           </div>
           <div style='width:45%;fontSize:14px;fontWeight:800' class='person-username'>
             {{person.username}}
           </div>
-          <div @click='$router.go("#")' style='borderRadius:2px;width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;boxShadow:0px 0px 5px rgba(0,0,0,0.3)' class="add-fr"><i class="fas fa-user-plus"></i></div>
+          <button :disabled='userFriend.find((user)=> (user[".value"]==person[".key"]))||userFriendRequesting.find((user)=> (user[".value"]==person[".key"]))||userFriendRequested.find((user)=> (user[".value"]==person[".key"]))' @click='$store.dispatch("sentFriendRequest",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-warning btn-sm"><i class="fas fa-user-plus"></i></button>
         </div>
       </div>
       <!-- -->
@@ -76,6 +76,16 @@ export default {
     return {
       people:[],
       posts:[],
+      // friend handle
+      userFriendRequesting:[],
+      userFriendRequested:[],
+      userFriend:[],
+      //
+    }
+  },
+  methods: {
+    viewProfile(key) {
+      this.$router.push({name:'post',params:{key:key}})
     }
   },
   watch: {
@@ -100,6 +110,9 @@ export default {
   },
   mounted() {
     this.$rtdbBind('people',db.ref('usersInformation'))
+    this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
+    this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
+    this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
   }
 }
 </script>
@@ -178,11 +191,6 @@ export default {
     border-bottom: 1px solid rgba(0,0,0,0.2);
     align-items: center;
     cursor: pointer;
-}
-.home-view .first-col .people-overview .person .add-fr:hover{
-    cursor: pointer;
-    background-color:orange;
-    color:white;
 }
 /*2 colum */
   /* posts-list */

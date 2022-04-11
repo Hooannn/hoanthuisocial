@@ -32,7 +32,7 @@
               <option value="Other">Other</option>
             </select>
           </div>
-          <div class="Status">
+          <div class="status">
             <span>Status</span>
             <select v-model='statusrel' id="status">
               <option value="Single">Single</option>
@@ -229,10 +229,9 @@ export default {
     width: 100%;
 }
 /* personal */
-.personal div{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.personal-info .personal div{
+  border:none;
+  padding:5px;
 }
 .personal-info h5 {
   margin: 0;

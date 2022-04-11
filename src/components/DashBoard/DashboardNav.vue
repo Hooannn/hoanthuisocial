@@ -26,7 +26,7 @@
               ></ion-icon>
           </div>
           <div class="drop-down">
-            <div @click='$router.push({name:"post",params:{key:$store.state.ukey}})'><span>Profile</span></div>
+            <div @click='viewMyProfile'><span>Profile</span></div>
             <div><span>Credit</span></div>
             <div><span>Friends</span></div>
             <div><span>Invite</span></div>
@@ -64,6 +64,12 @@ export default {
         router.push("/home");
         }, 1000);
         },
+        viewMyProfile() {
+            router.push('/loading')
+            setTimeout(function(){
+                router.push({name:"post",params:{key:store.state.ukey}})
+            }, 50)
+        }
     }
 };
 </script>

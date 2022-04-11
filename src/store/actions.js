@@ -1,3 +1,4 @@
+import router from "@/router/router";
 import firebase from "firebase/app";
 import Vue from "vue";
 import db from "./../plugins/firebase"
@@ -20,10 +21,10 @@ const objectToArray = (obj) =>
 const usersInf = db.ref("usersInformation");
 
 const actions = {
-  signUp({ commit }, account) {
+  signUp({ commit }, newAccount) {
     firebase
       .auth()
-      .createUserWithEmailAndPassword(account.email, account.password)
+      .createUserWithEmailAndPassword(newAccount.email, newAccount.password)
       .then((response) => {
         let account = response.user;
         sessionStorage.setItem("account", JSON.stringify(account));
@@ -32,13 +33,13 @@ const actions = {
         commit("SET_STATUS", null);
         usersInf.push({
           email: response.user.email,
-          username: "Unset",
-          dob: "Unset",
+          username: newAccount.username,
+          dob: newAccount.dob,
           avatarImg:
             "https://www.placidsoftware.com/assets/images/user-img.png",
           role: "Member",
           status:'Offline',
-          phone:'Unset',
+          phone:newAccount.phone,
           /*
           education: {
             title:'Title',
@@ -63,8 +64,9 @@ const actions = {
             twitter:'https://www.twitter.com/',
             youtube:'https://www.youtube.com/channel/'
           },
-          gender:'Other',
-          statusrel:'Single',
+          location:newAccount.location,
+          gender:newAccount.gender,
+          statusrel:newAccount.statusrel,
           registerDate:new Date().toLocaleDateString(),
         });
       })
@@ -153,6 +155,11 @@ const actions = {
     commit("SET_STATUS", null);
     sessionStorage.clear();
   },
+  sentFriendRequest(context, contactKey) {
+    let userKey=context.state.ukey
+    db.ref('usersInformation').child(contactKey).child('friends').child('friendrequested').push(userKey).catch(err => console.log(err))
+    db.ref('usersInformation').child(userKey).child('friends').child('friendrequesting').push(contactKey).catch(err => console.log(err))
+  },
   setUser({ commit }, user) {
     commit("SET_USER", user);
   },
@@ -183,6 +190,12 @@ const actions = {
   setLocation({commit},location) {
     commit("SET_LOCATION",location)
   },
+  loading() {
+    router.push('/loading')
+    setTimeout(function(){
+      router.go(-1)
+    }, 50)
+  },
   closeMoreInfo({commit,state},e) {
     let dropDown=document.querySelector('#app > div > div.dbnav > div > div.dbnav__short-info > div.drop-down')   
     let btn=document.querySelector('#app > div > div.dbnav > div > div.dbnav__short-info > div.more-setting')
@@ -208,7 +221,6 @@ const actions = {
     });
     let option=document.querySelectorAll('div.friend-com div.option')
     option.forEach(control => {
-      console.log(e.target.parentElement.parentElement)
       if (e.target.parentElement.parentElement!=control) {
         control.children[1].classList.remove('show')
       }
