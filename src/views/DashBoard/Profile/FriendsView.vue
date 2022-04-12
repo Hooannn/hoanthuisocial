@@ -18,6 +18,18 @@
               <friend-com :type='"friendsrequesting"' :class='friend[".key"]' v-for='friend in friendsRequesting' :key='friend[".key"]' :ukey='friend[".value"]' :fKey='friend[".key"]'/>
           </div>
       </div>
+      <div class="following">
+          <h5 @click='flingSlide'><div>Following <span style='fontSize:13px'>({{following.length}})</span></div><i class="fas" :class='{"fa-chevron-down":slide.fling==false,"fa-chevron-up":slide.fling==true}'></i></h5>
+          <div class='list'>
+              <friend-com :type="'following'" :class='follow[".key"]' v-for='follow in following' :key='follow[".key"]' :ukey='follow[".value"]' :fKey='follow[".key"]'/>
+          </div>
+      </div>
+      <div class="followed">
+          <h5 @click='fledSlide'><div>Followed <span style='fontSize:13px'>({{followed.length}})</span></div><i class="fas" :class='{"fa-chevron-down":slide.fled==false,"fa-chevron-up":slide.fled==true}'></i></h5>
+          <div class='list'>
+              <friend-com :type='"followed"' :class='follow[".key"]' v-for='follow in followed' :key='follow[".key"]' :ukey='follow[".value"]' :fKey='follow[".key"]'/>
+          </div>
+      </div>
   </div>
 </template>
 
@@ -28,6 +40,8 @@ export default {
   components: { FriendCom },
     data() {
         return {
+            following:[],
+            followed:[],
             friends:[],
             friendsRequested:[],
             friendsRequesting:[],
@@ -35,6 +49,8 @@ export default {
                 fr:false,
                 frqed:false,
                 frqing:false,
+                fling:false,
+                fled:false,
             }
         }
     },
@@ -71,12 +87,36 @@ export default {
                 list.style.animation='slide-up .3s forwards'
                 this.slide.frqing=false
             }
+        },
+        flingSlide() {
+            let list=document.querySelector('#app > div > div.profile-view > div.profile__content > div.container > div.friends-view.container > div.following > div')
+            if (this.slide.fling==false) {
+                list.style.animation='slide-down .3s forwards'
+                this.slide.fling=true
+            }
+            else if (this.slide.fling==true) {
+                list.style.animation='slide-up .3s forwards'
+                this.slide.fling=false
+            }
+        },
+        fledSlide() {
+            let list=document.querySelector('#app > div > div.profile-view > div.profile__content > div.container > div.friends-view.container > div.followed > div')
+            if (this.slide.fled==false) {
+                list.style.animation='slide-down .3s forwards'
+                this.slide.fled=true
+            }
+            else if (this.slide.fled==true) {
+                list.style.animation='slide-up .3s forwards'
+                this.slide.fled=false
+            }
         }
     },
     mounted() {
         this.$rtdbBind('friends',db.ref('usersInformation').child(this.$route.params.key).child('friends').child('isfriend'))
         this.$rtdbBind('friendsRequested',db.ref('usersInformation').child(this.$route.params.key).child('friends').child('friendrequested'))
         this.$rtdbBind('friendsRequesting',db.ref('usersInformation').child(this.$route.params.key).child('friends').child('friendrequesting'))
+        this.$rtdbBind('following', db.ref('usersInformation').child(this.$route.params.key).child('follows').child('following'))
+        this.$rtdbBind('followed', db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
     }
 }
 </script>
@@ -102,7 +142,7 @@ div.friends-view.container > div > h5 > i:hover{
   justify-content: space-between;
   cursor: pointer;
 }
-.friends-view .current-friends,.friends-view .requested-friends,.friends-view .requesting-friends{
+.friends-view .following,.friends-view .followed ,.friends-view .current-friends,.friends-view .requested-friends,.friends-view .requesting-friends{
     width: 100%;
     box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
     margin:30px 0;

@@ -11,7 +11,18 @@
               <span @click='$router.push({name:"messages"}),selected="Messages"' :class='{selected:selected=="Messages"}'>Messages</span>
           </div>
           <div class="dbnav__notifications">
-              <span @click='selected="Notifications"' :class='{selected:selected=="Notifications"}'>Notifications</span>
+              <span style='position:relative' @click='showNoti' :class='{selected:selected=="Notifications"}'>
+                  Notifications
+                <span v-if='!unseenNoti==0' style='pointerEvents:none;position:absolute;top:-5px;right:-10px;backgroundColor:red;borderRadius:3px;display:flex;justifyContent:center;alignItems:center;width:15px;height:15px;fontSize:8px;color:white'>
+                    {{ unseenNoti }}
+                </span>
+              </span>
+              <div class="drop-down">
+                  <div class='vl' style='pointerEvents:none;top:0;position:absolute;left:13%;borderLeft:2px solid rgb(255, 117, 85,0.5);height:100%'></div>
+                  <div style='zIndex:1;padding:5px 10px;background-color:white;borderBottom:1px solid grey' v-if='notis.length==0'>You have no notifications.</div>
+                  <noti-com :class='noti[".key"]' v-for='noti in notis' :key='noti[".key"]' :notiKey="noti['.key']"/>
+                  <div @click='clearNoti' style='zIndex:1;backgroundColor:whitesmoke;width:100%;display:flex;justifyContent:center'><button style='color:grey' class='btn btn-sm btn-link'>Clear</button></div>
+              </div>
           </div>
           <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm'>Market</button>
         <div class="dbnav__short-info">
@@ -39,17 +50,31 @@
 </template>
 
 <script>
+import db from '../../plugins/firebase'
 import logo from './../../assets/images/logo.png'
 import store from './../../store/store'
 import router from './../../router/router'
+import NotiCom from '../../components/General/NotiCom.vue'
 export default {
+    components: {
+        NotiCom
+    },
     data() {
         return {
             logo:logo,
             selected:'Home',
+            notis:[],
+        }
+    },
+    computed: {
+        unseenNoti() {
+            return this.notis.filter(noti => noti.status=="Unseen").length
         }
     },
     methods: {
+        clearNoti() {
+            db.ref('usersInformation').child(this.$store.state.ukey).child("notifications").remove()
+        },
         showMoreInfo() {
             let dropDown=document.querySelector('#app > div > div.dbnav > div > div.dbnav__short-info > div.drop-down')
             let shortInfo=document.querySelector('#app > div > div.dbnav > div > div.dbnav__short-info >div.more-setting')
@@ -69,7 +94,17 @@ export default {
             setTimeout(function(){
                 router.push({name:"post",params:{key:store.state.ukey}})
             }, 50)
+        },
+        showNoti() {
+            this.selected=''
+            let notiSpan=document.querySelector('#app > div > div.dbnav > div > div.dbnav__notifications > span')
+            let dropDown=document.querySelector('#app > div > div.dbnav > div > div.dbnav__notifications > div.drop-down')
+            dropDown.classList.toggle('show')
+            notiSpan.classList.toggle('show')
         }
+    },
+    mounted() {
+        this.$rtdbBind('notis',db.ref('usersInformation').child(this.$store.state.ukey).child('notifications'))
     }
 };
 </script>
@@ -171,16 +206,43 @@ export default {
 	border-right: 10px solid transparent;
 	border-bottom: 10px solid whitesmoke;
 }
-.drop-down div {
+.dbnav .dbnav__short-info .drop-down div {
     padding:8px 10px;
     cursor: pointer;
 }
-.drop-down div:hover {
+.dbnav .dbnav__short-info .drop-down div:hover {
     border-left:2px solid orangered;
     color:orangered;
     background-color:rgba(233, 227, 227, 0.1);
 }
-.drop-down div:hover span{
+.dbnav .dbnav__short-info .drop-down div:hover span{
     transform: translateX(3px);
 }
+/* notification drop down */
+.dbnav__notifications span.show {
+    color:white;
+    text-shadow: 2px 2px 3px rgba(255,255,255,0.3);
+}
+.dbnav__notifications .drop-down {
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+    position: absolute;
+    top:90%;
+    background-color: rgb(243, 234, 224);
+    color:rgb(43, 42, 42);
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+    border-radius: 2px;
+    max-width:300px;
+    overflow-y:auto;
+    max-height: 600px;
+}
+.dbnav__notifications .drop-down::before {
+    display: none;
+    content: unset;
+}
+.dbnav__notifications .drop-down.show {
+    visibility: visible;
+}
+/* -------- */
 </style>

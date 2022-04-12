@@ -1,5 +1,5 @@
 <template>
-  <div  id="app">
+  <div id="app">
     <!--
     <div class="app__introduce">
       <div class="content">
@@ -91,10 +91,7 @@
     <footer-com/>
     
     -->
-    <router-view >
-      
-    </router-view>
-    
+    <router-view> </router-view>
   </div>
 </template>
 
@@ -103,31 +100,29 @@ export default {
   mounted() {
     let account = JSON.parse(sessionStorage.getItem("account"));
     let role = sessionStorage.getItem("role");
-    let ukey= sessionStorage.getItem('ukey')
-    let username=sessionStorage.getItem('username')
-    let avatar=sessionStorage.getItem('avatar')
-    let dob=sessionStorage.getItem('dob')
-    let status=sessionStorage.getItem('status')
-    let cover=sessionStorage.getItem('cover')
-    let location=sessionStorage.getItem('location')
-    this.$store.dispatch('setUsername',username)
+    let ukey = sessionStorage.getItem("ukey");
+    let username = sessionStorage.getItem("username");
+    let avatar = sessionStorage.getItem("avatar");
+    let dob = sessionStorage.getItem("dob");
+    let status = sessionStorage.getItem("status");
+    let cover = sessionStorage.getItem("cover");
+    let location = sessionStorage.getItem("location");
+    this.$store.dispatch("setUsername", username);
     this.$store.dispatch("setUser", account);
     this.$store.dispatch("setRole", role);
-    this.$store.dispatch('setUkey', ukey);
+    this.$store.dispatch("setUkey", ukey);
     this.$store.dispatch("setAvatar", avatar);
-    this.$store.dispatch('setStatus', status);
+    this.$store.dispatch("setStatus", status);
     this.$store.dispatch("setDob", dob);
     this.$store.dispatch("setCover", cover);
     this.$store.dispatch("setLocation", location);
-    if (this.$store.state.user!=null) {
-      this.$router.push({name:'dhome'})
+    if (this.$store.state.user != null) {
+      this.$router.push({ name: "dhome" });
+    } else if (this.$store.state.user == null) {
+      this.$router.push("/home");
     }
-    else if (this.$store.state.user==null) {
-      this.$router.push('/home')
-    }
-  }
-}
-    
+  },
+};
 </script>
 
 <style>
@@ -136,7 +131,7 @@ export default {
   display: none;
 }
 .container {
-  padding:0;
+  padding: 0;
 }
 body {
   margin: 0;
@@ -158,5 +153,4 @@ a {
   text-decoration: none;
   color: unset;
 }
-
 </style>

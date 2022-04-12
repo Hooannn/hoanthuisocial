@@ -17,12 +17,12 @@
         <div style='borderBottom:1px solid gainsboro;display:flex;alignItems:center;justifyContent:space-around;width:100%;height:80px'>
           <div style='heigth:100%;width:45%;display:flex;justifyContent:space-between;;flexDirection:column;alignItems:center'>
             <span style='fontSize:14.5px;fontWeight:700'>Friends</span>
-            <span>0</span>
+            <span>{{userFriend.length}}</span>
           </div>
           <hr style='height:60%;border:1px solid gainsboro'/>
           <div style='heigth:100%;width:45%;display:flex;justifyContent:space-between;;flexDirection:column;alignItems:center'>
             <span style='fontSize:14.5px;fontWeight:700'>Follows</span>
-            <span>0</span>
+            <span>{{userFollow.length}}</span>
           </div>
         </div>
         <button @click='$router.push({name:"post",params:{key:$store.state.ukey}})' style='{textDecoration:none;color:black;padding:10px;}' class="btn btn-link btn-sm">View Profile</button>
@@ -38,7 +38,7 @@
           <div style='width:45%;fontSize:14px;fontWeight:800' class='person-username'>
             {{person.username}}
           </div>
-          <button :disabled='userFriend.find((user)=> (user[".value"]==person[".key"]))||userFriendRequesting.find((user)=> (user[".value"]==person[".key"]))||userFriendRequested.find((user)=> (user[".value"]==person[".key"]))' @click='$store.dispatch("sentFriendRequest",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-warning btn-sm"><i class="fas fa-user-plus"></i></button>
+          <button :disabled='userFriend.find((user)=> (user[".value"]==person[".key"]))||userFriendRequesting.find((user)=> (user[".value"]==person[".key"]))||userFriendRequested.find((user)=> (user[".value"]==person[".key"]))' @click='$store.dispatch("sentFriendRequest",person[".key"]),$store.dispatch("follow",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-warning btn-sm"><i class="fas fa-user-plus"></i></button>
         </div>
       </div>
       <!-- -->
@@ -74,6 +74,8 @@ export default {
   components: { FooterCom, PostCom },
   data() {
     return {
+      userFollow:[],
+      //
       people:[],
       posts:[],
       // friend handle
@@ -113,6 +115,7 @@ export default {
     this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
     this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
     this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
+    this.$rtdbBind('userFollow',db.ref('usersInformation').child(this.$store.state.ukey).child('follows').child('followed'))
   }
 }
 </script>

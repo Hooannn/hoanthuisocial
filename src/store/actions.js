@@ -159,6 +159,71 @@ const actions = {
     let userKey=context.state.ukey
     db.ref('usersInformation').child(contactKey).child('friends').child('friendrequested').push(userKey).catch(err => console.log(err))
     db.ref('usersInformation').child(userKey).child('friends').child('friendrequesting').push(contactKey).catch(err => console.log(err))
+    let noti= {
+      content:`${context.state.username} has sent you a friend requested.`,
+      date:new Date().toLocaleString(),
+      time:new Date().getTime(),
+      status:"Unseen",
+      type:'send-friendInvite',
+      ukey:userKey
+    }
+    db.ref('usersInformation').child(contactKey).child('notifications').push(noti)
+  },
+  follow(context,contactKey) {
+    let userKey=context.state.ukey
+    db.ref('usersInformation').child(userKey).child('follows').child('following').get()
+      .then((res) => {
+        let resVal=res.val()
+        let flingKey
+        if (resVal) {
+          resVal=Object.keys(resVal).map((key)=> ({key:key,value:resVal[key]}))
+          flingKey=resVal.find(ele => ele.value==contactKey).key
+        }
+        if (!flingKey) {
+          db.ref('usersInformation').child(contactKey).child('follows').child('followed').push(userKey)
+          db.ref('usersInformation').child(userKey).child('follows').child('following').push(contactKey)
+          let noti= {
+            content:`${context.state.username} has followed you.`,
+            date:new Date().toLocaleString(),
+            time:new Date().getTime(),
+            status:"Unseen",
+            type:'follow',
+            ukey:userKey
+          }
+          db.ref('usersInformation').child(contactKey).child('notifications').push(noti)
+        }
+        else {
+          return
+        }
+      })
+      .catch(err => console.log(err))
+  },
+  unfollow(context,contactKey) {
+    let userKey=context.state.ukey
+    db.ref('usersInformation').child(contactKey).child('follows').child('followed').get()
+      .then((res) => {
+        let resVal=res.val()
+        resVal=Object.keys(resVal).map((key)=> ({key:key,value:resVal[key]}))
+        let fledKey=resVal.find(ele => ele.value==userKey).key
+        if(fledKey) {
+        db.ref('usersInformation').child(contactKey).child('follows').child('followed').child(fledKey).remove().catch(err => console.log(err))
+        } else {
+          return
+        }
+      })
+      .catch(err => console.log(err))
+    db.ref('usersInformation').child(userKey).child('follows').child('following').get()
+      .then((res) => {
+        let resVal=res.val()
+        resVal=Object.keys(resVal).map((key)=> ({key:key,value:resVal[key]}))
+        let flingKey=resVal.find(ele => ele.value==contactKey).key
+        if (flingKey) {
+        db.ref('usersInformation').child(userKey).child('follows').child('following').child(flingKey).remove().catch(err => console.log(err))
+        } else {
+          return
+        }
+      })
+      .catch(err => console.log(err))
   },
   setUser({ commit }, user) {
     commit("SET_USER", user);
@@ -205,6 +270,14 @@ const actions = {
       dropDown.classList.remove('show')
       shortInfo.classList.remove('show')
     }
+    //
+    let notiDropdown=document.querySelector('#app > div > div.dbnav > div > div.dbnav__notifications > div')
+    let notiSpan=document.querySelector('#app > div > div.dbnav > div > div.dbnav__notifications > span')
+    if (e.target!=notiSpan) {
+      notiDropdown.classList.remove('show')
+      notiSpan.classList.remove('show')
+    }
+    //
     let controlPost=document.querySelectorAll('div.post-com > div.post-header > div.control')
     let controlComment=document.querySelectorAll('div.post-com > div.post-comments.show > div.post-comment > div.comment-header > div.control')
     //let controlPost=document.querySelectorAll('#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com > div.post-header > div.control')

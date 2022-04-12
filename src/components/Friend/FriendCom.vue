@@ -12,10 +12,11 @@
       <div class='option'>
         <span><i @click='showOption' class="fas fa-ellipsis-h"></i></span>
         <div class="drop-down">
-          <span @click='unfriend' v-if='type=="friend"'>Unfriend</span>
-          <span @click='acceptInvite' v-if='type=="friendsrequested"'>Accept</span>
-          <span @click='refuseInvite' v-if='type=="friendsrequested"'>Refuse</span>
-          <span @click='cancleInvite' v-if='type=="friendsrequesting"'>Cancle</span>
+          <span @click='unfriend ' v-if='type=="friend" && $store.state.ukey==$route.params.key'>Unfriend</span>
+          <span @click='acceptInvite' v-if='type=="friendsrequested" && $store.state.ukey==$route.params.key'>Accept</span>
+          <span @click='refuseInvite' v-if='type=="friendsrequested" && $store.state.ukey==$route.params.key'>Refuse</span>
+          <span @click='cancleInvite' v-if='type=="friendsrequesting" && $store.state.ukey==$route.params.key'>Cancle</span>
+          <span @click='unfollow' v-if='type=="following" && $store.state.ukey==$route.params.key'>Unfollow</span>
           <span @click='viewProfile'>View Profile</span>
         </div>
       </div>
@@ -56,6 +57,7 @@ export default {
       let e=[...this.targetFriendList]
       db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend').child(this.fKey).remove()
         .then(() => {
+          this.$store.dispatch('unfollow',this.ukey)
           let fkey
           e.forEach(element => {
           if (element[".value"]==store.state.ukey) {
@@ -74,6 +76,16 @@ export default {
       let e=[...this.targetFriendRequestingList]
       db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested').child(this.fKey).remove()
       .then(() => {
+        this.$store.dispatch('follow',this.ukey)
+        let noti={
+          content:`${this.$store.state.username} and you have become friend.`,
+          date:new Date().toLocaleString(),
+          time:new Date().getTime(),
+          type:'accept-friendInvite',
+          status:'Unseen',
+          ukey:this.$store.state.ukey,
+        }
+        db.ref('usersInformation').child(this.ukey).child('notifications').push(noti)
         db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend').push(this.ukey).catch(err=>console.log(err))
         db.ref('usersInformation').child(this.ukey).child('friends').child('isfriend').push(this.$store.state.ukey).catch(err=>console.log(err))
         let fkey
@@ -125,6 +137,11 @@ export default {
         },50)
       })
       .catch(err => console.log(err))
+    },
+    unfollow() {
+      this.$store.dispatch("unfollow",this.ukey)
+      let followEle=document.querySelector(`#app > div > div.profile-view > div.profile__content > div.container > div.friends-view.container > div.following > div.list > div.friend-com.${this.fKey}`)
+      followEle.remove()
     }
   },
   /*

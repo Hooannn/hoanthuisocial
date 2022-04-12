@@ -18,12 +18,17 @@
               </div>
               <div class="more-inf">
                   <button v-if='$store.state.ukey==profileKey' @click='$router.push({name:"personal"}),isSelect="Edit"' class='btn btn-dark btn-sm edit'>Edit Profile</button>
-                  <button :disabled='userFriend.find((user)=>(user[".value"]==$route.params.key))||userFriendRequesting.find((user)=>(user[".value"]==$route.params.key))||userFriendRequested.find((user)=>(user[".value"]==$route.params.key))' @click='$store.dispatch("sentFriendRequest",$route.params.key),isSelect="Add Friend"' v-if='$store.state.ukey!=profileKey' class='btn btn-dark btn-sm edit'>
+                  <button :disabled='userFriend.find((user)=>(user[".value"]==$route.params.key))||userFriendRequesting.find((user)=>(user[".value"]==$route.params.key))||userFriendRequested.find((user)=>(user[".value"]==$route.params.key))' @click='$store.dispatch("sentFriendRequest",$route.params.key),$store.dispatch("follow",$route.params.key),isSelect="Add Friend"' v-if='$store.state.ukey!=profileKey' class='btn btn-dark btn-sm edit'>
                       <span v-if='!userFriend.find((user)=>(user[".value"]==$route.params.key))'>Add Friend</span>
                       <span v-if='userFriend.find((user)=>(user[".value"]==$route.params.key))'>Friend</span>
                   </button>
                   <button v-if='$store.state.ukey==profileKey' class="btn btn-danger btn-sm market">View Market</button>
-                  <button v-if='$store.state.ukey!=profileKey' class="btn btn-danger btn-sm market">Follow</button>
+                  <button @click='$store.dispatch("follow",$route.params.key)' v-if='$store.state.ukey!=profileKey && !follows.find(user=> user[".value"]==$store.state.ukey)' class="btn btn-danger btn-sm market">
+                      Follow
+                  </button>
+                  <button @click='$store.dispatch("unfollow",$route.params.key)' v-if='$store.state.ukey!=profileKey && follows.find(user=> user[".value"]==$store.state.ukey)' class="btn btn-dark btn-sm market">
+                      Unfollow
+                  </button>
                   <div class="friends">
                       <span>Friends</span>
                       <span style='fontSize:20px'><strong>{{friends.length}}</strong></span>
@@ -41,7 +46,7 @@
                   <div @click='$router.push({name:"about",params:{key:profileKey}}),isSelect="About"' class="about" :class="{active:isSelect=='About'}">About</div>
                   <div @click='$router.push({name:"friends",params:{key:profileKey}}),isSelect="Friends"' class="friends-list" :class="{active:isSelect=='Friends'}">Friends</div>
                   <div @click='isSelect="Image"' class="images" :class="{active:isSelect=='Image'}">Image</div>
-                  <div @click='isSelect="Follows"' class="follows-list" :class="{active:isSelect=='Follows'}">Follows</div>
+                  <div @click='isSelect="Credits"' class="credits" :class="{active:isSelect=='Credits'}">Credits</div>
                   <div @click='isSelect="See more"' class="more" :class="{active:isSelect=='See more'}">See more <ion-icon style="marginLeft:5px" name="chevron-down-outline"></ion-icon></div>
               </div>
               <router-view></router-view>
@@ -69,8 +74,11 @@ export default {
             userFriendRequesting:[],
             userFriendRequested:[],
             userFriend:[],
-            //
+            //,
         }
+    },
+    methods: {
+
     },
     mounted() {
         this.$rtdbBind('user',db.ref('usersInformation').child(this.$route.params.key))
