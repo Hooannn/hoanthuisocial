@@ -60,6 +60,7 @@ export default {
             postContent:'',
             imagesUpload:[],
             user:{},
+            myfollowers:[],
         }
     },
     methods: {
@@ -78,6 +79,19 @@ export default {
                 }
                 db.ref('usersInformation').child(this.$store.state.ukey).child('posts').push(newPost).then(res => {
                     db.ref('usersInformation').child(this.$store.state.ukey).child('posts').child(res.key).child('key').set(res.key)
+                    this.$bvToast.show('new-blog')
+                    let noti={
+                        content:`${this.$store.state.username} has post a new post.`,
+                        date:new Date().toLocaleString(), 
+                        time:new Date().getTime(),
+                        status:'Unseen',
+                        type:'new-blog',
+                        ukey:this.$store.state.ukey,
+                        postKey:res.key,
+                    }
+                    this.myfollowers.forEach(follower => {
+                        db.ref('usersInformation').child(follower['.value']).child('notifications').push(noti)
+                    });
                 })
                 this.postContent=''
                 this.imagesUpload=[]
@@ -108,6 +122,7 @@ export default {
         this.$rtdbBind('user', db.ref('usersInformation').child(this.$route.params.key))
         this.$rtdbBind('socialAccounts', db.ref('usersInformation').child(this.$route.params.key).child('socialAccounts'))
         this.$rtdbBind('posts',db.ref('usersInformation').child(this.$route.params.key).child('posts'))
+        this.$rtdbBind('myfollowers',db.ref('usersInformation').child(this.$store.state.ukey).child('follows').child('followed'))
     }
 }
 </script>

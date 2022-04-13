@@ -11,5 +11,6 @@ const state = {
   userstatus:null,
   coverImg:null,
   location:null,
+  unseenNoti:null,
 };
 export default state;

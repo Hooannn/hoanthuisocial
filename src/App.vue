@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <toastes-container/>
     <!--
     <div class="app__introduce">
       <div class="content">
@@ -96,8 +97,11 @@
 </template>
 
 <script>
+import ToastesContainer from './components/General/ToastesContainer.vue';
 export default {
+  components: { ToastesContainer },
   mounted() {
+    this.$bvToast.show('unseen-notifications')
     let account = JSON.parse(sessionStorage.getItem("account"));
     let role = sessionStorage.getItem("role");
     let ukey = sessionStorage.getItem("ukey");

@@ -25,6 +25,11 @@ const routes = [
         component:() => import('../views/DashBoard/Profile/ProfileView.vue'),
         children:[
           {
+            path:'/dashboard/profile/:key/post-detail/:postKey',
+            name:'post-detail',
+            component:() => import('../views/DashBoard/Profile/PostDetail.vue')
+          },
+          {
             path:'/dashboard/profile/:key/post',
             name:'post',
             component:() => import('../views/DashBoard/Profile/PostView.vue')

@@ -1,5 +1,5 @@
 <template>
-  <div class="noti-com">
+  <div @click='seenNoti' class="noti-com">
     <div class="status"><div v-if='noti.status=="Unseen"'></div></div>
     <div class="type">
         <ion-icon v-if="noti.type=='like-blog'" class='icon' name="heart-outline"></ion-icon>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import EventBus from '../../eventbus'
 import db from '../../plugins/firebase'
 export default {
     props: {
@@ -28,6 +29,37 @@ export default {
         return {
             noti:{},
             ava:{},
+        }
+    },
+    methods: {
+        seenNoti() { 
+            db.ref('usersInformation').child(this.$store.state.ukey).child('notifications').child(this.notiKey).child('status').set("Seen")
+                .then(()=> {
+                    if (this.noti.type=='follow' || this.noti.type=='accept-friendInvite' ) {
+                        this.$router.push({name:'post',params:{key:this.noti.ukey}})
+                    }
+                    else if (this.noti.type=='send-friendInvite') {
+                        this.$router.push({name:'friends',params:{key:this.$store.state.ukey}})
+                    }
+                    else if (this.noti.type=='like-blog'|| this.noti.type=='new-blog') {
+                        this.$router.push({name:'post-detail',params:{key:this.noti.ukey,postKey:this.noti.postKey}})
+                    }
+                    else if (this.noti.type=='comment-blog') {
+                        let commentKey=this.noti.commentKey
+                        this.$router.push({name:'post-detail',params:{key:this.noti.ukey,postKey:this.noti.postKey}})
+                        /*
+                        setTimeout(function() {
+                            EventBus.$emit('showCom', commentKey)
+                        },100)
+                        */
+                    }
+                    else if (this.noti.type=='send-message') {
+                        return
+                    }
+                    else {
+                        return
+                    }
+                })
         }
     },
     mounted() {

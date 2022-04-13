@@ -142,11 +142,13 @@ export default {
         this.$store.dispatch('setDob',this.dob)
         db.ref('usersInformation').child(this.$store.state.ukey).child('statusrel').set(this.statusrel)
         db.ref('usersInformation').child(this.$store.state.ukey).child('gender').set(this.gender)
+        this.$bvToast.show('edit')
         }
       }
       if (this.description!=null && this.description.trim()!='' && this.description!=this.user.description) {
-        this.$router.push({name:'about'})
+        this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
         db.ref('usersInformation').child(this.$store.state.ukey).child('description').set(this.description)
+        this.$bvToast.show('edit')
       }
       else {
         return
@@ -165,7 +167,7 @@ export default {
           to:'',
           website:'',
         }
-        alert('Successfully added')
+        this.$bvToast.show('edit')
       }
       else {
         return
@@ -184,7 +186,7 @@ export default {
           to:'',
           website:'',
         }
-        alert('Successfully added')
+        this.$bvToast.show('edit')
       }
       else {
         return

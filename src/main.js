@@ -4,6 +4,10 @@ import router from './router/router'
 import store from './store/store'
 import "@/plugins/firebase";
 import { rtdbPlugin as VueFire } from 'vuefire'
+import PortalVue from 'portal-vue'
+import { ToastPlugin } from 'bootstrap-vue'
+Vue.use(ToastPlugin)
+Vue.use(PortalVue)
 Vue.use(VueFire)
 router.replace("/home");
 Vue.config.productionTip = false

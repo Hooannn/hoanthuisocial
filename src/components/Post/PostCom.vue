@@ -18,9 +18,11 @@
         <div class="control">
           <i @click='showControl' class="grey fas fa-ellipsis-v"></i>
           <div class="drop-down">
-            <span>Hide</span>
-            <span>Edit</span>
-            <span>Delete</span>
+            <span v-if='$route.name!="post-detail"' @click='viewPost'>View</span>
+            <span v-if='authorKey==$store.state.ukey'>Hide</span>
+            <span v-if='authorKey==$store.state.ukey'>Edit</span>
+            <span @click='deletePost' v-if='authorKey==$store.state.ukey'>Delete</span>
+            <span v-if='authorKey!=$store.state.ukey'>Report</span>
           </div>
         </div>
       </div>
@@ -59,6 +61,7 @@
 </template>
 
 <script>
+import EventBus from '../../eventbus'
 import db from '../../plugins/firebase'
 import PostComment from '../Post/PostComment.vue'
 export default {
@@ -82,7 +85,6 @@ export default {
   },
   methods: {
     //image preview
-    
     next() {
       let images = [];
       this.postImages.forEach(image => images.push(image));
@@ -120,9 +122,21 @@ export default {
 
     //
     likePost() {
-      //handle add notification soon
       if (!this.isLiked) {
-      db.ref("usersInformation").child(this.authorKey).child('posts').child(this.postKey).child('likes').child(this.$store.state.ukey).set('liked') }
+      db.ref("usersInformation").child(this.authorKey).child('posts').child(this.postKey).child('likes').child(this.$store.state.ukey).set('liked')
+      let noti={
+          content:`${this.$store.state.username} has liked your blog.`,
+          date:new Date().toLocaleString(),
+          time:new Date().getTime(),
+          status:'Unseen',
+          type:'like-blog',
+          ukey:this.$store.state.ukey,
+          postKey:this.postKey,
+        }
+      if (this.authorKey!=this.$store.state.ukey) {
+        db.ref("usersInformation").child(this.authorKey).child('notifications').push(noti).catch(err => console.log(err))
+      }
+      }
       else if (this.isLiked) {
       db.ref("usersInformation").child(this.authorKey).child('posts').child(this.postKey).child('likes').child(this.$store.state.ukey).remove()
       }
@@ -148,7 +162,6 @@ export default {
       }
     },
     postComment() {
-      //handle add notification soon
       if (this.comment!=null && this.comment.trim()!="") {
         let comment= {
           author:this.$store.state.ukey,
@@ -158,13 +171,56 @@ export default {
         }
         db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('comments').push(comment).then(res => {
           db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('comments').child(res.key).child('key').set(res.key)
+          let noti= {
+            content:`${this.$store.state.username} has commented to your blog.`,
+            date:new Date().toLocaleString(),
+            time:new Date().getTime(),
+            status:'Unseen',
+            type:'comment-blog',
+            ukey:this.$store.state.ukey,
+            postKey:this.postKey,
+            commentKey:res.key
+          }
+          if (this.authorKey!=this.$store.state.ukey) {
+            db.ref("usersInformation").child(this.authorKey).child('notifications').push(noti).catch(err => console.log(err))
+          }
         })
         this.comment=''
       }
       else {
         return
       }
+    },
+    //more control 
+    viewPost() {
+      if (this.$route.name!='post-detail') {
+        if (this.views.length==0 || this.views.filter(view=> view['.value']==this.$store.state.ukey).length==0) {
+          db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('views').push(this.$store.state.ukey).catch(err=>console.log(err))
+        }
+        this.$router.push({name:'post-detail',params:{key:this.authorKey,postKey:this.postKey}})
+      }
+      else {
+        return
+      }
+    },
+    deletePost() {
+      db.ref('usersInformation').child(this.$store.state.ukey).child('posts').child(this.postKey).remove()
+        .then(()=> {
+          let post=document.querySelector(`div.post-com.${this.post.key}`)
+          post.remove()
+        })
+        .catch(err=> console.log(err))
+    },
+    //
+    /*
+    showComment(commentKey) {
+      this.showPostComment()
+      let comment=document.querySelector(`div.post-com.${this.post.key} div.post-comments div.post-comment.${commentKey}`)
+      setTimeout(function() {
+        comment.focus()
+      },1000)
     }
+    */
   },
   watch: {
     post() {
@@ -242,7 +298,19 @@ export default {
     }
 
   },
+  /*
+  created() {
+    EventBus.$on("showCom", (value) => {
+      this.showComment(value);
+    });
+  },
+  */
   destroyed() {
+    /*
+    EventBus.$on("showCom", (value) => {
+      this.showComment(value);
+    });
+    */
     window.removeEventListener('keydown', function(e) {
       if (e.keyCode==27) {
         let imagePreview = document.querySelectorAll(

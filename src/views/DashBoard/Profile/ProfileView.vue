@@ -40,7 +40,7 @@
               </div>
               </div>
           </div>
-          <div class="container">
+          <div style='height:auto;minHeight:55vh;marginBottom:25px' class="container">
               <div class="profile__nav">
                   <div @click='$router.push({name:"post",params:{key:profileKey}}),isSelect="Post"' class="post" :class="{active:isSelect=='Post'}">Post</div>
                   <div @click='$router.push({name:"about",params:{key:profileKey}}),isSelect="About"' class="about" :class="{active:isSelect=='About'}">About</div>
@@ -95,8 +95,8 @@ export default {
 <style>
 .profile-view {
     width: 100%;
-    height: 100vh;
     min-height: 100vh;
+    height: auto;
     display: flex;
     flex-direction: column;
 }

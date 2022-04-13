@@ -31,15 +31,19 @@
       <!-- -->
       <div class="people-overview">
         <h5>People</h5>
+        <recommend-person v-for='person in people' :ukey="person['.key']" :key="person['.key']"/>
+        <!--
         <div @click='viewProfile(person[".key"])' v-for='person in people' :key="person['.key']" class="person" v-show='$store.state.ukey!=person[".key"] && !userFriend.find((user)=> (user[".value"]==person[".key"]))'>
           <div style='width:30px;height:30px;borderRadius:50%;overflow:hidden' class='person-avatar'>
             <img style='width:100%;height:100%;objectFit:cover' :src="person.avatarImg">
           </div>
           <div style='width:45%;fontSize:14px;fontWeight:800' class='person-username'>
-            {{person.username}}
+            <div>{{person.username}}</div>
+            <div style='fontSize:10px;color:grey;fontWeight:lighter'>Mutual {{  (person[".key"]) | getMutualFriend() }}</div>
           </div>
           <button :disabled='userFriend.find((user)=> (user[".value"]==person[".key"]))||userFriendRequesting.find((user)=> (user[".value"]==person[".key"]))||userFriendRequested.find((user)=> (user[".value"]==person[".key"]))' @click='$store.dispatch("sentFriendRequest",person[".key"]),$store.dispatch("follow",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-warning btn-sm"><i class="fas fa-user-plus"></i></button>
         </div>
+        -->
       </div>
       <!-- -->
     </div>
@@ -68,10 +72,11 @@
 
 <script>
 import FooterCom from '../../../components/General/FooterCom.vue'
+import RecommendPerson from '../../../components/General/RecommendPerson.vue'
 import PostCom from '../../../components/Post/PostCom.vue'
 import db from './../../../plugins/firebase'
 export default {
-  components: { FooterCom, PostCom },
+  components: { FooterCom, PostCom, RecommendPerson },
   data() {
     return {
       userFollow:[],
@@ -79,15 +84,28 @@ export default {
       people:[],
       posts:[],
       // friend handle
-      userFriendRequesting:[],
-      userFriendRequested:[],
       userFriend:[],
       //
     }
   },
-  methods: {
-    viewProfile(key) {
-      this.$router.push({name:'post',params:{key:key}})
+  filters: {
+    getMutualFriend:function(contactKey) {
+      let mutualFriend=[]
+      let targetFriend=[]
+      this.people.forEach(person => {
+        if (person['.key']==contactKey) {
+          targetFriend=person.friends.isfriend
+          targetFriend=Object.keys(targetFriend).map((key)=>({key:key,value:targetFriend[key]}))
+        }
+      });
+      this.userFriend.forEach(myfr => {
+        targetFriend.forEach(tarfr => {
+          if (myfr['.value']==tarfr['value']) {
+            mutualFriend.push(myfr['.value'])
+          }
+        });
+      });
+      return mutualFriend.length
     }
   },
   watch: {
@@ -112,8 +130,8 @@ export default {
   },
   mounted() {
     this.$rtdbBind('people',db.ref('usersInformation'))
-    this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
-    this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
+    //this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
+    //this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
     this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
     this.$rtdbBind('userFollow',db.ref('usersInformation').child(this.$store.state.ukey).child('follows').child('followed'))
   }
@@ -186,7 +204,7 @@ export default {
     background-color:white;
     word-wrap: break-word;
 }
-.home-view .first-col .people-overview .person{
+.home-view .first-col .people-overview .recommend-person{
     display: flex;
     width: 100%;
     justify-content: space-around;

@@ -72,6 +72,7 @@ export default {
                     this.$store.dispatch('setCover',this.newBackground)
                 }
                 this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
+                this.$bvToast.show('edit')
             }   
             else {
                 return

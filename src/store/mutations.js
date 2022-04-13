@@ -37,6 +37,9 @@ const mutations = {
   },
   SET_LOCATION(state,location) {
     state.location=location
+  },
+  SET_UNSEENNOTI(state, payload) {
+    state.unseenNoti=payload
   }
 };
 export default mutations;

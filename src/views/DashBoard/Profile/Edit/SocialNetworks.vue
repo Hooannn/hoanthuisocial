@@ -93,6 +93,7 @@ export default {
             else {
                 return
             }
+            this.$bvToast.show('edit')
             this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
         }
     },

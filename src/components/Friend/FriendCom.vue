@@ -6,7 +6,7 @@
       </div>
       <div class="infor">
         <div style='fontSize:16px'>{{user.username}}</div>
-        <div style='fontSize:13px;color:grey'>Mutual 0</div>
+        <div v-if='ukey!=$store.state.ukey' style='fontSize:13px;color:grey'>Mutual {{mutualFriend.length}}</div>
       </div>
       </div>
       <div class='option'>
@@ -38,7 +38,9 @@ export default {
       user:{},
       targetFriendRequestedList:[],
       targetFriendList:[],
+      myFriendList:[],
       targetFriendRequestingList:[],
+      mutualFriend:[],
     }
   },
   methods: {
@@ -144,18 +146,25 @@ export default {
       followEle.remove()
     }
   },
-  /*
+  
   watch: {
-    targetFriendRequestingList(e) {
-      this.targetFriendRequestingList=e
+    targetFriendList() {
+      this.mutualFriend=[]
+      this.myFriendList.forEach(myfr => {
+        this.targetFriendList.forEach(tarfr => {
+          if (myfr[".value"]==tarfr[".value"]) {
+            this.mutualFriend.push(myfr[".value"])
+          }
+        });
+      });
     }
   },
-  */
   mounted() {
     this.$rtdbBind('user',db.ref('usersInformation').child(this.ukey))
     this.$rtdbBind('targetFriendRequestedList',db.ref('usersInformation').child(this.ukey).child('friends').child('friendrequested'))
     this.$rtdbBind('targetFriendRequestingList',db.ref('usersInformation').child(this.ukey).child('friends').child('friendrequesting'))
     this.$rtdbBind('targetFriendList',db.ref('usersInformation').child(this.ukey).child('friends').child('isfriend'))
+    this.$rtdbBind('myFriendList',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
   }
 }
 </script>

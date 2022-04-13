@@ -8,7 +8,7 @@
               <span @click='$router.push({name:"dhome"}),selected="Home"' :class='{selected:selected=="Home"}'>Home</span>
           </div>
           <div class="dbnav__messages">
-              <span @click='$router.push({name:"messages"}),selected="Messages"' :class='{selected:selected=="Messages"}'>Messages</span>
+              <span @click='showMessageBar' :class='{selected:selected=="Messages"}'>Messages</span>
           </div>
           <div class="dbnav__notifications">
               <span style='position:relative' @click='showNoti' :class='{selected:selected=="Notifications"}'>
@@ -50,11 +50,15 @@
 </template>
 
 <script>
+import newnoti from '../../assets/sounds/newnoti.mp3'
+import unseennoti from '../../assets/sounds/unseennoti.mp3'
 import db from '../../plugins/firebase'
 import logo from './../../assets/images/logo.png'
 import store from './../../store/store'
 import router from './../../router/router'
 import NotiCom from '../../components/General/NotiCom.vue'
+const newnotiSound=new Audio(newnoti)
+const unseennotiSound=new Audio(unseennoti)
 export default {
     components: {
         NotiCom
@@ -64,6 +68,8 @@ export default {
             logo:logo,
             selected:'Home',
             notis:[],
+            currentNoti:0,
+            interval:null,
         }
     },
     computed: {
@@ -71,7 +77,29 @@ export default {
             return this.notis.filter(noti => noti.status=="Unseen").length
         }
     },
+    watch: {
+        notis() {
+            let unseenNoti=[]
+            unseenNoti=this.notis.filter(noti => noti.status=='Unseen').length
+            if (unseenNoti>this.currentNoti) {
+                this.$bvToast.show('new-notifications')
+                newnotiSound.play()
+            }
+            this.$store.dispatch('setUnseenNoti',unseenNoti)
+            this.currentNoti=unseenNoti
+        }
+    },
     methods: {
+        showMessageBar() {
+            this.selected=""
+            let messageSpan=document.querySelector('#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span')
+            let mb=document.querySelector('#app > div.dash-board > div.message-bar')
+            mb.classList.toggle('show')
+            messageSpan.classList.toggle('show')
+            //mb.style.width='35px'
+            //mb.style.opacity='1'
+            //mb.style.visibility='visible'
+        },
         clearNoti() {
             db.ref('usersInformation').child(this.$store.state.ukey).child("notifications").remove()
         },
@@ -104,7 +132,16 @@ export default {
         }
     },
     mounted() {
-        this.$rtdbBind('notis',db.ref('usersInformation').child(this.$store.state.ukey).child('notifications'))
+        this.$rtdbBind('notis',db.ref('usersInformation').child(this.$store.state.ukey).child('notifications'))    
+        this.interval=setInterval(() => {
+            if (store.state.unseenNoti>0) {
+                this.$bvToast.show('unseen-notifications')
+                unseennotiSound.play()
+            }
+        }, 300000);
+    },
+    destroyed() {
+        clearInterval(this.interval)
     }
 };
 </script>
@@ -142,6 +179,9 @@ export default {
 .dbnav .dbnav__content .dbnav__home span.selected, .dbnav .dbnav__content .dbnav__messages span.selected,.dbnav .dbnav__content .dbnav__notifications span.selected {
     color:white;
     text-shadow: 2px 2px 3px rgba(255,255,255,0.3);
+}
+#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span.show {
+    color:white;
 }
 /* */
 .dbnav .dbnav__short-info {
