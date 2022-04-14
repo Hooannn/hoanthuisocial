@@ -12,7 +12,7 @@
           <div class="avatar"><img style='width:100%;height:100%;objectFit:cover' :src="author.avatarImg"></div>
           <div class="infor">
             <div class="username">{{author.username}}</div>
-            <div class="time">{{post.time}}</div>
+            <div class="time">{{post.date}}</div>
           </div>
         </div>
         <div class="control">

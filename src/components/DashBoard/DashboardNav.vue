@@ -8,7 +8,11 @@
               <span @click='$router.push({name:"dhome"}),selected="Home"' :class='{selected:selected=="Home"}'>Home</span>
           </div>
           <div class="dbnav__messages">
-              <span @click='showMessageBar' :class='{selected:selected=="Messages"}'>Messages</span>
+              <span style='position:relative' @click='showMessageBar' :class='{selected:selected=="Messages"}'>Messages
+                  <span v-if='!unseenMsg==0' style='pointerEvents:none;position:absolute;top:-5px;right:-10px;backgroundColor:red;borderRadius:3px;display:flex;justifyContent:center;alignItems:center;width:15px;height:15px;fontSize:8px;color:white'>
+                    {{ unseenMsg }}
+                </span>
+              </span>
           </div>
           <div class="dbnav__notifications">
               <span style='position:relative' @click='showNoti' :class='{selected:selected=="Notifications"}'>
@@ -70,12 +74,15 @@ export default {
             notis:[],
             currentNoti:0,
             interval:null,
+            //
+            messages:[],
+            unseenMsg:0,
         }
     },
     computed: {
         unseenNoti() {
             return this.notis.filter(noti => noti.status=="Unseen").length
-        }
+        },
     },
     watch: {
         notis() {
@@ -87,6 +94,18 @@ export default {
             }
             this.$store.dispatch('setUnseenNoti',unseenNoti)
             this.currentNoti=unseenNoti
+        },
+        messages() {
+            this.unseenMsg=0
+            this.messages.forEach(message => {
+                let messageData=message.data
+                messageData=Object.keys(messageData).map((key)=> ({key:key,author:messageData[key].author,status:messageData[key].status}))
+                messageData.forEach(data => {
+                    if (data.author!=this.$store.state.ukey && data.status=="Unseen") {
+                        this.unseenMsg++
+                    }
+                });
+            });
         }
     },
     methods: {
@@ -118,7 +137,7 @@ export default {
         }, 1000);
         },
         viewMyProfile() {
-            router.push('/loading')
+            router.push({name:'dhome'})
             setTimeout(function(){
                 router.push({name:"post",params:{key:store.state.ukey}})
             }, 50)
@@ -132,6 +151,7 @@ export default {
         }
     },
     mounted() {
+        this.$rtdbBind('messages',db.ref('messagesData'))
         this.$rtdbBind('notis',db.ref('usersInformation').child(this.$store.state.ukey).child('notifications'))    
         this.interval=setInterval(() => {
             if (store.state.unseenNoti>0) {

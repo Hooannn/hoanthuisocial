@@ -13,14 +13,16 @@
     <div class="avatar"><img :src="ava['.value']" ></div>
     <div class="content">
         <span style='color:black' class='text'><Strong>{{noti.content}}</Strong></span>
-        <div class="time">{{noti.time}}</div>
+        <div class="time">{{noti.date}}</div>
     </div>
   </div>
 </template>
 
 <script>
 import EventBus from '../../eventbus'
+import router from '../../router/router'
 import db from '../../plugins/firebase'
+import store from '../../store/store'
 export default {
     props: {
         notiKey:String
@@ -36,17 +38,35 @@ export default {
             db.ref('usersInformation').child(this.$store.state.ukey).child('notifications').child(this.notiKey).child('status').set("Seen")
                 .then(()=> {
                     if (this.noti.type=='follow' || this.noti.type=='accept-friendInvite' ) {
-                        this.$router.push({name:'post',params:{key:this.noti.ukey}})
+                        this.$router.push({name:'dhome'})
+                        let ukey=this.noti.ukey
+                        setTimeout(function() {
+                            router.push({name:'post',params:{key:ukey}})
+                        },50)
                     }
                     else if (this.noti.type=='send-friendInvite') {
-                        this.$router.push({name:'friends',params:{key:this.$store.state.ukey}})
+                        this.$router.push({name:'dhome'})
+
+                        setTimeout(function() {
+                            router.push({name:'friends',params:{key:store.state.ukey}})
+                        },50)
                     }
                     else if (this.noti.type=='like-blog'|| this.noti.type=='new-blog') {
-                        this.$router.push({name:'post-detail',params:{key:this.noti.ukey,postKey:this.noti.postKey}})
+                        this.$router.push({name:'dhome'})
+                        let postKey=this.noti.postKey
+                        let ukey=this.noti.ukey
+                        setTimeout(function() {
+                            router.push({name:'post-detail',params:{key:ukey,postKey:postKey}})
+                        },50)
                     }
                     else if (this.noti.type=='comment-blog') {
                         let commentKey=this.noti.commentKey
-                        this.$router.push({name:'post-detail',params:{key:this.noti.ukey,postKey:this.noti.postKey}})
+                        this.$router.push({name:'dhome'})
+                        let postKey=this.noti.postKey
+                        let ukey=this.noti.ukey
+                        setTimeout(function() {
+                            router.push({name:'post-detail',params:{key:ukey,postKey:postKey}})
+                        },50)
                         /*
                         setTimeout(function() {
                             EventBus.$emit('showCom', commentKey)
@@ -54,7 +74,7 @@ export default {
                         */
                     }
                     else if (this.noti.type=='send-message') {
-                        return
+                        this.$store.dispatch('addMsgData',this.noti.messageKey)
                     }
                     else {
                         return

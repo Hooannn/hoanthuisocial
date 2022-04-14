@@ -5,7 +5,7 @@
           <div class="avatar"><img style='width:100%;height:100%;objectFit:cover' :src="author.avatarImg"></div>
           <div class="infor">
             <div style='fontSize:15px' class="username">{{author.username}}</div>
-            <div class="time">{{comment.time}}</div>
+            <div class="time">{{comment.date}}</div>
           </div>
         </div>
         <div class="control">

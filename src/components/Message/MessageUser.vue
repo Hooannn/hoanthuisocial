@@ -1,7 +1,8 @@
 <template>
-  <div class="message-user">
+  <div @click='showMessage' class="message-user">
       <img style='width:100%;height:100%;objectFit:cover;borderRadius:50%' :src="user.avatarImg">
       <span class='username'>{{user.username}}</span>
+      <div v-if='unseenMsg>0' class='unseen-msg'>{{unseenMsg}}</div>
       <div :class='{online:user.status=="Online"}' class="status"></div>
   </div>
 </template>
@@ -14,11 +15,47 @@ export default {
     },
     data() {
         return {
-            user: {}
+            user: {},
+            messages:[],
+            messagesData:[],
+            messageKey:'',
+            unseenMsg:0,
+        }
+    },
+    methods: {
+        showMessage() {
+            if (this.messageKey!='' && this.messageKey!=null) {
+                this.$store.dispatch('addMsgData', this.messageKey)
+            }
+            else {
+                return
+            }
+        }
+    },
+    watch: {
+        messages() {
+            this.messages.forEach(message => {
+                if (message['user1']==this.$store.state.ukey && message['user2']==this.ukey) {
+                    this.messageKey=message[".key"]
+                }
+                else if (message['user2']==this.$store.state.ukey && message['user1']==this.ukey) {
+                    this.messageKey=message[".key"]
+                }
+            });
+            this.$rtdbBind('messagesData',db.ref('messagesData').child(this.messageKey).child('data'))
+        },
+        messagesData() {
+            this.unseenMsg=0
+            this.messagesData.forEach(message => {
+                if (message.author!=this.$store.state.ukey && message.status=='Unseen') {
+                    this.unseenMsg++
+                }
+            })
         }
     },
     mounted() {
         this.$rtdbBind('user',db.ref('usersInformation').child(this.ukey))
+        this.$rtdbBind('messages',db.ref('messagesData'))
     }
 }
 </script>
@@ -53,7 +90,7 @@ export default {
     transform: translate(-50%,-50%);
     padding:5px;
     background-color: white;
-    border-top:5px solid rgb(255, 117, 85);
+    border-top:2px solid rgb(255, 117, 85);
     visibility: hidden;
     color:black;
     opacity: 0;
@@ -75,6 +112,21 @@ export default {
     bottom: 0px;
     right: 1px;
     background-color:grey;
+}
+.message-user .unseen-msg{
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+    position: absolute;
+    top: 0px;
+    right: 1px;
+    background-color:red;
+    color:white;
+    font-size: 11.3px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .message-user .status.online{
     background-color:green;

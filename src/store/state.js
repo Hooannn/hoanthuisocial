@@ -12,5 +12,6 @@ const state = {
   coverImg:null,
   location:null,
   unseenNoti:null,
+  messagesData:[],
 };
 export default state;

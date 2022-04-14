@@ -50,7 +50,7 @@ export default {
     },
     viewProfile() {
       let key=this.ukey
-      router.push('/loading')
+      router.push({name:'dhome'})
       setTimeout(function() {
         router.push({name:'post',params:{key:key}})
       },50)
@@ -90,6 +90,11 @@ export default {
         db.ref('usersInformation').child(this.ukey).child('notifications').push(noti)
         db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend').push(this.ukey).catch(err=>console.log(err))
         db.ref('usersInformation').child(this.ukey).child('friends').child('isfriend').push(this.$store.state.ukey).catch(err=>console.log(err))
+        let newMessage= {
+          user1:this.$store.state.ukey,
+          user2:this.ukey,
+        }
+        db.ref('messagesData').push(newMessage)
         let fkey
         e.forEach(element => {
           if (element[".value"]==store.state.ukey) {

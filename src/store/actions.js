@@ -357,6 +357,12 @@ const actions = {
   setUnseenNoti({commit},pay) {
     commit("SET_UNSEENNOTI", pay)
   },
+  addMsgData({commit}, message) {
+    commit("ADD_MESSAGEDATA", message)
+  },
+  removeMsgData({commit}, message) {
+    commit("REMOVE_MESSAGEDATA", message)
+  },
   loading() {
     router.push("/loading");
     setTimeout(function () {

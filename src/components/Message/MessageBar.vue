@@ -27,8 +27,7 @@ export default {
     width: 0;
     opacity: 0;
     visibility: hidden;
-    background-color:white;
-    box-shadow:4px 3px 8px rgba(0,0,0,0.7);
+    background-color:transparent;
     position: fixed;
     right: 0;
     top:50px;

@@ -40,6 +40,14 @@ const mutations = {
   },
   SET_UNSEENNOTI(state, payload) {
     state.unseenNoti=payload
+  },
+  ADD_MESSAGEDATA(state, message) {
+    if (state.messagesData.indexOf(message)==-1) {
+      state.messagesData.push(message)
+    }
+  },
+  REMOVE_MESSAGEDATA(state, message) {
+    state.messagesData.splice(state.messagesData.indexOf(message),1)
   }
 };
 export default mutations;
