@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import newmessage from '../../assets/sounds/newmessage.mp3'
 import newnoti from '../../assets/sounds/newnoti.mp3'
 import unseennoti from '../../assets/sounds/unseennoti.mp3'
 import db from '../../plugins/firebase'
@@ -63,6 +64,7 @@ import router from './../../router/router'
 import NotiCom from '../../components/General/NotiCom.vue'
 const newnotiSound=new Audio(newnoti)
 const unseennotiSound=new Audio(unseennoti)
+const newmessageSound=new Audio(newmessage)
 export default {
     components: {
         NotiCom
@@ -103,6 +105,8 @@ export default {
                 messageData.forEach(data => {
                     if (data.author!=this.$store.state.ukey && data.status=="Unseen") {
                         this.unseenMsg++
+                        this.$bvToast.show('new-message')
+                        newmessageSound.play()
                     }
                 });
             });

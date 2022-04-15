@@ -20,8 +20,14 @@
       </b-toast>
       <b-toast id="edit" static no-close-button auto-hide>
         <div style='display:flex;flexDirection:column;boxShadow:1px 1px 3px rgba(0,0,0,0.4);padding:0;borderRadius:5px;overflow:hidden'>
-            <div style='backgroundColor:rgb(255, 117, 85);color:white;fontSize:16px'><ion-icon style='marginRight:5px' name="create-outline"></ion-icon> Success</div>
+            <div style='backgroundColor:rgba(0, 128, 0, 0.795);color:white;fontSize:16px'><ion-icon style='marginRight:5px' name="create-outline"></ion-icon> Success</div>
             <div style='backgroundColor:whitesmoke;color:black'>Edit successfully.</div> 
+        </div>
+      </b-toast>
+      <b-toast id="new-message" static no-close-button auto-hide>
+        <div style='display:flex;flexDirection:column;boxShadow:1px 1px 3px rgba(0,0,0,0.4);padding:0;borderRadius:5px;overflow:hidden'>
+            <div style='backgroundColor:#FB5252;color:white;fontSize:16px'><ion-icon style='marginRight:5px' name="chatbox-ellipses-outline"></ion-icon> Message</div>
+            <div style='backgroundColor:whitesmoke;color:black'>You have new message.</div> 
         </div>
       </b-toast>
     </div>

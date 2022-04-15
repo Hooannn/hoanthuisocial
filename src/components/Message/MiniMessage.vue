@@ -69,6 +69,7 @@ export default {
             if (this.inputMsg!=null && this.inputMsg.trim()!='') {
                 db.ref('messagesData').child(this.messageKey).child('data').push(msg)
                 //notification
+                /*
                 let noti= {
                     time:new Date().getTime(),
                     date:new Date().toLocaleString(),
@@ -79,6 +80,7 @@ export default {
                     messageKey:this.messageKey,
                 }
                 db.ref('usersInformation').child(this.contactUser[".key"]).child('notifications').push(noti)
+                */
                 this.inputMsg=''
             }
             else {

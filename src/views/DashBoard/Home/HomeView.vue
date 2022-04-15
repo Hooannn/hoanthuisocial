@@ -46,6 +46,18 @@
         -->
       </div>
       <!-- -->
+      <!-- -->
+      <div class="pages-introduce">
+              <h5 style='fontWeight:bolder;border:none;padding:0;'>Create a Page</h5>
+              <div>Want to create and manage your page for mutiple purposes. Let's try.</div>
+              <button style='color:white' class="btn btn-outline-warning">Try now</button>
+      </div>
+      <!-- -->
+      <!-- -->
+      <div class="pages-overview">
+        <h5>Pages</h5>
+      </div>
+      <!-- -->
     </div>
     <div class="second-col">
       <div style='width:100%;height:40px;display:flex;alignItems:center;boxShadow:1px 1px 4px rgba(0,0,0,0.4);overflow:hidden;borderRadius:3px' class="search-bar">
@@ -62,6 +74,17 @@
               <h5 style='fontWeight:bolder;border:none;padding:0;'>Want to share your everything</h5>
               <div>Post your post now. Add your image, share your day and iteract with another people.</div>
               <button style='color:white;fontWeight:400;backgroundColor:orange;borderColor:orange' class="btn btn-warning">Post it now</button>
+      </div>
+      <!-- -->
+      <div class="group-introduce">
+              <h5 style='fontWeight:bolder;border:none;padding:0;'>Connect more</h5>
+              <div>Join a group to connect with more people, make more discussion, with your favorite topic, hobbies, skill. Why not ?</div>
+              <button style='color:white' class="btn btn-primary">Find</button>
+              <button style='color:white' class="btn btn-primary">Create</button>
+      </div>
+      <!-- -->
+      <div class="group-overview">
+        <h5>Group</h5>
       </div>
       <!-- -->
     </div>
@@ -213,6 +236,34 @@ export default {
     align-items: center;
     cursor: pointer;
 }
+  /* pages introduce*/
+.home-view .first-col .pages-introduce {
+    margin-top:25px;
+    border-radius: 2px;
+    padding:15px;
+    color:white;
+    font-weight: 700;
+    background:url('https://cdn.dribbble.com/users/1615584/screenshots/14795728/media/217c90aba448b05c6cab81a6891f071e.jpg?compress=1&resize=400x300') no-repeat;
+    background-position:bottom;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.2);
+}
+.home-view .first-col .pages-introduce *{
+    margin:10px 0;
+}
+  /* pages overview*/
+.home-view .first-col .pages-overview {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.2);
+    border-radius: 2px;
+    text-overflow: ellipsis;
+    background-color:white;
+    word-wrap: break-word;
+}
 /*2 colum */
   /* posts-list */
 
@@ -233,7 +284,34 @@ export default {
 .home-view .third-col .post-introduce *{
     margin:10px 0;
 }
-
+  /* group introduce */
+.home-view .third-col .group-introduce {
+    margin-top:25px;
+    border-radius: 2px;
+    padding:15px;
+    color:white;
+    font-weight: 700;
+    background:url('https://i.pinimg.com/originals/ba/45/64/ba45640767d3711ed5b6de14ca353f2b.jpg') no-repeat;
+    background-position:center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.2);
+}
+.home-view .third-col .group-introduce *{
+    margin:10px 0;
+}
+  /* group overview */
+.home-view .third-col .group-overview {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.2);
+    border-radius: 2px;
+    text-overflow: ellipsis;
+    background-color:white;
+    word-wrap: break-word;
+}
 /** */
 
 </style>
