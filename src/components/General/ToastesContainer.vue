@@ -30,6 +30,12 @@
             <div style='backgroundColor:whitesmoke;color:black'>You have new message.</div> 
         </div>
       </b-toast>
+      <b-toast id="alert-empty-blog" static no-close-button auto-hide>
+        <div style='display:flex;flexDirection:column;boxShadow:1px 1px 3px rgba(0,0,0,0.4);padding:0;borderRadius:5px;overflow:hidden'>
+            <div style='backgroundColor:orangered;color:white;fontSize:16px'><ion-icon style='marginRight:5px' name="alert-outline"></ion-icon> Alert</div>
+            <div style='backgroundColor:whitesmoke;color:black'>We don't find any content you have post. Try again.</div> 
+        </div>
+      </b-toast>
     </div>
 </template>
 

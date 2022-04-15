@@ -1,5 +1,6 @@
 <template>
   <div class="home-view ">
+    <make-post />
     <div class="container">
     <div class="first-col">
       <!-- -->
@@ -73,7 +74,7 @@
       <div class="post-introduce">
               <h5 style='fontWeight:bolder;border:none;padding:0;'>Want to share your everything</h5>
               <div>Post your post now. Add your image, share your day and iteract with another people.</div>
-              <button style='color:white;fontWeight:400;backgroundColor:orange;borderColor:orange' class="btn btn-warning">Post it now</button>
+              <button @click='showMakePost' style='color:white;fontWeight:400;backgroundColor:orange;borderColor:orange' class="btn btn-warning">Post it now</button>
       </div>
       <!-- -->
       <div class="group-introduce">
@@ -95,11 +96,12 @@
 
 <script>
 import FooterCom from '../../../components/General/FooterCom.vue'
+import MakePost from '../../../components/General/MakePost.vue'
 import RecommendPerson from '../../../components/General/RecommendPerson.vue'
 import PostCom from '../../../components/Post/PostCom.vue'
 import db from './../../../plugins/firebase'
 export default {
-  components: { FooterCom, PostCom, RecommendPerson },
+  components: { FooterCom, PostCom, RecommendPerson, MakePost },
   data() {
     return {
       userFollow:[],
@@ -109,6 +111,12 @@ export default {
       // friend handle
       userFriend:[],
       //
+    }
+  },
+  methods: {
+    showMakePost() {
+      let makePost=document.querySelector('#app > div.dash-board > div.home-view > div.cover')
+      makePost.classList.add('show')
     }
   },
   filters: {

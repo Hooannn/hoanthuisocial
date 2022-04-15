@@ -67,7 +67,7 @@ export default {
         postPost() {
             //handle add notification soon
             if ((this.postContent==null || this.postContent.trim()=='') && (this.imagesUpload.length==0)) {
-                alert('You are posting an empty post !')
+                this.$bvToast.show('alert-empty-blog')
             }
             else {
                 let newPost= {
