@@ -20,6 +20,11 @@ const routes = [
         component:() => import ('../views/DashBoard/Messages/MessagesView.vue')
       },
       {
+        path:'/dashboard/pages/:key',
+        name:'pages',
+        component:() => import ('../views/DashBoard/Pages/PagesView.vue')
+      },
+      {
         path:'/dashboard/profile/:key',
         name:'profile',
         component:() => import('../views/DashBoard/Profile/ProfileView.vue'),

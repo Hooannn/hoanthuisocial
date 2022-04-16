@@ -5,9 +5,11 @@
           </div>
           <div style='width:45%;fontSize:14px;fontWeight:800' class='person-username'>
             <div>{{person.username}}</div>
-            <div style='fontSize:10px;color:grey;fontWeight:lighter'>Mutual {{mutualFriend.length}}</div>
+            <div v-if="person.type!='page'" style='fontSize:10px;color:grey;fontWeight:lighter'>Mutual {{mutualFriend.length}}</div>
+            <div v-if="person.type=='page'" style='fontSize:10px;color:grey;fontWeight:lighter'>Like {{person.likes.length}}</div>
           </div>
-          <button :disabled='userFriend.find((user)=> (user[".value"]==person[".key"]))||userFriendRequesting.find((user)=> (user[".value"]==person[".key"]))||userFriendRequested.find((user)=> (user[".value"]==person[".key"]))' @click='$store.dispatch("sentFriendRequest",person[".key"]),$store.dispatch("follow",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-warning btn-sm"><i class="fas fa-user-plus"></i></button>
+          <button v-if='person.type!="page"' :disabled='userFriend.find((user)=> (user[".value"]==person[".key"]))||userFriendRequesting.find((user)=> (user[".value"]==person[".key"]))||userFriendRequested.find((user)=> (user[".value"]==person[".key"]))' @click='$store.dispatch("sentFriendRequest",person[".key"]),$store.dispatch("follow",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-warning btn-sm"><i class="fas fa-user-plus"></i></button>
+          <button v-if='person.type=="page"' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-primary btn-sm"><i class="fas fa-thumbs-up"></i></button>
         </div>
 </template>
 
@@ -48,7 +50,12 @@ export default {
     },
     methods: {
         viewProfile(key) {
-            this.$router.push({name:'post',params:{key:key}})
+            if (this.person.type!='page') {
+                this.$router.push({name:'post',params:{key:key}})
+            }
+            else if (this.person.type=='page') {
+                this.$router.push({name:'pages',params:{key:key}})
+            }
         }
     },
 }

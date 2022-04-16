@@ -18,7 +18,7 @@
         <div class="control">
           <i @click='showControl' class="grey fas fa-ellipsis-v"></i>
           <div class="drop-down">
-            <span v-if='$route.name!="post-detail"' @click='viewPost'>View</span>
+            <span v-if='$route.name!="post-detail" && author.type!="page"' @click='viewPost'>View</span>
             <span v-if='authorKey==$store.state.ukey'>Hide</span>
             <span v-if='authorKey==$store.state.ukey'>Edit</span>
             <span @click='deletePost' v-if='authorKey==$store.state.ukey'>Delete</span>
@@ -42,7 +42,7 @@
           <div @click='showPostComment' class="comments"><i class="grey fas fa-comment-alt"></i> Comment {{comments.length}}</div>
         </div>
         <div class="right">
-          <div class="views">
+          <div v-if='author.type!="page"' class="views">
             <i class="grey fas fa-eye"></i>  View {{views.length}}
           </div>
         </div>
@@ -154,8 +154,11 @@ export default {
       commentInput.classList.toggle('show')
     },
     viewAuthorProfile() {
-      if (this.$store.state.ukey!=this.authorKey && this.$route.params.key!=this.authorKey) {
+      if (this.$store.state.ukey!=this.authorKey && this.$route.params.key!=this.authorKey && this.author.type!="page") {
         this.$router.push({name:"post",params:{key:this.authorKey}})
+      }
+      else if (this.author.type=="page") {
+        this.$router.push({name:"pages",params:{key:this.authorKey}})
       }
       else {
         return
@@ -233,11 +236,14 @@ export default {
         }
       })
     //
-    },
+    }
+
   },
   mounted() {
     this.$rtdbBind('author',db.ref('usersInformation').child(this.authorKey))
+    //this.$rtdbBind('author',db.ref('pages').child(this.authorKey))
     this.$rtdbBind('post',db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey))
+    //this.$rtdbBind('post',db.ref('pages').child(this.authorKey).child('posts').child(this.postKey))
     this.$rtdbBind('likes',db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('likes'))
     this.$rtdbBind('views',db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('views'))
     this.$rtdbBind('comments',db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('comments'))
@@ -376,7 +382,7 @@ pre {
 }
 
 .post-com {
-  margin-top:25px;
+  margin-bottom:25px;
   width: 100%;
   background-color:white;
   box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.2);

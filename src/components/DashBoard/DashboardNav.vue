@@ -43,7 +43,7 @@
           <div class="drop-down">
             <div @click='viewMyProfile'><span>Profile</span></div>
             <div><span>Credit</span></div>
-            <div><span>Friends</span></div>
+            <div @click='viewMyFriend'><span>Friends</span></div>
             <div><span>Invite</span></div>
             <div><span>Setting</span></div>
             <div @click='logOut'><span>Logout</span></div>
@@ -144,6 +144,12 @@ export default {
             router.push({name:'dhome'})
             setTimeout(function(){
                 router.push({name:"post",params:{key:store.state.ukey}})
+            }, 50)
+        },
+        viewMyFriend() {
+            router.push({name:'dhome'})
+            setTimeout(function(){
+                router.push({name:"friends",params:{key:store.state.ukey}})
             }, 50)
         },
         showNoti() {

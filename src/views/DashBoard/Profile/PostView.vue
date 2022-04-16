@@ -12,6 +12,7 @@
           </div>
       </div>
       <div class='second-col'>
+          <h5 v-if='$store.state.ukey!=$route.params.key'>Posts</h5>
           <div v-if='$store.state.ukey==$route.params.key' class='make-post'>
               <div style='display:flex;flexDirection:column' class="content">
                   <div style='display:flex'>
@@ -140,6 +141,15 @@ pre {
     margin:0;
     padding:0;
 }
+.post-view .second-col h5 {
+    margin:0;
+    padding:unset;
+    padding:20px;  
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    font-size: 17px;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
 .post-view {
     margin-top:50px;
     margin-bottom:50px;
@@ -199,7 +209,8 @@ pre {
     box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
-    padding:20px;    
+    padding:20px;
+    margin-bottom: 25px;   
 }
 .posts-list {
     width: 100%;

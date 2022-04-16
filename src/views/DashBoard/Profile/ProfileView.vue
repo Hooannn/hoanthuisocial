@@ -42,12 +42,12 @@
           </div>
           <div style='height:auto;minHeight:55vh;marginBottom:25px' class="container">
               <div class="profile__nav">
-                  <div @click='$router.push({name:"post",params:{key:profileKey}}),isSelect="Post"' class="post" :class="{active:isSelect=='Post'}">Post</div>
-                  <div @click='$router.push({name:"about",params:{key:profileKey}}),isSelect="About"' class="about" :class="{active:isSelect=='About'}">About</div>
-                  <div @click='$router.push({name:"friends",params:{key:profileKey}}),isSelect="Friends"' class="friends-list" :class="{active:isSelect=='Friends'}">Friends</div>
-                  <div @click='isSelect="Image"' class="images" :class="{active:isSelect=='Image'}">Image</div>
-                  <div @click='isSelect="Credits"' class="credits" :class="{active:isSelect=='Credits'}">Credits</div>
-                  <div @click='isSelect="See more"' class="more" :class="{active:isSelect=='See more'}">See more <ion-icon style="marginLeft:5px" name="chevron-down-outline"></ion-icon></div>
+                  <div @click='$router.push({name:"post",params:{key:profileKey}})' class="post" :class="{active:$route.name=='post'}">Post</div>
+                  <div @click='$router.push({name:"about",params:{key:profileKey}})' class="about" :class="{active:$route.name=='about'}">About</div>
+                  <div @click='$router.push({name:"friends",params:{key:profileKey}})' class="friends-list" :class="{active:$route.name=='friends'}">Friends</div>
+                  <div class="images" :class="{active:$route.name=='images'}">Image</div>
+                  <div class="credits" :class="{active:$route.name=='credits'}">Credits</div>
+                  <div class="more" :class="{active:$route.name=='see-more'}">See more <ion-icon style="marginLeft:5px" name="chevron-down-outline"></ion-icon></div>
               </div>
               <router-view></router-view>
           </div>
@@ -68,7 +68,6 @@ export default {
             },
             friends:[],
             follows:[],
-            isSelect:"Post",
             profileKey:'',
             //friend handle
             userFriendRequesting:[],

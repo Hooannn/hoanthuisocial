@@ -31,8 +31,8 @@
       <!-- -->
       <!-- -->
       <div class="people-overview">
-        <h5>People</h5>
-        <recommend-person v-for='person in people' :ukey="person['.key']" :key="person['.key']"/>
+        <h5>People you may know</h5>
+        <recommend-person v-show='person.type!="page"' v-for='person in people' :ukey="person['.key']" :key="person['.key']"/>
         <!--
         <div @click='viewProfile(person[".key"])' v-for='person in people' :key="person['.key']" class="person" v-show='$store.state.ukey!=person[".key"] && !userFriend.find((user)=> (user[".value"]==person[".key"]))'>
           <div style='width:30px;height:30px;borderRadius:50%;overflow:hidden' class='person-avatar'>
@@ -57,11 +57,12 @@
       <!-- -->
       <div class="pages-overview">
         <h5>Pages</h5>
+        <recommend-person v-show='person.type=="page"' v-for='person in people' :ukey="person['.key']" :key="person['.key']"/>
       </div>
       <!-- -->
     </div>
     <div class="second-col">
-      <div style='width:100%;height:40px;display:flex;alignItems:center;boxShadow:1px 1px 4px rgba(0,0,0,0.4);overflow:hidden;borderRadius:3px' class="search-bar">
+      <div style='marginBottom:25px;width:100%;height:40px;display:flex;alignItems:center;boxShadow:1px 1px 4px rgba(0,0,0,0.4);overflow:hidden;borderRadius:3px' class="search-bar">
         <input placeholder="Search something..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;border:none;outline:none;backgroundColor:white;' type="text">
         <div class='btn-search' style='color:white;width:20%;height:100%;display:flex;justifyContent:center;alignItems:center;'><i class="fas fa-search"></i></div>
       </div>
@@ -271,6 +272,15 @@ export default {
     text-overflow: ellipsis;
     background-color:white;
     word-wrap: break-word;
+}
+.home-view .first-col .pages-overview .recommend-person{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    padding:10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    align-items: center;
+    cursor: pointer;
 }
 /*2 colum */
   /* posts-list */
