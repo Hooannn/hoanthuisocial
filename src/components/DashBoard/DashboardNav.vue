@@ -100,15 +100,17 @@ export default {
         messages() {
             this.unseenMsg=0
             this.messages.forEach(message => {
-                let messageData=message.data
-                messageData=Object.keys(messageData).map((key)=> ({key:key,author:messageData[key].author,status:messageData[key].status}))
-                messageData.forEach(data => {
+                if (message.data != undefined && message.data !=null) {
+                    let messageData=message.data
+                    messageData=Object.keys(messageData).map((key)=> ({key:key,author:messageData[key].author,status:messageData[key].status}))
+                    messageData.forEach(data => {
                     if (data.author!=this.$store.state.ukey && data.status=="Unseen") {
                         this.unseenMsg++
                         this.$bvToast.show('new-message')
                         newmessageSound.play()
                     }
                 });
+                }
             });
         }
     },

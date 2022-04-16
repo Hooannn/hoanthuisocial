@@ -32,6 +32,7 @@ const actions = {
         commit("SET_ERROR", "Successfully signed up !");
         commit("SET_STATUS", null);
         usersInf.push({
+          type:'user',
           email: response.user.email,
           username: newAccount.username,
           dob: newAccount.dob,
@@ -145,7 +146,6 @@ const actions = {
     firebase
       .auth()
       .signOut()
-      .then((res) => console.log(res))
       .catch((err) => console.log(err));
     db.ref("usersInformation")
       .child(store.state.ukey)
@@ -182,6 +182,87 @@ const actions = {
       .child(contactKey)
       .child("notifications")
       .push(noti);
+  },
+  acceptGroupRequest(groupKey, targetKey) {
+    //check if is member if required //
+    let newMember= {
+      key:targetKey,
+      role:'member'
+    }
+    db.ref('groups').child(groupKey).child('members').push(newMember).then(()=>
+    {
+      db.ref('groups').child(groupKey).child('membersRequest').get().then(res => {
+        let rqKey
+        let resVal = res.val();
+        if (resVal) {
+          resVal = Object.keys(resVal).map((key) => ({
+            key: key,
+            ukey: resVal[key]
+          }));
+        rqKey = resVal.find((ele) => ele.ukey == targetKey).key;
+        }
+        if (rqKey!=undefined && rqKey!=null) {
+          db.ref('groups').child(contactKey).child('membersRequest').child(rqKey).remove()
+        }
+      })
+    })
+  },
+  leaveGroup(context, contactKey) {
+    let userKey = context.state.ukey;
+    db.ref('groups').child(contactKey).child('members').get()
+    .then((res) => {
+      let rqKey
+      let resVal = res.val();
+      if (resVal) {
+        resVal = Object.keys(resVal).map((key) => ({
+          key: key,
+          ukey: resVal[key].key,
+          role:resVal[key].role,
+        }));
+        rqKey = resVal.find((ele) => ele.ukey == userKey).key;
+      }
+      if (rqKey!=undefined && rqKey!=null) {
+        db.ref('groups').child(contactKey).child('members').child(rqKey).remove()
+      }
+    })
+  },
+  refuseGroupRequest(groupKey, targetKey) {
+    db.ref('groups').child(groupKey).child('membersRequest').get().then(res => {
+      let rqKey
+      let resVal = res.val();
+      if (resVal) {
+        resVal = Object.keys(resVal).map((key) => ({
+          key: key,
+          ukey: resVal[key]
+        }));
+      rqKey = resVal.find((ele) => ele.ukey == targetKey).key;
+      }
+      if (rqKey!=undefined && rqKey!=null) {
+        db.ref('groups').child(contactKey).child('membersRequest').child(rqKey).remove()
+      }
+    })
+  },
+  sentGroupRequest(context, contactKey) {
+    let userKey = context.state.ukey;
+    db.ref('groups').child(contactKey).child('membersRequest').push(userKey)
+  },
+  cancleGroupRequest(context, contactKey) {
+    let userKey = context.state.ukey;
+    db.ref('groups').child(contactKey).child('membersRequest').get()
+    .then((res) => {
+      let rqKey
+      let resVal = res.val();
+      if (resVal) {
+        resVal = Object.keys(resVal).map((key) => ({
+          key: key,
+          ukey: resVal[key]
+        }));
+        rqKey = resVal.find((ele) => ele.ukey == userKey).key;
+      }
+      if (rqKey!=undefined && rqKey!=null) {
+        db.ref('groups').child(contactKey).child('membersRequest').child(rqKey).remove()
+      }
+    })
   },
   follow(context, contactKey) {
     let userKey = context.state.ukey;

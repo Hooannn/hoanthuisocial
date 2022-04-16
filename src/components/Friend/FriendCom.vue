@@ -6,18 +6,19 @@
       </div>
       <div class="infor">
         <div style='fontSize:16px'>{{user.username}}</div>
-        <div v-if='ukey!=$store.state.ukey' style='fontSize:13px;color:grey'>Mutual {{mutualFriend.length}}</div>
+        <div v-if='ukey!=$store.state.ukey && user.type=="user"' style='fontSize:13px;color:grey'>Mutual {{mutualFriend.length}}</div>
       </div>
       </div>
       <div class='option'>
         <span><i @click='showOption' class="fas fa-ellipsis-h"></i></span>
         <div class="drop-down">
+          <span v-if='user.type=="user"' @click='viewProfile'>View Profile</span>
+          <span v-if='user.type=="page"' @click='viewPage'>View Page</span>
           <span @click='unfriend ' v-if='type=="friend" && $store.state.ukey==$route.params.key'>Unfriend</span>
           <span @click='acceptInvite' v-if='type=="friendsrequested" && $store.state.ukey==$route.params.key'>Accept</span>
           <span @click='refuseInvite' v-if='type=="friendsrequested" && $store.state.ukey==$route.params.key'>Refuse</span>
           <span @click='cancleInvite' v-if='type=="friendsrequesting" && $store.state.ukey==$route.params.key'>Cancle</span>
-          <span @click='unfollow' v-if='type=="following" && $store.state.ukey==$route.params.key'>Unfollow</span>
-          <span @click='viewProfile'>View Profile</span>
+          <span @click='unfollow' v-if='type=="following" && $store.state.ukey==$route.params.key'>Unfollow</span>     
         </div>
       </div>
   </div>
@@ -53,6 +54,13 @@ export default {
       router.push({name:'dhome'})
       setTimeout(function() {
         router.push({name:'post',params:{key:key}})
+      },50)
+    },
+    viewPage() {
+      let key=this.ukey
+      router.push({name:'dhome'})
+      setTimeout(function() {
+        router.push({name:'pages',params:{key:key}})
       },50)
     },
     unfriend() {

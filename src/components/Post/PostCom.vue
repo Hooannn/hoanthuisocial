@@ -85,6 +85,7 @@ export default {
   },
   methods: {
     //image preview
+    
     next() {
       let images = [];
       this.postImages.forEach(image => images.push(image));
@@ -105,6 +106,7 @@ export default {
         this.selectedImg = images[index];
       }
     },
+    
     showImage(img) {
         this.selectedImg = img;
         let imagePreview = document.querySelector(
@@ -261,8 +263,10 @@ export default {
     })
     //
     //style image
-      //`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com.${this.postKey} > div.post-content > div.images > div.image`
-    if (this.post.images.length%3==0) {
+    //`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com.${this.postKey} > div.post-content > div.images > div.image`
+    
+    if (this.post.images!=undefined && this.post.images.length>0) {
+      if (this.post.images.length%3==0) {
       let images=document.querySelectorAll(`div.post-com.${this.postKey} > div.post-content > div.images div.image`)
       images.forEach(image => {
         image.style.width='33.3%'
@@ -296,7 +300,7 @@ export default {
         images[this.post.images.length-2].style.width='50%'
       }
     }
-    
+    }
     //style image
     if (this.$store.state.ukey!=this.authorKey) {
       let authorElement=document.querySelector(`div.post-com.${this.postKey} .post-header .author`)

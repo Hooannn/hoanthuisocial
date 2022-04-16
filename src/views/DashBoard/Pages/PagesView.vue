@@ -16,18 +16,18 @@
                   </div>
               </div>
               <div class="more-inf">
-                  <button class="btn btn-danger btn-sm market">
+                  <button @click='$store.dispatch("follow",$route.params.key)' v-if='!peopleFollowed.find(user=> user[".value"]==$store.state.ukey)' class="btn btn-danger btn-sm market">
                       Like
+                  </button>
+                  <button @click='$store.dispatch("unfollow",$route.params.key)' v-if='peopleFollowed.find(user=> user[".value"]==$store.state.ukey)' class="btn btn-dark btn-sm market">
+                      Unlike
                   </button>
                   <button class="btn btn-success btn-sm market">
                       Contact
                   </button>
-                  <button style='display:none' class="btn btn-dark btn-sm market">
-                      Unlike
-                  </button>
                   <div class="follows">
                       <span>Likes</span>
-                      <span ><strong>1565</strong></span>
+                      <span ><strong>{{peopleFollowed.length}}</strong></span>
                   </div>
               </div>
               </div>
@@ -36,12 +36,12 @@
               <div style='width:30%;display:flex;flexDirection:column' class="first-col">
                   <div class="about">
                       <h5>About this page</h5>
-                      <div style='fontSize:15px;padding:15px'>{{page.about}}</div>
+                      <div style='fontSize:15px;padding:15px'>{{page.description}}</div>
                   </div>
                   <div class="people-liked">
                       <h5>People who likes this page</h5>
                       <div class="people-list">
-
+                          <recommend-person :class='{"this-is-me":person[".value"]==$store.state.ukey}' v-for='person in peopleFollowed' :type='"page"' :ukey="person['.value']" :key="person['.key']"/>
                       </div>
                   </div>
               </div>
@@ -76,22 +76,26 @@
 import db from '../../../plugins/firebase'
 import FooterCom from '../../../components/General/FooterCom.vue'
 import PostCom from '../../../components/Post/PostCom.vue'
+import RecommendPerson from '../../../components/General/RecommendPerson.vue'
 export default {
     components: {
         FooterCom,
-        PostCom
+        PostCom,
+        RecommendPerson
     },
     data() {
         return {
             page:{},
             posts:[],
-            peopleLiked:[]
+            peopleFollowed:[],
+            profileKey:'',
         }
     },
     mounted() {
         this.$rtdbBind('page',db.ref('usersInformation').child(this.$route.params.key))
         this.$rtdbBind('posts',db.ref('usersInformation').child(this.$route.params.key).child('posts'))
-        this.$rtdbBind('peopleLiked',db.ref('usersInformation').child(this.$route.params.key).child('likes'))
+        this.$rtdbBind('peopleFollowed',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
+        this.profileKey=this.$route.params.key
     }
 }
 </script>
@@ -204,5 +208,17 @@ export default {
     border-radius: 2px;
     text-overflow: ellipsis;
     background-color:white;
+}
+.page__content .container .first-col .people-liked .people-list div div .recommend-person{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    padding:10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    align-items: center;
+    cursor: pointer;
+}
+.page__content .container .first-col .people-liked .people-list div.this-is-me div .recommend-person{
+    cursor: unset;
 }
 </style>

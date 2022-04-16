@@ -20,6 +20,11 @@ const routes = [
         component:() => import ('../views/DashBoard/Messages/MessagesView.vue')
       },
       {
+        path:'/dashboard/group/:key',
+        name:'group',
+        component:() => import ('../views/DashBoard/Groups/GroupView.vue')
+      },
+      {
         path:'/dashboard/pages/:key',
         name:'pages',
         component:() => import ('../views/DashBoard/Pages/PagesView.vue')

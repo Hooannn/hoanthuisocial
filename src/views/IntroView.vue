@@ -79,7 +79,7 @@
       <ion-icon @click='next' class='icon next' name="chevron-forward-outline"></ion-icon>
       <div class="users-overview">
         
-        <div v-for='user in users' :key='user[".key"]' class="user">
+        <div v-for='user in filterUsers' :key='user[".key"]' class="user">
           <div class="user__avatar"><img :src="user.avatarImg"><i :class='{online:user.status=="Online",offline:user.status=="Offline"}' style='position:absolute;bottom:-2px;right:-2px;fontSize:12px' class="fas fa-circle"></i></div>
           <div class="user__username"><strong>{{user.username}}</strong></div>
           <div class="user__role"><i>{{user.role}}</i></div>
@@ -104,8 +104,20 @@ export default {
     data() {
         return {
         users: [],
+        filterUsers:[],
         slideInterval:null,
         usersInterval:null,
+      }
+    },
+    watch: {
+      users() {
+        //filter active member handle soon
+        this.filterUsers=[]
+        this.users.forEach(user => {
+          if (user.type=='user') {
+            this.filterUsers.push(user)
+          }
+        });
       }
     },
     mounted() {
@@ -139,6 +151,7 @@ export default {
     },9000)
     ///
     
+    ///
     let wrapper=document.querySelector('#app > div.intro-view > div.app__overview > div.users-overview')
     this.usersInterval=setInterval(()=>{
       setTimeout(()=>{
@@ -331,7 +344,7 @@ export default {
 .app__overview .header h5 {
   transition:all 0.2s ease-in-out;
 }
-.app__overview .users-overview {
+.app__overview .users-overview{
   padding:0 20px;
   white-space: nowrap;
   user-select: none;

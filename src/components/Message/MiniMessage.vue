@@ -97,9 +97,17 @@ export default {
             let msg=document.querySelector(`#app > div.dash-board > div.messages-m-container > div.mini-message.${this.messageKey}`)
             let msgContent=document.querySelector(`#app > div.dash-board > div.messages-m-container > div.mini-message.${this.messageKey} > div.content`)
             let msgInput=document.querySelector(`#app > div.dash-board > div.messages-m-container > div.mini-message.${this.messageKey} > div.input`)
-            msg.classList.toggle('show')
-            msgContent.classList.toggle('show')
-            msgInput.classList.toggle('show')
+            if (msg!=null && msg!=undefined) {
+                msg.classList.toggle('show')
+            }
+            
+            if (msgContent!=null && msgContent!=undefined) {
+                msgContent.classList.toggle('show')
+            }
+            if (msgInput!=null && msgInput!=undefined) {
+                msgInput.classList.toggle('show')
+            }
+            
         },
         close() {
             let msg=document.querySelector(`#app > div.dash-board > div.messages-m-container > div.mini-message.${this.messageKey}`)
@@ -149,7 +157,7 @@ export default {
     overflow: hidden;
 }
 .mini-message.show {
-    height: 50px;
+    transform: translateY(300px);
 }
 /* header */
 .mini-message .header{

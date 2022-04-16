@@ -4,6 +4,7 @@
     <div class="container">
     <div class="first-col">
       <!-- -->
+      <!-- <button @click='toMyPage' class="btn btn-primary">My Page</button> -->
       <div class="short-intro">
         <div style='width:100%;maxHeight:90px;overflow:hidden' class="short-bg">
           <img style='width:100%;height:100%;objectFit:cover' :src="$store.state.coverImg">
@@ -32,7 +33,7 @@
       <!-- -->
       <div class="people-overview">
         <h5>People you may know</h5>
-        <recommend-person v-show='person.type!="page"' v-for='person in people' :ukey="person['.key']" :key="person['.key']"/>
+        <recommend-person :type='"home"' v-show='person.type!="page" && $store.state.ukey!=person[".key"]' v-for='person in people' :ukey="person['.key']" :key="person['.key']"/>
         <!--
         <div @click='viewProfile(person[".key"])' v-for='person in people' :key="person['.key']" class="person" v-show='$store.state.ukey!=person[".key"] && !userFriend.find((user)=> (user[".value"]==person[".key"]))'>
           <div style='width:30px;height:30px;borderRadius:50%;overflow:hidden' class='person-avatar'>
@@ -57,7 +58,7 @@
       <!-- -->
       <div class="pages-overview">
         <h5>Pages</h5>
-        <recommend-person v-show='person.type=="page"' v-for='person in people' :ukey="person['.key']" :key="person['.key']"/>
+        <recommend-person :type='"home"' v-show='person.type=="page"' v-for='person in people' :ukey="person['.key']" :key="person['.key']"/>
       </div>
       <!-- -->
     </div>
@@ -87,6 +88,7 @@
       <!-- -->
       <div class="group-overview">
         <h5>Group</h5>
+        <recommend-group v-for='group in groups' :key='group[".key"]' :class='group[".key"]' :gKey='group[".key"]'/>
       </div>
       <!-- -->
     </div>
@@ -98,17 +100,19 @@
 <script>
 import FooterCom from '../../../components/General/FooterCom.vue'
 import MakePost from '../../../components/General/MakePost.vue'
+import RecommendGroup from '../../../components/General/RecommendGroup.vue'
 import RecommendPerson from '../../../components/General/RecommendPerson.vue'
 import PostCom from '../../../components/Post/PostCom.vue'
 import db from './../../../plugins/firebase'
 export default {
-  components: { FooterCom, PostCom, RecommendPerson, MakePost },
+  components: { FooterCom, PostCom, RecommendPerson, MakePost, RecommendGroup },
   data() {
     return {
       userFollow:[],
       //
       people:[],
       posts:[],
+      groups:[],
       // friend handle
       userFriend:[],
       //
@@ -118,7 +122,16 @@ export default {
     showMakePost() {
       let makePost=document.querySelector('#app > div.dash-board > div.home-view > div.cover')
       makePost.classList.add('show')
+    },
+    /*
+    toMyPage() {
+      this.$store.dispatch('setUser', "Not null")
+      this.$store.dispatch('setRole', "Not null")
+      this.$store.dispatch('setUkey', "testpage")
+      this.$store.dispatch('setUsername', "hoanthui's Social Official")
+      this.$store.dispatch('loading')
     }
+    */
   },
   filters: {
     getMutualFriend:function(contactKey) {
@@ -144,24 +157,29 @@ export default {
     people() {
       this.posts=[]
       this.people.forEach(person => {
-        person.posts=Object.keys(person.posts).sort().map((key) => ({
-          key: person.posts[key].key,
-          author: person.posts[key].author,
-          content: person.posts[key].content,
-          comments:person.posts[key].comments,
-          date:person.posts[key].date,
-          time:person.posts[key].time,
-          likes:person.posts[key].likes,
-          images:person.posts[key].images,
-        }));
-      person.posts.forEach(post => {
-        this.posts.push(post)
-      });
+        if (person.posts!=undefined && person.posts!=null) {
+          if (typeof person.posts != Array) {
+              person.posts=Object.keys(person.posts).sort().map((key) => ({
+                key: person.posts[key].key,
+                author: person.posts[key].author,
+                content: person.posts[key].content,
+                comments:person.posts[key].comments,
+                date:person.posts[key].date,
+                time:person.posts[key].time,
+                likes:person.posts[key].likes,
+                images:person.posts[key].images,
+            }));
+          }
+          person.posts.forEach(post => {
+            this.posts.push(post)
+          });
+        }
       });
     }
   },
   mounted() {
     this.$rtdbBind('people',db.ref('usersInformation'))
+    this.$rtdbBind('groups',db.ref('groups'))
     //this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
     //this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
     this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
@@ -236,7 +254,7 @@ export default {
     background-color:white;
     word-wrap: break-word;
 }
-.home-view .first-col .people-overview .recommend-person{
+.home-view .first-col .people-overview div div .recommend-person{
     display: flex;
     width: 100%;
     justify-content: space-around;
