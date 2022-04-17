@@ -9,7 +9,6 @@ import { ToastPlugin } from 'bootstrap-vue'
 Vue.use(ToastPlugin)
 Vue.use(PortalVue)
 Vue.use(VueFire)
-router.replace("/home");
 Vue.config.productionTip = false
 new Vue({
   router,

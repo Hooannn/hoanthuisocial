@@ -1,19 +1,5 @@
 # socialnetwork
 
-## Project setup
-```
-npm install
-```
+### A socialnetwork built by VueJS and Firebase
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+See [Page is live now](https://keen-torrone-765162.netlify.app).
