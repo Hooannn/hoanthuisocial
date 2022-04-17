@@ -20,8 +20,19 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  position:fixed;
+  top:0;
+  left:0;
+  background-color:rgba(0,0,0,0.3);
+  z-index: 99999;
+  visibility: hidden;
+  opacity: 0;
+}
+.loading-page.show {
+  visibility: visible;
+  opacity: 1;
 }
 .loading-page .loader {
   width: 6vw;

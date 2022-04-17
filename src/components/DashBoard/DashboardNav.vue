@@ -22,7 +22,7 @@
                 </span>
               </span>
               <div class="drop-down">
-                  <div class='vl' style='pointerEvents:none;top:0;position:absolute;left:13%;borderLeft:2px solid rgb(255, 117, 85,0.5);height:100%'></div>
+                  <div class='vl' style='pointerEvents:none;top:0;position:absolute;left:13.5%;borderLeft:2px solid rgb(255, 117, 85,0.5);height:100%'></div>
                   <div style='zIndex:1;padding:5px 10px;background-color:white;borderBottom:1px solid grey' v-if='notis.length==0'>You have no notifications.</div>
                   <noti-com :class='noti[".key"]' v-for='noti in notis' :key='noti[".key"]' :notiKey="noti['.key']"/>
                   <div @click='clearNoti' style='zIndex:1;backgroundColor:whitesmoke;width:100%;display:flex;justifyContent:center'><button style='color:grey' class='btn btn-sm btn-link'>Clear</button></div>
@@ -40,7 +40,7 @@
                 name="chevron-down-outline"
               ></ion-icon>
           </div>
-          <div class="drop-down">
+          <div style='width:150px' class="drop-down">
             <div @click='viewMyProfile'><span>Profile</span></div>
             <div><span>Credit</span></div>
             <div @click='viewMyFriend'><span>Friends</span></div>
@@ -258,7 +258,7 @@ export default {
     display: flex;
     flex-direction: column;
     visibility: hidden;
-    width: 150px;
+    max-width: 150px;
     position: absolute;
     top:90%;
     background-color:whitesmoke;

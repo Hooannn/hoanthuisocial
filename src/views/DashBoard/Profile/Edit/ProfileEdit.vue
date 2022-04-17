@@ -43,8 +43,7 @@ export default {
             onUploadDone: (res) => {
             this.newAvatar = res.filesUploaded[0].url;
             this.user.avatarImg=this.newAvatar
-            
-                }
+            }
             }
             client.picker(options).open();
         },
@@ -56,25 +55,33 @@ export default {
             onUploadDone: (res) => {
             this.newBackground = res.filesUploaded[0].url;
             this.user.coverImg=this.newBackground
-            
-                }
+            }
             }
             client.picker(options).open();
         },
         saveChanges() {
             if (this.newAvatar!=null || this.newBackground!=null) {
                 if (this.newAvatar!=null) {
+                    this.$store.dispatch('loading')
                     db.ref('usersInformation').child(this.$store.state.ukey).child('avatarImg').set(this.newAvatar)
-                    this.$store.dispatch('setAvatar',this.newAvatar)
+                    .then(()=> {
+                        this.$store.dispatch('unload')
+                        this.$store.dispatch('setAvatar',this.newAvatar)
+                    })
                 }
                 if (this.newBackground!=null) {
+                    this.$store.dispatch('loading')
                     db.ref('usersInformation').child(this.$store.state.ukey).child('coverImg').set(this.newBackground)
-                    this.$store.dispatch('setCover',this.newBackground)
+                    .then(()=> {
+                        this.$store.dispatch('unload')
+                        this.$store.dispatch('setCover',this.newBackground)
+                    })
                 }
                 this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
                 this.$bvToast.show('edit')
             }   
             else {
+                this.$bvToast.show('alert-no-change')
                 return
             }
         }

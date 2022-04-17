@@ -22,10 +22,13 @@ const usersInf = db.ref("usersInformation");
 
 const actions = {
   signUp({ commit }, newAccount) {
+    let loader=document.querySelector('#app > div.loading-page')
+    loader.classList.add('show')
     firebase
       .auth()
       .createUserWithEmailAndPassword(newAccount.email, newAccount.password)
       .then((response) => {
+        loader.classList.remove('show')
         let account = response.user;
         sessionStorage.setItem("account", JSON.stringify(account));
         commit("SET_USER", response.user);
@@ -71,8 +74,10 @@ const actions = {
           password: newAccount.password,
           registerDate: new Date().toLocaleDateString(),
         });
+        store.dispatch('login',newAccount)
       })
       .catch((error) => {
+        loader.classList.remove('show')
         commit("SET_USER", null);
         commit("SET_ERROR", error.message);
         commit("SET_STATUS", false);
@@ -82,10 +87,14 @@ const actions = {
     commit("SET_ERROR", message);
   },
   login({ commit }, account) {
+    let loader=document.querySelector('#app > div.loading-page')
+    loader.classList.add('show')
     firebase
       .auth()
       .signInWithEmailAndPassword(account.email, account.password)
       .then((response) => {
+        loader.classList.remove('show')
+        router.push({name:'dhome'})
         //login logic go after this comment
         let user;
         commit("SET_USER", response.user);
@@ -131,6 +140,7 @@ const actions = {
         commit("SET_USER", null);
         commit("SET_ERROR", error.message);
         commit("SET_STATUS", false);
+        loader.classList.remove('show')
       });
   },
   logOut({ commit }) {
@@ -245,6 +255,17 @@ const actions = {
   sentGroupRequest(context, contactKey) {
     let userKey = context.state.ukey;
     db.ref('groups').child(contactKey).child('membersRequest').push(userKey)
+    let noti= {
+      content: `You has sent a request to join this group. Please wait for their decision.`,
+      date: new Date().toLocaleString(),
+      groupKey:contactKey,
+      time: new Date().getTime(),
+      status: "Unseen",
+      type: "send-group-request",
+      ukey: contactKey,
+    }
+    db.ref('usersInformation').child(userKey).child('notifications').push(noti)
+    //
   },
   cancleGroupRequest(context, contactKey) {
     let userKey = context.state.ukey;
@@ -363,6 +384,14 @@ const actions = {
       })
       .catch((err) => console.log(err));
   },
+  loading() {
+    let loader=document.querySelector('#app > div.loading-page')
+    loader.classList.add('show')
+  },
+  unload() {
+    let loader=document.querySelector('#app > div.loading-page')
+    loader.classList.remove('show')
+  },
   /*
   getMutualFriend({ state }, targetKey) {
     let myKey = state.ukey;
@@ -443,12 +472,6 @@ const actions = {
   },
   removeMsgData({commit}, message) {
     commit("REMOVE_MESSAGEDATA", message)
-  },
-  loading() {
-    router.push("/loading");
-    setTimeout(function () {
-      router.go(-1);
-    }, 50);
   },
   closeMoreInfo({ commit, state }, e) {
     let dropDown = document.querySelector(

@@ -1,17 +1,17 @@
 <template>
-  <div class="edit-view">
-    <div class="first-col">
-      <div class="your-details">
-        <h5>Your Details</h5>
+  <div class="staffs-view">
+      <div style='width:18%' class="first-col">
+      <div class="manage">
+        <h5>Manage</h5>
         <div
-          v-for="(detail, index) in yourDetails"
+          v-for="(manage, index) in manages"
           :key="index"
-          @click="$router.push({ name: detail.name })"
-            :class='{selected:$route.name==detail.name}'
-        >{{detail.title}}</div>
+          @click="$router.push({ name: manage.name })"
+            :class='{selected:$route.name==manage.name}'
+        >{{manage.title}}</div>
       </div>
     </div>
-    <div class="second-col">
+    <div style='width:78%' class="second-col">
       <router-view></router-view>
     </div>
   </div>
@@ -21,22 +21,22 @@
 export default {
   data() {
     return {
-      yourDetails: [
-        { title: "Personal Info", name: "personal" },
-        { title: "Profile", name: "profile-edit" },
-        { title: "Social Networks", name: "social-networks" },
-        { title: "Email Setting", name: "email-setting"},
-        { title: "Change Password", name: "change-password" },
-        { title: "Deactivate Account", name: "deactivate-account" },
+      manages: [
+        { title: "Information", name: "group-manage-info" },
+        { title: "Posts", name: "group-manage-post" },
+        { title: "Members", name: "group-manage-members" },
+        { title: "Join Requested", name: "group-manage-members-request" },
       ],
-      selected:'',
     };
+  },
+  mounted() {
+    this.$router.push({name:'group-manage-info'})
   }
 };
 </script>
 
 <style>
-.edit-view {
+.staffs-view {
   margin-top: 50px;
   margin-bottom: 50px;
   width: 100%;
@@ -45,19 +45,17 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.edit-view .first-col {
-  width: 18%;
+.staffs-view .first-col {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-.edit-view .second-col {
-  width: 78%;
+.staffs-view .second-col {
   height: 100%;
 }
 /* 1 col */
 /* your details */
-.your-details {
+.manage {
   display: flex;
   flex-direction: column;
   font-size: 13px;
@@ -66,8 +64,9 @@ export default {
   border-radius: 2px;
   text-overflow: ellipsis;
   background-color: white;
+  width: 100%;
 }
-.your-details h5 {
+.manage h5 {
   margin: 0;
   padding: unset;
   padding: 20px;
@@ -75,7 +74,7 @@ export default {
   font-size: 17px;
   font-weight: 800;
 }
-.your-details div {
+.manage div {
   padding: 15px 10px;
     border-bottom: 1px solid rgba(0,0,0,0.2);
     display: flex;
@@ -83,7 +82,7 @@ export default {
     font-size: 14px;
     cursor: pointer;
 }
-.your-details div.selected, .your-details div:hover {
+.manage div.selected, .manage div:hover {
   border-right:2px solid #ff7555;
   color:#ff7555;
 }

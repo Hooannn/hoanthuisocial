@@ -49,8 +49,10 @@ export default {
                     content:this.postContent,
                     images:this.imgsUpload,
                 }
+                this.$store.dispatch('loading')
                 db.ref('usersInformation').child(this.$store.state.ukey).child('posts').push(newPost).then(res => {
                     db.ref('usersInformation').child(this.$store.state.ukey).child('posts').child(res.key).child('key').set(res.key)
+                    this.$store.dispatch('unload')
                     this.$bvToast.show('new-blog')
                     let noti={
                         content:`${this.$store.state.username} has post a new post.`,
@@ -65,6 +67,7 @@ export default {
                         db.ref('usersInformation').child(follower['.value']).child('notifications').push(noti)
                     });
                 })
+                .catch(()=>loader.classList.remove('show'))
                 this.postContent=''
                 this.imgsUpload=[]
                 this.close()

@@ -1,7 +1,7 @@
 <template>
     <div @click='viewGroup(group[".key"])' class="recommend-group">
           <div style='width:30px;height:30px;borderRadius:50%;overflow:hidden' class='group-avatar'>
-            <img style='width:100%;height:100%;objectFit:cover' :src="group.coverImg">
+            <img style='width:100%;height:100%;objectFit:cover' :src="group.avatarImg">
           </div>
           <div style='width:45%;fontSize:14px;fontWeight:800' class='group-username'>
             <div>{{group.groupname}}</div>

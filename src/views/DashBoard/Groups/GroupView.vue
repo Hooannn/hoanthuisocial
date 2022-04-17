@@ -1,7 +1,7 @@
 <template>
   <div class="group-view" :key='$route.params.key'>
       <div class="group__cover">
-          <img :src="group.coverImg" alt="Cover img">
+          <img :src="group.avatarImg" alt="Cover img">
       </div>
       <div class="group__content ">
           <div class="group__header">
@@ -51,7 +51,7 @@
               <div v-if='members.find(user => user.key==$store.state.ukey)' class="member-nav is-member">
                   <div @click='$router.push({name:"group-about"})' class="group-about" :class="{active:$route.name=='group-about'}">About</div>
                   <div @click='$router.push({name:"group-post"})' class="group-post" :class="{active:$route.name=='group-post'}">Post</div>
-                  <div @click='$router.push({name:"members"})' class="members" :class="{active:$route.name=='members'}">Members</div>
+                  <div @click='$router.push({name:"members"})' class="members" :class="{active:$route.name=='members'}">Members ({{members.length}})</div>
                   <div v-if='members.find(user => (user.key==$store.state.ukey && user.role=="staff"))' @click='$router.push({name:"manage"})' class="staff" :class="{active:$route.name=='manage'}">Manage</div>
               </div>
               <router-view></router-view>
@@ -90,6 +90,16 @@ export default {
             members:[],
             rules:[],
             membersRequest:[],
+        }
+    },
+    watch: {
+        members() {
+            if (this.members.find(user=>user.key==this.$store.state.ukey)) {
+                this.$router.push({name:'group-post'})
+            }
+            else {
+                return
+            }
         }
     },
     mounted() {

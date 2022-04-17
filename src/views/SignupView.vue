@@ -15,7 +15,7 @@
         <h2><strong style="fontSize: 25px">Account Details:</strong></h2>
         <div
           class="result"
-          :class="{ success: getStatus != null }"
+          :class="{ success: getStatus == null }"
           v-if="getMessage"
         >
           {{ getMessage }}<i @click="setMessage(null)" class="fas fa-times"></i>
@@ -159,6 +159,7 @@ export default {
           dob:this.dob,
           location:this.location
         });
+        /*
         let newAccount = {
           email: this.email,
           password: this.password,
@@ -170,6 +171,7 @@ export default {
             router.push("/login");
           }, 1000);
         }, 1500);
+        */
       }
     },
   },

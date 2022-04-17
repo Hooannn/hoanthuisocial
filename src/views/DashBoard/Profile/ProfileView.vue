@@ -44,8 +44,9 @@
               <div class="profile__nav">
                   <div @click='$router.push({name:"post",params:{key:profileKey}})' class="post" :class="{active:$route.name=='post'}">Post</div>
                   <div @click='$router.push({name:"about",params:{key:profileKey}})' class="about" :class="{active:$route.name=='about'}">About</div>
-                  <div @click='$router.push({name:"friends",params:{key:profileKey}})' class="friends-list" :class="{active:$route.name=='friends'}">Friends</div>
-                  <div class="images" :class="{active:$route.name=='images'}">Image</div>
+                  <div v-if='$store.state.ukey==$route.params.key' @click='$router.push({name:"friends",params:{key:profileKey}})' class="friends-list" :class="{active:$route.name=='friends'}">Friends ({{friends.length+follows.length+following.length+userFriendRequested.length+userFriendRequesting.length}})</div>
+                  <div v-if='$store.state.ukey!=$route.params.key' @click='$router.push({name:"friends",params:{key:profileKey}})' class="friends-list" :class="{active:$route.name=='friends'}">Friends ({{friends.length+follows.length+following.length}})</div>
+                  <div class="images" :class="{active:$route.name=='images'}">Images</div>
                   <div class="credits" :class="{active:$route.name=='credits'}">Credits</div>
                   <div class="more" :class="{active:$route.name=='see-more'}">See more <ion-icon style="marginLeft:5px" name="chevron-down-outline"></ion-icon></div>
               </div>
@@ -68,6 +69,7 @@ export default {
             },
             friends:[],
             follows:[],
+            following:[],
             profileKey:'',
             //friend handle
             userFriendRequesting:[],
@@ -83,6 +85,7 @@ export default {
         this.$rtdbBind('user',db.ref('usersInformation').child(this.$route.params.key))
         this.$rtdbBind('friends',db.ref('usersInformation').child(this.$route.params.key).child('friends').child('isfriend'))
         this.$rtdbBind('follows',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
+        this.$rtdbBind('following',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('following'))
         this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
         this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
         this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))

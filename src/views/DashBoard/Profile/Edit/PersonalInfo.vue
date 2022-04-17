@@ -135,22 +135,48 @@ export default {
       {
         if (this.phone !=this.user.phone || this.username!=this.user.username || this.gender!=this.user.gender||this.statusrel!=this.user.statusrel || this.dob!=this.user.dob) {
         this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
+        this.$store.dispatch('loading')
         db.ref('usersInformation').child(this.$store.state.ukey).child('username').set(this.username)
+        .then(()=>{
+          this.$store.dispatch('unload')
+          this.$bvToast.show('edit')
+        }).catch(()=>this.$store.dispatch('unload'))
         this.$store.dispatch('setUsername',this.username)
         db.ref('usersInformation').child(this.$store.state.ukey).child('phone').set(this.phone)
+        .then(()=>{
+          this.$store.dispatch('unload')
+          this.$bvToast.show('edit')
+        }).catch(()=>this.$store.dispatch('unload'))
         db.ref('usersInformation').child(this.$store.state.ukey).child('dob').set(this.dob)
+        .then(()=>{
+          this.$store.dispatch('unload')
+          this.$bvToast.show('edit')
+        }).catch(()=>this.$store.dispatch('unload'))
         this.$store.dispatch('setDob',this.dob)
         db.ref('usersInformation').child(this.$store.state.ukey).child('statusrel').set(this.statusrel)
+        .then(()=>{
+          this.$store.dispatch('unload')
+          this.$bvToast.show('edit')
+        }).catch(()=>this.$store.dispatch('unload'))
         db.ref('usersInformation').child(this.$store.state.ukey).child('gender').set(this.gender)
-        this.$bvToast.show('edit')
+        .then(()=>{
+          this.$store.dispatch('unload')
+          this.$bvToast.show('edit')
+        }).catch(()=>this.$store.dispatch('unload'))
         }
       }
       if (this.description!=null && this.description.trim()!='' && this.description!=this.user.description) {
-        this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
-        db.ref('usersInformation').child(this.$store.state.ukey).child('description').set(this.description)
-        this.$bvToast.show('edit')
+        this.$store.dispatch('loading')
+        db.ref('usersInformation').child(this.$store.state.ukey).child('description').set(this.description).then(()=> {
+          this.$store.dispatch('unload')
+          this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
+          this.$bvToast.show('edit')
+        }).catch(()=> {
+          this.$store.dispatch('unload')
+        })
       }
       else {
+        this.$bvToast.show('alert-no-change')
         return
       }
     },
@@ -160,16 +186,22 @@ export default {
         this.education.to !=null && this.education.to.trim()!='' &&
         this.education.website !=null && this.education.website.trim()!='' 
       ) {
-        db.ref('usersInformation').child(this.$store.state.ukey).child('education').push(this.education)
+        this.$store.dispatch('loading')
+        db.ref('usersInformation').child(this.$store.state.ukey).child('education').push(this.education).then(()=> {
+          this.$store.dispatch('unload')
+          this.$bvToast.show('edit')
+        }).catch(()=> {
+          this.$store.dispatch('loading')
+        })
         this.education= {
           title:'',
           from:'',
           to:'',
           website:'',
         }
-        this.$bvToast.show('edit')
       }
       else {
+        this.$bvToast.show('alert-no-change')
         return
       }
     },
@@ -179,16 +211,23 @@ export default {
         this.employment.to !=null && this.employment.to.trim()!='' &&
         this.employment.website !=null && this.employment.website.trim()!='' 
       ) {
+        this.$store.dispatch('loading')
         db.ref('usersInformation').child(this.$store.state.ukey).child('employment').push(this.employment)
+        .then(()=> {
+          this.$store.dispatch('unload')
+          this.$bvToast.show('edit')
+        }).catch(()=> {
+          this.$store.dispatch('unload')
+        })
         this.employment= {
           title:'',
           from:'',
           to:'',
           website:'',
         }
-        this.$bvToast.show('edit')
       }
       else {
+        this.$bvToast.show('alert-no-change')
         return
       }
     }

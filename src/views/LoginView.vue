@@ -65,15 +65,12 @@ export default {
     ...mapActions(["login", "setMessage"]),
     forgotPassword() {
       //forgot password handling
-      store.dispatch("warning", "Sorry! This gonna be updated soon");
     },
     loginwFB() {
       //authencation with fb
-      store.dispatch("warning", "Sorry! This gonna be updated soon");
     },
     loginwGG() {
       //authencation with gg
-      store.dispatch("warning", "Sorry! This gonna be updated soon");
     },
     resetErrMsgs() {
       this.errmsgs = [];
@@ -112,9 +109,11 @@ export default {
           //this.login({ email: this.email, password: this.password });
           this.email = null;
           this.password = null;
+          /*
           setTimeout(function () {
             router.push({name:"dhome"});
           }, 1500);
+          */
         }
       }
     },

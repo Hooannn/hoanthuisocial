@@ -9,6 +9,7 @@
         <ion-icon v-if="noti.type=='send-friendInvite'" class='icon' name="person-add-outline"></ion-icon>
         <ion-icon v-if="noti.type=='accept-friendInvite'" class='icon' name="people-outline"></ion-icon>
         <ion-icon v-if="noti.type=='follow'" class='icon' name="eye-outline"></ion-icon>
+        <ion-icon v-if="noti.type=='send-group-request'" class='icon' name="enter-outline"></ion-icon>
     </div>
     <div class="avatar"><img :src="ava['.value']" ></div>
     <div class="content">
@@ -84,7 +85,12 @@ export default {
     },
     mounted() {
         this.$rtdbBind('noti',db.ref('usersInformation').child(this.$store.state.ukey).child("notifications").child(this.notiKey))
-        this.$rtdbBind('ava', db.ref('usersInformation').child(this.noti.ukey).child('avatarImg'))
+        if (this.noti.type=="send-group-request") {
+            this.$rtdbBind('ava', db.ref('groups').child(this.noti.ukey).child('avatarImg'))
+        }
+        else {
+            this.$rtdbBind('ava', db.ref('usersInformation').child(this.noti.ukey).child('avatarImg'))
+        }
     }
 };
 </script>
@@ -108,7 +114,7 @@ export default {
     background-color:white;
 }
 #app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com .status {
-    width: 3%;
+    width: 10px;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -121,7 +127,7 @@ export default {
     border-radius: 50%;
 }
 #app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com .type {
-    width: 3%;
+    width: 10px;
     height: 100%;
     position: relative;
     display: flex;

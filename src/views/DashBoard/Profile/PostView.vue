@@ -78,7 +78,9 @@ export default {
                     content:this.postContent,
                     images:this.imagesUpload,
                 }
+                this.$store.dispatch('loading')
                 db.ref('usersInformation').child(this.$store.state.ukey).child('posts').push(newPost).then(res => {
+                    this.$store.dispatch('unload')
                     db.ref('usersInformation').child(this.$store.state.ukey).child('posts').child(res.key).child('key').set(res.key)
                     this.$bvToast.show('new-blog')
                     let noti={
@@ -93,6 +95,9 @@ export default {
                     this.myfollowers.forEach(follower => {
                         db.ref('usersInformation').child(follower['.value']).child('notifications').push(noti)
                     });
+                })
+                .catch(()=> {
+                    loader.classList.remove('show')
                 })
                 this.postContent=''
                 this.imagesUpload=[]

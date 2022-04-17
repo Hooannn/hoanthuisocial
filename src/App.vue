@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <loading-view/>
     <toastes-container/>
     <!--
     <div class="app__introduce">
@@ -98,8 +99,9 @@
 
 <script>
 import ToastesContainer from './components/General/ToastesContainer.vue';
+import LoadingView from './views/LoadingView.vue';
 export default {
-  components: { ToastesContainer },
+  components: { ToastesContainer, LoadingView },
   mounted() {
     
     let account = JSON.parse(sessionStorage.getItem("account"));

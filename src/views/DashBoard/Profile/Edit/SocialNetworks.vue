@@ -83,18 +83,35 @@ export default {
                 this.pinterest != this.currentSocialNetworks.pinterest ||
                 this.youtube != this.currentSocialNetworks.youtube 
             ) { 
+                this.$store.dispatch('loading')
+                let social= {
+                    facebook:this.facebook.trim(),
+                    instagram:this.instagram.trim(),
+                    twitter:this.twitter.trim(),
+                    github:this.github.trim(),
+                    pinterest:this.pinterest.trim(),
+                    youtube:this.youtube.trim(),
+                }
+                db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts').set(social)
+                .then(()=> {
+                    this.$store.dispatch('unload')
+                }).catch(() => this.$store.dispatch('unload'))
+                this.$bvToast.show('edit')
+                /*
                 db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts').child('facebook').set(this.facebook.trim())
                 db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts').child('instagram').set(this.instagram.trim())
                 db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts').child('twitter').set(this.twitter.trim())
                 db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts').child('github').set(this.github.trim())
                 db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts').child('pinterest').set(this.pinterest.trim())
                 db.ref('usersInformation').child(this.$store.state.ukey).child('socialAccounts').child('youtube').set(this.youtube.trim())
+                */
+                this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
             }
             else {
+                this.$bvToast.show('alert-no-change')
                 return
             }
-            this.$bvToast.show('edit')
-            this.$router.push({name:'about',params:{key:this.$store.state.ukey}})
+            
         }
     },
     watch: {

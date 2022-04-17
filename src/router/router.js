@@ -14,11 +14,13 @@ const routes = [
         name:'dhome',
         component:() => import ('../views/DashBoard/Home/HomeView.vue')
       },
+      /*
       {
         path:'/dashboard/messages',
         name:'messages',
         component:() => import ('../views/DashBoard/Messages/MessagesView.vue')
       },
+      */
       {
         path:'/dashboard/group/:key',
         name:'group',
@@ -42,7 +44,29 @@ const routes = [
           {
             path:'/dashboard/group/:key/manage',
             name:'manage',
-            component:() => import('../views/DashBoard/Groups/StaffsView.vue')
+            component:() => import('../views/DashBoard/Groups/Manage/StaffsView.vue'),
+            children: [
+              {
+                path:'/dashboard/group/:key/group-manage-info',
+                name:'group-manage-info',
+                component:() => import('../views/DashBoard/Groups/Manage/ManageInfo.vue')
+              },
+              {
+                path:'/dashboard/group/:key/group-manage-post',
+                name:'group-manage-post',
+                component:() => import('../views/DashBoard/Groups/Manage/ManagePosts.vue')
+              },
+              {
+                path:'/dashboard/group/:key/group-manage-members',
+                name:'group-manage-members',
+                component:() => import('../views/DashBoard/Groups/Manage/ManageMembers.vue')
+              },
+              {
+                path:'/dashboard/group/:key/group-manage-members-request',
+                name:'group-manage-members-request',
+                component:() => import('../views/DashBoard/Groups/Manage/ManageRequest.vue')
+              },
+            ]
           },
         ]
       },
