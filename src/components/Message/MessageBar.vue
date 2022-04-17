@@ -1,6 +1,6 @@
 <template>
   <div class="message-bar">
-      <message-user v-for='user in myFriendList' :ukey='user[".value"]' :key='user[".value"]' :class='user[".key"]'/>
+      <message-user v-for='user in myFriendList' :ukey='user[".value"]' :key='user[".key"]' :class='user[".key"]'/>
   </div>
 </template>
 

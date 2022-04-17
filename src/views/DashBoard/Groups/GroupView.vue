@@ -23,8 +23,8 @@
               </div>
               </div>
           </div>
-          <div style='height:auto;minHeight:55vh;marginBottom:25px;display:flex;flexWrap:wrap;justifyContent:center' class="container">
-              <div class="first-col">
+          <div style='height:auto;minHeight:55vh;marginBottom:25px;display:flex;flexDirection:column;alignItems:center' class="container">
+              <div v-if='!members.find(user => user.key==$store.state.ukey)' class="first-col non-member">
                   <div class="about">
                       <h5>About this group</h5>
                       <div>{{group.description}}</div>
@@ -48,6 +48,13 @@
                       </div>
                   </div>
               </div>
+              <div v-if='members.find(user => user.key==$store.state.ukey)' class="member-nav is-member">
+                  <div @click='$router.push({name:"group-about"})' class="group-about" :class="{active:$route.name=='group-about'}">About</div>
+                  <div @click='$router.push({name:"group-post"})' class="group-post" :class="{active:$route.name=='group-post'}">Post</div>
+                  <div @click='$router.push({name:"members"})' class="members" :class="{active:$route.name=='members'}">Members</div>
+                  <div v-if='members.find(user => (user.key==$store.state.ukey && user.role=="staff"))' @click='$router.push({name:"manage"})' class="staff" :class="{active:$route.name=='manage'}">Manage</div>
+              </div>
+              <router-view></router-view>
           </div>
           <!--
           <div style='height:auto;minHeight:55vh;marginBottom:25px' class="container">
@@ -221,5 +228,31 @@ export default {
     width: 100%;
     max-height: 400px;
     overflow-y:auto;
+}
+.group__content .container .member-nav {
+    width: 100%;
+    justify-content: space-around;
+    display: flex;
+    align-items: center;
+    height: 40px;
+}
+.group__content .container .member-nav div{
+    height: 100%;
+    width: 15%;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0,0,0,0.4);
+    cursor: pointer;
+}
+.group__content .container .member-nav div.active{
+    background-color:rgba(128, 128, 128, 0.158);
+    border-bottom:3px solid orange;
+    color:orangered;
+    font-weight: 900;
+}
+.group__content .container .member-nav div:hover{
+    background-color:rgba(128, 128, 128, 0.158);
 }
 </style>

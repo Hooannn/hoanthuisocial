@@ -22,7 +22,29 @@ const routes = [
       {
         path:'/dashboard/group/:key',
         name:'group',
-        component:() => import ('../views/DashBoard/Groups/GroupView.vue')
+        component:() => import ('../views/DashBoard/Groups/GroupView.vue'),
+        children:[
+          {
+            path:'/dashboard/group/:key/post',
+            name:'group-post',
+            component:() => import('../views/DashBoard/Groups/GroupPost.vue')
+          },
+          {
+            path:'/dashboard/group/:key/about',
+            name:'group-about',
+            component:() => import('../views/DashBoard/Groups/AboutView.vue')
+          },
+          {
+            path:'/dashboard/group/:key/members',
+            name:'members',
+            component:() => import('../views/DashBoard/Groups/MembersView.vue')
+          },
+          {
+            path:'/dashboard/group/:key/manage',
+            name:'manage',
+            component:() => import('../views/DashBoard/Groups/StaffsView.vue')
+          },
+        ]
       },
       {
         path:'/dashboard/pages/:key',

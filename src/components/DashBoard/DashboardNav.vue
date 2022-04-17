@@ -100,7 +100,8 @@ export default {
         messages() {
             this.unseenMsg=0
             this.messages.forEach(message => {
-                if (message.data != undefined && message.data !=null) {
+                if (message.user1==this.$store.state.ukey || message.user2==this.$store.state.ukey) {
+                    if (message.data != undefined && message.data !=null) {
                     let messageData=message.data
                     messageData=Object.keys(messageData).map((key)=> ({key:key,author:messageData[key].author,status:messageData[key].status}))
                     messageData.forEach(data => {
@@ -110,6 +111,7 @@ export default {
                         newmessageSound.play()
                     }
                 });
+                }
                 }
             });
         }
