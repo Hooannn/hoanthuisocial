@@ -179,17 +179,18 @@ export default {
   },
   mounted() {
     this.$store.dispatch('loading')
-    this.$rtdbBind('groups',db.ref('groups'))
-    //this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
-    //this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
-    this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
-    this.$rtdbBind('userFollow',db.ref('usersInformation').child(this.$store.state.ukey).child('follows').child('followed'))
     this.$rtdbBind('people',db.ref('usersInformation')).then(()=>{
       this.$store.dispatch('unload')
     }).catch(err=>{
       alert(err)
       this.$store.dispatch('unload')
     })
+    this.$rtdbBind('groups',db.ref('groups'))
+    //this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
+    //this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
+    this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
+    this.$rtdbBind('userFollow',db.ref('usersInformation').child(this.$store.state.ukey).child('follows').child('followed'))
+    
   }
 }
 </script>

@@ -92,9 +92,21 @@ export default {
             membersRequest:[],
         }
     },
+    watch:{
+        members() {
+            if (this.members.find(user => user.key!=this.$store.state.ukey)) {
+                this.$router.push({name:'group'})
+            }
+        }
+    },
     mounted() {
         this.$store.dispatch('loading')
         this.$rtdbBind('members',db.ref('groups').child(this.$route.params.key).child('members'))
+        .then(()=>{
+            if (this.members.find(user => user.key==this.$store.state.ukey)) {
+                this.$router.push({name:'group-post'})
+            }
+        })
         this.$rtdbBind('membersRequest',db.ref('groups').child(this.$route.params.key).child('membersRequest'))
         this.$rtdbBind('rules',db.ref('groups').child(this.$route.params.key).child('rules'))
         this.$rtdbBind('group',db.ref('groups').child(this.$route.params.key))
