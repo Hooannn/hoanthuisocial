@@ -64,6 +64,7 @@ export default {
       },50)
     },
     unfriend() {
+      this.$store.dispatch('loading')
       let e=[...this.targetFriendList]
       db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend').child(this.fKey).remove()
         .then(() => {
@@ -79,10 +80,16 @@ export default {
             let friendEle=document.querySelector(`#app > div > div.profile-view > div.profile__content > div.container > div.friends-view.container > div.current-friends > div.list > div.friend-com.${this.fKey}`)
             friendEle.remove()
           },50)
+        }).then(()=>{
+          this.$store.dispatch('unload')
         })
-        .catch(err=> {console.log(err)})
+        .catch(err=> {
+          this.$store.dispatch('unload')
+          alert(err)
+          })
     },
     acceptInvite() {
+      this.$store.dispatch('loading')
       let e=[...this.targetFriendRequestingList]
       db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested').child(this.fKey).remove()
       .then(() => {
@@ -114,10 +121,16 @@ export default {
           let friendEle=document.querySelector(`#app > div > div.profile-view > div.profile__content > div.container > div.friends-view.container > div.requested-friends > div.list > div.friend-com.${this.fKey}`)
           friendEle.remove()
         },50)
-      })
-      .catch(err => console.log(err))
+      }).then(()=>{
+          this.$store.dispatch('unload')
+        })
+        .catch(err=> {
+          this.$store.dispatch('unload')
+          alert(err)
+          })
     },
     refuseInvite() {
+      this.$store.dispatch('loading')
       let e=[...this.targetFriendRequestingList]
       db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested').child(this.fKey).remove()
       .then(() => {
@@ -150,8 +163,13 @@ export default {
           let friendEle=document.querySelector(`#app > div > div.profile-view > div.profile__content > div.container > div.friends-view.container > div.requesting-friends > div.list > div.friend-com.${this.fKey}`)
           friendEle.remove()
         },50)
-      })
-      .catch(err => console.log(err))
+      }).then(()=>{
+          this.$store.dispatch('unload')
+        })
+        .catch(err=> {
+          this.$store.dispatch('unload')
+          alert(err)
+          })
     },
     unfollow() {
       this.$store.dispatch("unfollow",this.ukey)

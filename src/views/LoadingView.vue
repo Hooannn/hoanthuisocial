@@ -1,6 +1,8 @@
 <template>
   <div class="loading-page">
-    <div class="loader"></div>
+    <div class='loader-cover' style='width:50px;height:50px;borderRadius:50%;display:flex;justifyContent:center;alignItems:center;backgroundColor:#313131'>
+      <div class="loader"></div>
+    </div>
   </div>
 </template>
 
@@ -17,16 +19,15 @@ export default {
 
 <style>
 .loading-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-width: 100vw;
   min-height: 100vh;
   position:fixed;
   top:0;
   left:0;
-  background-color:rgba(0,0,0,0.3);
   z-index: 99999;
+  cursor:wait;
+  display: flex;
+  justify-content: center;
   visibility: hidden;
   opacity: 0;
 }
@@ -34,12 +35,15 @@ export default {
   visibility: visible;
   opacity: 1;
 }
+.loading-page .loader-cover {
+  margin-top:165px;
+}
 .loading-page .loader {
-  width: 6vw;
-  height: 6vw;
-  border: 1vw solid #f3f3f3;
+  width: 35px;
+  height: 35px;
+  border: 3px solid rgba(255,255,255,0.1);
   border-radius: 50%;
-  border-top: 1vw solid orange;
+  border-top: 3px solid orange;
   animation: spin 0.7s infinite;
 }
 @keyframes spin {

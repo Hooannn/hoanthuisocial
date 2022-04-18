@@ -67,7 +67,7 @@ export default {
                         db.ref('usersInformation').child(follower['.value']).child('notifications').push(noti)
                     });
                 })
-                .catch(()=>loader.classList.remove('show'))
+                .catch(()=>this.$store.dispatch('unload'))
                 this.postContent=''
                 this.imgsUpload=[]
                 this.close()

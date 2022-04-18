@@ -103,7 +103,6 @@ import LoadingView from './views/LoadingView.vue';
 export default {
   components: { ToastesContainer, LoadingView },
   mounted() {
-    
     let account = JSON.parse(sessionStorage.getItem("account"));
     let role = sessionStorage.getItem("role");
     let ukey = sessionStorage.getItem("ukey");
@@ -124,7 +123,7 @@ export default {
     this.$store.dispatch("setLocation", location);
     
     if (this.$store.state.user != null) {
-      this.$router.push({ name: "dhome" });
+      //this.$router.push({ name: "dhome" });
     } else if (this.$store.state.user == null) {
       this.$router.push("/home");
     }
@@ -150,6 +149,9 @@ body {
   font-family: "Poppins", sans-serif;
   user-select: none;
   background-color: rgba(229, 240, 248, 0.904);
+}
+.bar {
+  background:orange;
 }
 #app {
   width: 100vw;

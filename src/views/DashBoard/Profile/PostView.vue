@@ -97,7 +97,7 @@ export default {
                     });
                 })
                 .catch(()=> {
-                    loader.classList.remove('show')
+                    this.$store.dispatch('unload')
                 })
                 this.postContent=''
                 this.imagesUpload=[]

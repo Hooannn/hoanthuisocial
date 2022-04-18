@@ -91,10 +91,27 @@ export default {
             profileKey:'',
         }
     },
+    watch:{
+        page() {
+            if (this.page.type=="user") {
+                this.$router.push({name:'post',params:{key:this.$route.params.key}})
+            }
+            else {
+                return
+            }
+        }
+    },
     mounted() {
-        this.$rtdbBind('page',db.ref('usersInformation').child(this.$route.params.key))
+        //this.$store.dispatch('loading')
         this.$rtdbBind('posts',db.ref('usersInformation').child(this.$route.params.key).child('posts'))
         this.$rtdbBind('peopleFollowed',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
+        this.$rtdbBind('page',db.ref('usersInformation').child(this.$route.params.key))
+        .then(()=> {
+            this.$store.dispatch('unload')
+        })
+        .catch(() => {
+            this.$store.dispatch('unload')
+        })
         this.profileKey=this.$route.params.key
     }
 }

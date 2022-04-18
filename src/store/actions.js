@@ -94,7 +94,6 @@ const actions = {
       .signInWithEmailAndPassword(account.email, account.password)
       .then((response) => {
         loader.classList.remove('show')
-        router.push({name:'dhome'})
         //login logic go after this comment
         let user;
         commit("SET_USER", response.user);
@@ -135,6 +134,7 @@ const actions = {
             sessionStorage.setItem("location", user[0].location);
           })
           .catch((err) => console.log(err));
+        router.push({name:'dhome'})
       })
       .catch((error) => {
         commit("SET_USER", null);
@@ -153,9 +153,11 @@ const actions = {
         
         })  
       })*/
+    store.dispatch('loading')
     firebase
       .auth()
       .signOut()
+      .then(()=>store.dispatch('unload'))
       .catch((err) => console.log(err));
     db.ref("usersInformation")
       .child(store.state.ukey)
@@ -166,6 +168,7 @@ const actions = {
     commit("SET_STATUS", null);
     sessionStorage.clear();
   },
+  //send invite friend request
   sentFriendRequest(context, contactKey) {
     let userKey = context.state.ukey;
     db.ref("usersInformation")
@@ -193,15 +196,19 @@ const actions = {
       .child("notifications")
       .push(noti);
   },
-  acceptGroupRequest(groupKey, targetKey) {
+  ///
+
+  ///group manage handle
+  acceptGroupRequest(context,payload) {
     //check if is member if required //
+    store.dispatch('loading')
     let newMember= {
-      key:targetKey,
+      key:payload.targetKey,
       role:'member'
     }
-    db.ref('groups').child(groupKey).child('members').push(newMember).then(()=>
+    db.ref('groups').child(payload.groupKey).child('members').push(newMember).then(()=>
     {
-      db.ref('groups').child(groupKey).child('membersRequest').get().then(res => {
+      db.ref('groups').child(payload.groupKey).child('membersRequest').get().then(res => {
         let rqKey
         let resVal = res.val();
         if (resVal) {
@@ -209,15 +216,46 @@ const actions = {
             key: key,
             ukey: resVal[key]
           }));
-        rqKey = resVal.find((ele) => ele.ukey == targetKey).key;
+        rqKey = resVal.find((ele) => ele.ukey == payload.targetKey).key;
         }
         if (rqKey!=undefined && rqKey!=null) {
-          db.ref('groups').child(contactKey).child('membersRequest').child(rqKey).remove()
+          db.ref('groups').child(payload.groupKey).child('membersRequest').child(rqKey).remove()
         }
+        //user noti
+        let noti= {
+          content: `Your request has been accepted. Welcome to our group.`,
+          date: new Date().toLocaleString(),
+          groupKey:payload.groupKey,
+          time: new Date().getTime(),
+          status: "Unseen",
+          type: "accept-group-request",
+          ukey: payload.groupKey,
+        }
+        db.ref('usersInformation').child(payload.targetKey).child('notifications').push(noti)
+        //group noti
+        let gnoti= {
+          content: `New member joined.`,
+          date: new Date().toLocaleString(),
+          groupKey:payload.groupKey,
+          time: new Date().getTime(),
+          status: "Unseen",
+          type: "group-user-accept",
+          ukey: payload.targetKey,
+        }
+        db.ref('groups').child(payload.groupKey).child('notifications').push(gnoti)
+        //
+        store.dispatch('unload')
+      }).catch(err=>{
+        alert(err)
+        store.dispatch('unload')
       })
+    }).catch(err => {
+      alert(err)
+      store.dispatch('unload')
     })
   },
   leaveGroup(context, contactKey) {
+    store.dispatch('loading')
     let userKey = context.state.ukey;
     db.ref('groups').child(contactKey).child('members').get()
     .then((res) => {
@@ -234,10 +272,25 @@ const actions = {
       if (rqKey!=undefined && rqKey!=null) {
         db.ref('groups').child(contactKey).child('members').child(rqKey).remove()
       }
+      let noti= {
+        content: `${store.state.username} has left group.`,
+        date: new Date().toLocaleString(),
+        groupKey:contactKey,
+        time: new Date().getTime(),
+        status: "Unseen",
+        type: "group-user-leave",
+        ukey: userKey,
+      }
+      db.ref('groups').child(contactKey).child('notifications').push(noti)
+      store.dispatch('unload')
+    }).catch((err)=>{
+      alert(err)
+      store.dispatch('unload')
     })
   },
-  refuseGroupRequest(groupKey, targetKey) {
-    db.ref('groups').child(groupKey).child('membersRequest').get().then(res => {
+  refuseGroupRequest(context, payload) {
+    store.dispatch('loading')
+    db.ref('groups').child(payload.groupKey).child('membersRequest').get().then(res => {
       let rqKey
       let resVal = res.val();
       if (resVal) {
@@ -245,16 +298,37 @@ const actions = {
           key: key,
           ukey: resVal[key]
         }));
-      rqKey = resVal.find((ele) => ele.ukey == targetKey).key;
+      rqKey = resVal.find((ele) => ele.ukey == payload.targetKey).key;
       }
       if (rqKey!=undefined && rqKey!=null) {
-        db.ref('groups').child(contactKey).child('membersRequest').child(rqKey).remove()
+        db.ref('groups').child(payload.groupKey).child('membersRequest').child(rqKey).remove().then(()=>{
+          let noti= {
+            content: `Sorry. Your request has been refused.`,
+            date: new Date().toLocaleString(),
+            groupKey:payload.groupKey,
+            time: new Date().getTime(),
+            status: "Unseen",
+            type: "refuse-group-request",
+            ukey: payload.groupKey,
+          }
+          db.ref('usersInformation').child(payload.targetKey).child('notifications').push(noti)
+          store.dispatch('unload')
+        }).catch(err=>{
+          alert(err)
+          store.dispatch('unload')
+        })
       }
     })
   },
   sentGroupRequest(context, contactKey) {
+    store.dispatch('loading')
     let userKey = context.state.ukey;
-    db.ref('groups').child(contactKey).child('membersRequest').push(userKey)
+    db.ref('groups').child(contactKey).child('membersRequest').push(userKey).then(()=>{
+      store.dispatch('unload')
+    }).catch(err=>{
+      alert(err)
+      store.dispatch('unload')
+    })
     let noti= {
       content: `You has sent a request to join this group. Please wait for their decision.`,
       date: new Date().toLocaleString(),
@@ -265,9 +339,20 @@ const actions = {
       ukey: contactKey,
     }
     db.ref('usersInformation').child(userKey).child('notifications').push(noti)
+    let gnoti= {
+      content: `${store.state.username} has sent request to join group.`,
+      date: new Date().toLocaleString(),
+      groupKey:contactKey,
+      time: new Date().getTime(),
+      status: "Unseen",
+      type: "group-user-request",
+      ukey: userKey,
+    }
+    db.ref('groups').child(contactKey).child('notifications').push(gnoti)
     //
   },
   cancleGroupRequest(context, contactKey) {
+    store.dispatch('loading')
     let userKey = context.state.ukey;
     db.ref('groups').child(contactKey).child('membersRequest').get()
     .then((res) => {
@@ -281,11 +366,40 @@ const actions = {
         rqKey = resVal.find((ele) => ele.ukey == userKey).key;
       }
       if (rqKey!=undefined && rqKey!=null) {
-        db.ref('groups').child(contactKey).child('membersRequest').child(rqKey).remove()
+        db.ref('groups').child(contactKey).child('membersRequest').child(rqKey).remove().then(()=>{
+          store.dispatch('unload')
+        }).catch(err=>{
+          alert(err)
+          store.dispatch('unload')
+        })
       }
     })
   },
+  banUser(context,payload) {
+    store.dispatch('loading')
+    db.ref('groups').child(payload.groupKey).child('members').get().then(res=> {
+      let resVal=res.val()
+      resVal=Object.keys(resVal).map((key)=>({key:key,ukey:resVal[key].key}))
+      let memberKey=resVal.find(user=>user.ukey==payload.targetKey).key
+      db.ref('groups').child(payload.groupKey).child('members').child(memberKey).remove().then(()=>{
+        let noti= {
+          content: `You have been kicked by the staffs.`,
+          date: new Date().toLocaleString(),
+          groupKey:payload.groupKey,
+          time: new Date().getTime(),
+          status: "Unseen",
+          type: "accept-group-request",
+          ukey: payload.groupKey,
+        }
+        db.ref('usersInformation').child(payload.targetKey).child('notifications').push(noti)
+        store.dispatch('unload')
+      }).catch(()=>store.dispatch('unload'))
+    }).catch(err=>alert(err))
+  },
+  /////
+  //follow handle
   follow(context, contactKey) {
+    store.dispatch('loading')
     let userKey = context.state.ukey;
     db.ref("usersInformation")
       .child(userKey)
@@ -328,10 +442,15 @@ const actions = {
         } else {
           return;
         }
+        store.dispatch('unload')
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        store.dispatch('unload')
+        console.log(err)
+      });
   },
   unfollow(context, contactKey) {
+    store.dispatch('loading')
     let userKey = context.state.ukey;
     db.ref("usersInformation")
       .child(contactKey)
@@ -381,9 +500,16 @@ const actions = {
         } else {
           return;
         }
+      }).then(()=>{
+        store.dispatch('unload')
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        store.dispatch('unload')
+        alert(err)
+      });
   },
+  ///
+  //loading animation
   loading() {
     let loader=document.querySelector('#app > div.loading-page')
     loader.classList.add('show')
@@ -392,6 +518,7 @@ const actions = {
     let loader=document.querySelector('#app > div.loading-page')
     loader.classList.remove('show')
   },
+  //
   /*
   getMutualFriend({ state }, targetKey) {
     let myKey = state.ukey;
@@ -434,6 +561,8 @@ const actions = {
     //return mutualFriendList.length;
   },
   */
+
+  ///set state
   setUser({ commit }, user) {
     commit("SET_USER", user);
   },
@@ -473,6 +602,8 @@ const actions = {
   removeMsgData({commit}, message) {
     commit("REMOVE_MESSAGEDATA", message)
   },
+  ///
+  /////close all dropdown
   closeMoreInfo({ commit, state }, e) {
     let dropDown = document.querySelector(
       "#app > div > div.dbnav > div > div.dbnav__short-info > div.drop-down"
@@ -523,6 +654,7 @@ const actions = {
       "div.post-com > div.post-comments.show > div.post-comment > div.comment-header > div.control"
     );
     //
+    //
     //let controlPost=document.querySelectorAll('#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com > div.post-header > div.control')
     //let controlComment=document.querySelectorAll('#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com > div.post-comments.show > div.post-comment > div.comment-header > div.control')
     controlPost.forEach((control) => {
@@ -541,6 +673,15 @@ const actions = {
         control.children[1].classList.remove("show");
       }
     });
+    //
+    let aboutUserControl=document.querySelectorAll("div.about-user div.control")
+    //let aboutUserControlText=document.querySelector("div.about-user .group-member-control")
+    aboutUserControl.forEach(element => {
+      if (e.target != element.parentElement.children[2]) {
+        element.classList.remove("show");
+      }
+      });
+    //
   },
 };
 export default actions;

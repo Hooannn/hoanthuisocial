@@ -38,13 +38,13 @@
                   <div class="staffs">
                       <h5>Staffs</h5>
                       <div style='width:100%;display:flex;flexWrap:wrap;' class="users-overview">
-                          <about-user v-show='member.role=="staff"' v-for='member in members' :key='member[".key"]' :class="member['.key']" :ukey='member.key'/>
+                          <about-user v-show='member.role=="staff"' v-for='member in members' :key='member[".key"]' :ukey='member.key'/>
                       </div>
                   </div>
                   <div class="active-members">
                       <h5>Active Members</h5>
                       <div style='width:100%;display:flex;flexWrap:wrap;' class="users-overview">
-                          <about-user v-for='member in members' :key='member[".key"]' :class="member['.key']" :ukey='member.key'/>
+                          <about-user v-for='member in members' :key='member[".key"]' :ukey='member.key'/>
                       </div>
                   </div>
               </div>
@@ -92,21 +92,18 @@ export default {
             membersRequest:[],
         }
     },
-    watch: {
-        members() {
-            if (this.members.find(user=>user.key==this.$store.state.ukey)) {
-                this.$router.push({name:'group-post'})
-            }
-            else {
-                return
-            }
-        }
-    },
     mounted() {
-        this.$rtdbBind('group',db.ref('groups').child(this.$route.params.key))
+        this.$store.dispatch('loading')
         this.$rtdbBind('members',db.ref('groups').child(this.$route.params.key).child('members'))
         this.$rtdbBind('membersRequest',db.ref('groups').child(this.$route.params.key).child('membersRequest'))
         this.$rtdbBind('rules',db.ref('groups').child(this.$route.params.key).child('rules'))
+        this.$rtdbBind('group',db.ref('groups').child(this.$route.params.key))
+        .then(()=> {
+            this.$store.dispatch('unload')
+        })
+        .catch(()=> {
+            this.$store.dispatch('unload')
+        })
         this.profileKey=this.$route.params.key
     }
 }

@@ -4,12 +4,14 @@
     <div class="type">
         <ion-icon v-if="noti.type=='like-blog'" class='icon' name="heart-outline"></ion-icon>
         <ion-icon v-if="noti.type=='comment-blog'" class='icon' name="chatbox-outline"></ion-icon>
-        <ion-icon v-if="noti.type=='new-blog'" class='icon' name="newspaper-outline"></ion-icon>
+        <ion-icon v-if="noti.type=='new-blog'||noti.type=='group-new-blog'" class='icon' name="newspaper-outline"></ion-icon>
         <ion-icon v-if="noti.type=='send-message'" class='icon' name="chatbubbles-outline"></ion-icon>
         <ion-icon v-if="noti.type=='send-friendInvite'" class='icon' name="person-add-outline"></ion-icon>
         <ion-icon v-if="noti.type=='accept-friendInvite'" class='icon' name="people-outline"></ion-icon>
         <ion-icon v-if="noti.type=='follow'" class='icon' name="eye-outline"></ion-icon>
         <ion-icon v-if="noti.type=='send-group-request'" class='icon' name="enter-outline"></ion-icon>
+        <ion-icon v-if="noti.type=='accept-group-request'" class='icon' name="checkmark-outline"></ion-icon>
+        <ion-icon v-if="noti.type=='refuse-group-request'" class='icon' name="close-outline"></ion-icon>
     </div>
     <div class="avatar"><img :src="ava['.value']" ></div>
     <div class="content">
@@ -74,6 +76,13 @@ export default {
                         },100)
                         */
                     }
+                    else if (this.noti.type=="send-group-request" ||this.noti.type=="accept-group-request"||this.noti.type=="refuse-group-request") {
+                        this.$router.push({name:'dhome'})
+                        let groupKey=this.noti.groupKey
+                        setTimeout(function() {
+                            router.push({name:'group',params:{key:groupKey}})
+                        },50)
+                    }
                     else if (this.noti.type=='send-message') {
                         this.$store.dispatch('addMsgData',this.noti.messageKey)
                     }
@@ -85,7 +94,7 @@ export default {
     },
     mounted() {
         this.$rtdbBind('noti',db.ref('usersInformation').child(this.$store.state.ukey).child("notifications").child(this.notiKey))
-        if (this.noti.type=="send-group-request") {
+        if (this.noti.type=="send-group-request" ||this.noti.type=="accept-group-request"||this.noti.type=="refuse-group-request") {
             this.$rtdbBind('ava', db.ref('groups').child(this.noti.ukey).child('avatarImg'))
         }
         else {

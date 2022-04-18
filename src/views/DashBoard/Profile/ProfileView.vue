@@ -78,19 +78,29 @@ export default {
             //,
         }
     },
-    methods: {
-
+    watch: {
+        user() {
+            if (this.user.type=="page") {
+                this.$router.push({name:'pages',params:{key:this.$route.params.key}})
+            }
+            else {
+                return
+            }
+        }
     },
     mounted() {
-        this.$rtdbBind('user',db.ref('usersInformation').child(this.$route.params.key))
+        this.$store.dispatch('loading')
         this.$rtdbBind('friends',db.ref('usersInformation').child(this.$route.params.key).child('friends').child('isfriend'))
         this.$rtdbBind('follows',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
         this.$rtdbBind('following',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('following'))
         this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
         this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
         this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
+        this.$rtdbBind('user',db.ref('usersInformation').child(this.$route.params.key))
+        .then(()=> {this.$store.dispatch('unload')})
+        .catch(()=>{this.$store.dispatch('unload')})
         this.profileKey=this.$route.params.key
-    }
+    },
 }
 </script>
 

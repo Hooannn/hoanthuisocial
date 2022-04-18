@@ -8,7 +8,7 @@
                       <textarea v-model='postContent' style='fontSize:14px;minHeight:100px;width:100%;outline:none;border:none;marginLeft:10px;marginBottom:10px' :placeholder="placeholder" ></textarea>
                   </div>
                   <div style='display:flex;flexWrap:wrap;width:100%;justifyContent:space-around;padding:15px' class="images-pre">
-                      <div v-for='(img,index) in imagesUpload' :key='index' style='width:30%;marginTop:10px' class="image-pre">
+                      <div v-for='(img,index) in imgsUpload' :key='index' style='width:30%;marginTop:10px' class="image-pre">
                           <img style='width:100%;height:100%;objectFit:cover;border:2px solid orange' :src="img" @click='removeImg(img)'>
                       </div>
                   </div>
@@ -20,7 +20,7 @@
           </div>
           <h5>Posts</h5>
           <div class="posts-list">
-              
+              <post-com :groupKey='$route.params.key' :type='"group-post"' :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
           </div>
       </div>
       <div style='width:20%' class='second-col'>
@@ -43,27 +43,90 @@ export default {
   data() {
         return {
             group:{},
+            members:[],
             posts:[],
             placeholder:'Want to share something, '+this.$store.state.username + " ?",
             postContent:'',
-            imagesUpload:[],
+            imgsUpload:[],
             user:{}
         }
   },
   methods: {
       uploadImages() {
-
+          const options = {
+            accept: ["image/*"],
+            maxFiles: 20,
+            uploadInBackground: false,
+            onUploadDone: (res) => {
+            let images = res.filesUploaded.map((item) => item.url);
+            if (images.length == 1 ) {
+                this.imgsUpload.push(images[0]);
+            } else if (images.length > 1 ) {
+                this.imgsUpload = [...this.imgsUpload, ...images];
+            }
+          },
+        };
+        client.picker(options).open();
       },
       postPost() {
-
-      },
+            if ((this.postContent==null || this.postContent.trim()=='') && (this.imgsUpload.length==0)) {
+                this.$bvToast.show('alert-empty-blog')
+            }
+            else {
+                let newPost= {
+                    author:this.$store.state.ukey,
+                    date:new Date().toLocaleString(),
+                    time: new Date().getTime(),
+                    content:this.postContent,
+                    images:this.imgsUpload,
+                }
+                this.$store.dispatch('loading')
+                db.ref('groups').child(this.$route.params.key).child('posts').push(newPost).then(res => {
+                    db.ref('groups').child(this.$route.params.key).child('posts').child(res.key).child('key').set(res.key)
+                    this.$store.dispatch('unload')
+                    this.$bvToast.show('new-blog')
+                    //member noti
+                    let mnoti={
+                        content:`${this.$store.state.username} has post a new post in ${this.group.groupname}.`,
+                        date:new Date().toLocaleString(), 
+                        time:new Date().getTime(),
+                        status:'Unseen',
+                        type:'group-new-blog',
+                        ukey:this.$store.state.ukey,
+                        postKey:res.key,
+                    }
+                    this.members.forEach(member => {
+                        if (member.key!=this.$store.state.ukey) {
+                            db.ref('usersInformation').child(member.key).child('notifications').push(mnoti)
+                        }
+                    });
+                    //group noti
+                    let gnoti={
+                        content:`${this.$store.state.username} has post a new post.`,
+                        date:new Date().toLocaleString(), 
+                        time:new Date().getTime(),
+                        status:'Unseen',
+                        type:'group-new-blog',
+                        ukey:this.$store.state.ukey,
+                        postKey:res.key,
+                    }
+                    db.ref('groups').child(this.$route.params.key).child('notifications').push(gnoti)
+                })
+                .catch(()=>this.$store.dispatch('unload'))
+                this.postContent=''
+                this.imgsUpload=[]
+            }
+    },
       removeImg(img) {
-
+          let index=this.imgsUpload.indexOf(img)
+          this.imgsUpload.splice(index,1)
       }
   },
   mounted() {
       this.$rtdbBind('user', db.ref('usersInformation').child(this.$store.state.ukey))
       this.$rtdbBind('group', db.ref('groups').child(this.$route.params.key))
+      this.$rtdbBind('members', db.ref('groups').child(this.$route.params.key).child('members'))
+      this.$rtdbBind('posts', db.ref('groups').child(this.$route.params.key).child('posts'))
   }
 }
 </script>
