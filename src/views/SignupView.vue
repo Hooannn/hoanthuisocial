@@ -194,7 +194,7 @@ a:hover {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: auto;
+  height: 100%;
   background-color:rgba(119, 107, 107, 0.2);
 }
 .signup-page div.result {
@@ -376,6 +376,9 @@ a:hover {
   */
   .signup-page form {
     flex-direction: column;
+  }
+  .signup-page {
+    height: auto;
   }
   .signup-page form .information {
     width: 100%;
