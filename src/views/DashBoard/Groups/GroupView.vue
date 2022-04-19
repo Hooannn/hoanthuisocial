@@ -8,7 +8,7 @@
               <div class="container">
                   <div class="inf">
                     <div class="detail">
-                      <div class="username"><strong style='fontSize:20px'>{{group.groupname}}</strong></div>
+                      <div class="username"><strong >{{group.groupname}}</strong></div>
                       <div class="date" style='fontSize:14px'>Active at {{group.registerDate}}</div>
                     </div>
                   </div>
@@ -94,7 +94,7 @@ export default {
     },
     watch:{
         members() {
-            if (this.members.find(user => user.key!=this.$store.state.ukey)) {
+            if (this.members.find(user => (user.key!=this.$store.state.ukey))) {
                 this.$router.push({name:'group'})
             }
         }
@@ -103,7 +103,10 @@ export default {
         this.$store.dispatch('loading')
         this.$rtdbBind('members',db.ref('groups').child(this.$route.params.key).child('members'))
         .then(()=>{
-            if (this.members.find(user => user.key==this.$store.state.ukey)) {
+            if (this.members.find(user => user.key==this.$store.state.ukey).role=='member') {
+                this.$router.push({name:'group-post'})
+            }
+            if (this.members.find(user => user.key==this.$store.state.ukey).role=='staff') {
                 this.$router.push({name:'group-post'})
             }
         })
@@ -117,7 +120,7 @@ export default {
             this.$store.dispatch('unload')
         })
         this.profileKey=this.$route.params.key
-    }
+    },
 }
 </script>
 
@@ -273,5 +276,41 @@ export default {
 }
 .group__content .container .member-nav div:hover{
     background-color:rgba(128, 128, 128, 0.158);
+}
+
+/* */
+@media only screen and (max-width: 768px) {
+    .group__cover {
+        padding-top:35px;   
+        height: 200px;
+    }
+    .group__header .container {
+        flex-direction: column;
+        font-size: 15px;
+    }
+    .group-view h5 {
+        padding:10px;
+        font-size: 15px;
+    }
+    #app > div.dash-board > div.group-view > div.group__content > div.container > div > div.about > div,
+    #app > div.dash-board > div.group-view > div.group__content > div.container > div > div.rules div {
+        font-size: 14px;
+    }
+    .about-user {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .group__content .container .member-nav {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        height: 40px;
+    }
+    .group__content .container .member-nav div{
+        margin:0 5px;
+        font-size: 11px;
+    }
 }
 </style>

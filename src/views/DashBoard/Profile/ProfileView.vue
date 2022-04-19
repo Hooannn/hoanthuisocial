@@ -31,11 +31,11 @@
                   </button>
                   <div class="friends">
                       <span>Friends</span>
-                      <span style='fontSize:20px'><strong>{{friends.length}}</strong></span>
+                      <span><strong>{{friends.length}}</strong></span>
                   </div>
                   <div class="follows">
                       <span>Follows</span>
-                      <span style='fontSize:20px'><strong>{{follows.length}}</strong></span>
+                      <span><strong>{{follows.length}}</strong></span>
                   </div>
               </div>
               </div>
@@ -50,7 +50,7 @@
                   <div class="credits" :class="{active:$route.name=='credits'}">Credits</div>
                   <div class="more" :class="{active:$route.name=='see-more'}">See more <ion-icon style="marginLeft:5px" name="chevron-down-outline"></ion-icon></div>
               </div>
-              <router-view></router-view>
+              <router-view class='router-view'></router-view>
           </div>
           <footer-com/>
       </div>
@@ -213,5 +213,53 @@ export default {
 .profile__nav .more{
     display: flex;
     align-items: center;
+}
+
+/*  */
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+    button>span{
+        font-size: 8px;
+    }
+    .profile__cover {
+        padding-top:35px;   
+        height: 200px;
+    }
+    .profile__header{
+        height: auto;
+        word-wrap: break-word;
+    }
+   .profile__header .container{
+        flex-direction: column;
+    }
+    .profile__header .container .inf .avatar{
+        width: 70px;
+        height: 70px;
+        top:-15px;
+        left:15px;
+    }
+    .profile__header .container .inf .avatar .status{
+        width:15px;
+        height:15px;
+    }
+    .profile__header .container .more-inf {
+        flex-direction: column;
+        font-size: 15px;
+    }
+    .profile__header .container .more-inf *:not(span){
+        margin:5px 0;
+    }
+    .profile__nav {
+        display: flex;
+        justify-content: center;
+    }
+    .profile__nav div{
+        width: 10%;
+        font-size: 10.5px;
+        margin:0 5px;
+    }
+    #app > div.dash-board > div.profile-view > div.profile__content > div.container > div.post-view.router-view > div.second-col > div.posts-list div {
+        font-size: 12px;
+    }
 }
 </style>

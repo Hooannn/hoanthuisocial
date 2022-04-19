@@ -47,6 +47,16 @@ const routes = [
             component:() => import('../views/DashBoard/Groups/Manage/StaffsView.vue'),
             children: [
               {
+                path:'/dashboard/group/:key/group-manage-notifications',
+                name:'group-manage-notifications',
+                component:() => import('../views/DashBoard/Groups/Manage/ManageNotifications.vue')
+              },
+              {
+                path:'/dashboard/group/:key/group-manage-delete',
+                name:'group-manage-delete',
+                component:() => import('../views/DashBoard/Groups/Manage/ManageDelete.vue')
+              },
+              {
                 path:'/dashboard/group/:key/group-manage-info',
                 name:'group-manage-info',
                 component:() => import('../views/DashBoard/Groups/Manage/ManageInfo.vue')

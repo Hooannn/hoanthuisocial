@@ -1,6 +1,6 @@
 <template>
   <div class="about-user">
-      <div style='width:30px;height:30px;overflow:hidden;borderRadius:50%;marginRight:5px'>
+      <div style='width:30px;height:30px;overflow:hidden;borderRadius:50%;margin:0 5px'>
           <img style='width:100%;heigth:100%;objectFit:cover' :src="user.avatarImg">
       </div>
       <div @click='viewProfile' class="username">

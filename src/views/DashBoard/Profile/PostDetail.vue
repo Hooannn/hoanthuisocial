@@ -1,5 +1,5 @@
 <template>
-  <div class="post-detail">
+  <div style='width:90%;margin:25px auto;' class="post-detail">
       <post-com :key='post.key' :class='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
   </div>
 </template>

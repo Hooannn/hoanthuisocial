@@ -154,7 +154,6 @@ div.friends-view.container > div > h5 > i:hover{
     background-color:white;
     opacity: 0;
     visibility: hidden;
-    display: flex;
     flex-wrap: wrap;
 }
 @keyframes slide-down {
@@ -177,6 +176,19 @@ div.friends-view.container > div > h5 > i:hover{
     100% {
         height: 0;
         visibility: hidden;
+    }
+}
+
+/*  */
+@media only screen and (max-width: 768px) {
+    .friends-view h5 {
+        font-size: 12px;
+        padding:8px;
+    }
+    .friends-view div .list .friend-com {
+        width: 100%;
+        height: auto;
+        padding: 5px 40px;
     }
 }
 </style>

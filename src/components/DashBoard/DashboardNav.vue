@@ -1,14 +1,16 @@
 <template>
-  <div class="dbnav">
+    
+    <div class="dbnav">
+        <!-- window screen -->
       <div class="dbnav__content container">
           <div class="dbnav__logo">
           <img :src="logo">
             </div>
           <div class="dbnav__home">
-              <span @click='$router.push({name:"dhome"}),selected="Home"' :class='{selected:selected=="Home"}'>Home</span>
+              <span @click='$router.push({name:"dhome"}),selected="Home"' :class='{selected:selected=="Home"}'><span>Home</span></span>
           </div>
           <div class="dbnav__messages">
-              <span style='position:relative' @click='showMessageBar' :class='{selected:selected=="Messages"}'>Messages
+              <span style='position:relative' @click='showMessageBar' :class='{selected:selected=="Messages"}'><div>Messages</div>
                   <span v-if='!unseenMsg==0' style='pointerEvents:none;position:absolute;top:-5px;right:-10px;backgroundColor:red;borderRadius:3px;display:flex;justifyContent:center;alignItems:center;width:15px;height:15px;fontSize:8px;color:white'>
                     {{ unseenMsg }}
                 </span>
@@ -16,7 +18,7 @@
           </div>
           <div class="dbnav__notifications">
               <span style='position:relative' @click='showNoti' :class='{selected:selected=="Notifications"}'>
-                  Notifications
+                  <div>Notifications</div>
                 <span v-if='!unseenNoti==0' style='pointerEvents:none;position:absolute;top:-5px;right:-10px;backgroundColor:red;borderRadius:3px;display:flex;justifyContent:center;alignItems:center;width:15px;height:15px;fontSize:8px;color:white'>
                     {{ unseenNoti }}
                 </span>
@@ -28,7 +30,8 @@
                   <div @click='clearNoti' style='zIndex:1;backgroundColor:whitesmoke;width:100%;display:flex;justifyContent:center'><button style='color:grey' class='btn btn-sm btn-link'>Clear</button></div>
               </div>
           </div>
-          <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm'>Market</button>
+          <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-wd'>Market</button>
+          <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-mb'><ion-icon name="cart"></ion-icon></button>
         <div class="dbnav__short-info">
           <div @click='showMoreInfo' class="more-setting">
               <div class="user-avatar">
@@ -50,6 +53,9 @@
           </div>
         </div>
       </div>
+        <!-- window screen -->
+        <!-- mobile screen -->
+
   </div>
 </template>
 
@@ -119,7 +125,7 @@ export default {
     methods: {
         showMessageBar() {
             this.selected=""
-            let messageSpan=document.querySelector('#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span')
+            let messageSpan=document.querySelector('#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span > div')
             let mb=document.querySelector('#app > div.dash-board > div.message-bar')
             mb.classList.toggle('show')
             messageSpan.classList.toggle('show')
@@ -158,7 +164,7 @@ export default {
         },
         showNoti() {
             this.selected=''
-            let notiSpan=document.querySelector('#app > div > div.dbnav > div > div.dbnav__notifications > span')
+            let notiSpan=document.querySelector('#app > div > div.dbnav > div > div.dbnav__notifications > span > div')
             let dropDown=document.querySelector('#app > div > div.dbnav > div > div.dbnav__notifications > div.drop-down')
             dropDown.classList.toggle('show')
             notiSpan.classList.toggle('show')
@@ -205,17 +211,30 @@ export default {
     height: 100%;
     font-size: 14px;
 }
-.dbnav .dbnav__content .dbnav__home span:hover, .dbnav .dbnav__content .dbnav__messages span:hover,.dbnav .dbnav__content .dbnav__notifications span:hover {
+.dbnav__content .btn-mb {
+    display: none;
+}
+.dbnav__content .dbnav-icon{
+    justify-content: center;
+    align-items: center;
+    font-size:18px;
+}
+.dbnav .dbnav__content .dbnav__home span:hover, .dbnav .dbnav__content .dbnav__messages span>div:hover,.dbnav .dbnav__content .dbnav__notifications span>div:hover {
     color:white;
     text-shadow: 2px 2px 3px rgba(255,255,255,0.3);
     cursor: pointer;
 }
-.dbnav .dbnav__content .dbnav__home span.selected, .dbnav .dbnav__content .dbnav__messages span.selected,.dbnav .dbnav__content .dbnav__notifications span.selected {
+.dbnav .dbnav__content .dbnav__home span.selected{
     color:white;
     text-shadow: 2px 2px 3px rgba(255,255,255,0.3);
 }
-#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span.show {
+#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span >div.show {
     color:white;
+    text-shadow: 2px 2px 3px rgba(255,255,255,0.3);
+}
+#app > div.dash-board > div.dbnav > div > div.dbnav__notifications > span > div.show {
+    color:white;
+    text-shadow: 2px 2px 3px rgba(255,255,255,0.3);
 }
 /* */
 .dbnav .dbnav__short-info {
@@ -319,4 +338,27 @@ export default {
     visibility: visible;
 }
 /* -------- */
+@media only screen and (max-width: 768px) {
+    .dbnav {
+        height: 35px;
+    }
+    .dbnav__logo {
+        display: none;
+    }
+    .dbnav__content {
+        font-size: 13px;
+    }
+    .dbnav__content .btn-wd {
+        display: none;
+    }
+    .dbnav__content .btn-mb {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+    }
+    #app > div.dash-board > div.dbnav > div > div.dbnav__short-info > div.more-setting > span {
+        display: none;
+    }
+}
 </style>

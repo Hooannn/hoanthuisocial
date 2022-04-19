@@ -1,19 +1,21 @@
 <template>
   <div @click='seenNoti' class="noti-com">
-    <div class="status"><div v-if='noti.status=="Unseen"'></div></div>
+    <div v-if='type!="group"' class="status"><div v-if='noti.status=="Unseen"'></div></div>
     <div class="type">
         <ion-icon v-if="noti.type=='like-blog'" class='icon' name="heart-outline"></ion-icon>
         <ion-icon v-if="noti.type=='comment-blog'" class='icon' name="chatbox-outline"></ion-icon>
         <ion-icon v-if="noti.type=='new-blog'||noti.type=='group-new-blog'" class='icon' name="newspaper-outline"></ion-icon>
         <ion-icon v-if="noti.type=='send-message'" class='icon' name="chatbubbles-outline"></ion-icon>
-        <ion-icon v-if="noti.type=='send-friendInvite'" class='icon' name="person-add-outline"></ion-icon>
+        <ion-icon v-if="noti.type=='send-friendInvite'||noti.type=='group-user-request'" class='icon' name="person-add-outline"></ion-icon>
         <ion-icon v-if="noti.type=='accept-friendInvite'" class='icon' name="people-outline"></ion-icon>
         <ion-icon v-if="noti.type=='follow'" class='icon' name="eye-outline"></ion-icon>
         <ion-icon v-if="noti.type=='send-group-request'" class='icon' name="enter-outline"></ion-icon>
-        <ion-icon v-if="noti.type=='accept-group-request'" class='icon' name="checkmark-outline"></ion-icon>
-        <ion-icon v-if="noti.type=='refuse-group-request'" class='icon' name="close-outline"></ion-icon>
+        <ion-icon v-if="noti.type=='accept-group-request'||noti.type=='group-user-accept'" class='icon' name="checkmark-outline"></ion-icon>
+        <ion-icon v-if="noti.type=='refuse-group-request'||noti.type=='group-delete'" class='icon' name="close-outline"></ion-icon>
+        <ion-icon v-if="noti.type=='group-create'" class='icon' name="checkmark-done"></ion-icon>
+        <ion-icon v-if="noti.type=='group-user-leave'" class='icon' name="person-remove-outline"></ion-icon>
     </div>
-    <div class="avatar"><img :src="ava['.value']" ></div>
+    <div v-if='noti.type!="group-delete"' class="avatar"><img :src="ava['.value']" ></div>
     <div class="content">
         <span style='color:black' class='text'><Strong>{{noti.content}}</Strong></span>
         <div class="time">{{noti.date}}</div>
@@ -28,7 +30,9 @@ import db from '../../plugins/firebase'
 import store from '../../store/store'
 export default {
     props: {
-        notiKey:String
+        notiKey:String,
+        type:String,
+        groupKey:String,
     },
     data() {
         return {
@@ -37,7 +41,11 @@ export default {
         }
     },
     methods: {
-        seenNoti() { 
+        seenNoti() {
+            ///
+            if (this.type=='group') {
+                return
+            }
             db.ref('usersInformation').child(this.$store.state.ukey).child('notifications').child(this.notiKey).child('status').set("Seen")
                 .then(()=> {
                     if (this.noti.type=='follow' || this.noti.type=='accept-friendInvite' ) {
@@ -76,7 +84,7 @@ export default {
                         },100)
                         */
                     }
-                    else if (this.noti.type=="send-group-request" ||this.noti.type=="accept-group-request"||this.noti.type=="refuse-group-request") {
+                    else if (this.noti.type=="send-group-request" ||this.noti.type=="accept-group-request"||this.noti.type=="refuse-group-request"|| this.noti.type=="group-create") {
                         this.$router.push({name:'dhome'})
                         let groupKey=this.noti.groupKey
                         setTimeout(function() {
@@ -93,19 +101,33 @@ export default {
         }
     },
     mounted() {
-        this.$rtdbBind('noti',db.ref('usersInformation').child(this.$store.state.ukey).child("notifications").child(this.notiKey))
-        if (this.noti.type=="send-group-request" ||this.noti.type=="accept-group-request"||this.noti.type=="refuse-group-request") {
-            this.$rtdbBind('ava', db.ref('groups').child(this.noti.ukey).child('avatarImg'))
+        if (this.type!='group') {
+            this.$rtdbBind('noti',db.ref('usersInformation').child(this.$store.state.ukey).child("notifications").child(this.notiKey))
+            if (this.noti.type=="send-group-request" ||this.noti.type=="accept-group-request"||this.noti.type=="refuse-group-request"||this.noti.type=="group-create") {
+                this.$rtdbBind('ava', db.ref('groups').child(this.noti.ukey).child('avatarImg'))
+            }
+            else {
+                this.$rtdbBind('ava', db.ref('usersInformation').child(this.noti.ukey).child('avatarImg'))
+            }
         }
-        else {
+        else if (this.type=='group') {
+            this.$rtdbBind('noti',db.ref('groups').child(this.groupKey).child("notifications").child(this.notiKey))
             this.$rtdbBind('ava', db.ref('usersInformation').child(this.noti.ukey).child('avatarImg'))
+            /*
+            if (this.noti.type=="send-group-request" ||this.noti.type=="accept-group-request"||this.noti.type=="refuse-group-request"||this.noti.type=="group-create") {
+                this.$rtdbBind('ava', db.ref('groups').child(this.noti.ukey).child('avatarImg'))
+            }
+            else {
+                this.$rtdbBind('ava', db.ref('usersInformation').child(this.noti.ukey).child('avatarImg'))
+            }
+            */
         }
     }
 };
 </script>
 
 <style>
-#app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com {
+div.noti-com {
     width: 100%;
     min-height: 80px;
     max-height: auto;
@@ -116,33 +138,33 @@ export default {
     padding:0;
     margin:0;
 }
-#app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com:hover {
+div.noti-com:hover {
     background-color:white;
 }
-#app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com:hover .type .icon{
+div.noti-com:hover .type .icon{
     background-color:white;
 }
-#app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com .status {
+div.noti-com .status {
     width: 10px;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com .status>div {
+div.noti-com .status>div {
     width: 5px;
     height: 5px;
     background-color:orange;
     border-radius: 50%;
 }
-#app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com .type {
+div.noti-com .type {
     width: 10px;
     height: 100%;
     position: relative;
     display: flex;
     align-items: center;
 }
-#app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com .type .icon{
+div.noti-com .type .icon{
     position: absolute;
     top:50%;
     left:50%;
@@ -153,7 +175,7 @@ export default {
     background-color:rgb(243, 234, 224);
     color: rgb(51, 51, 51);
 }
-#app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com .content{
+div.noti-com .content{
     width: 60%;
     height: 100%;
     display: flex;
@@ -163,14 +185,14 @@ export default {
     word-wrap: break-word;
     font-size: 13.5px;
 }
-#app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com .avatar {
+div.noti-com .avatar {
     width: 30px;
     height: 30px;
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid rgb(255, 69, 0,0.7);
 }
-#app > div > div.dbnav > div > div.dbnav__notifications > div > div.noti-com .avatar img{
+div.noti-com .avatar img{
     width: 100%;
     height: 100%;
     object-fit: cover;

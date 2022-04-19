@@ -4,6 +4,7 @@ const state = {
   success: null,
   status:null,
   role: null,
+  type:null,
   ukey:null,
   username:null,
   avatarImg:null,

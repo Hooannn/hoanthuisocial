@@ -1,5 +1,5 @@
 <template>
-  <div class="group-about-view">
+  <div style='width:80%' class="group-about-view">
     <div class="about">
         <h5>About this group</h5>
         <div>{{group.description}}</div>
@@ -60,7 +60,7 @@ export default {
     background-color:white;
     width: 100%;
 }
-.group-about-view>div>div{
+#app > div.dash-board > div.group-view > div.group__content > div.container > div.group-about-view > div.about > div {
     padding:15px;
     font-size: 15px;
 }
@@ -107,5 +107,17 @@ export default {
     width: 100%;
     max-height: 400px;
     overflow-y:auto;
+}
+@media only screen and (max-width: 768px) {
+    #app > div.dash-board > div.group-view > div.group__content > div.container > div.group-about-view > div.staffs > div div.about-user{
+        padding:10px;
+    }
+    #app > div.dash-board > div.group-view > div.group__content > div.container > div.group-about-view > div.active-members > div div.about-user{
+        padding:10px;
+    }
+    .group-about-view>div>div{
+        padding:0;
+        font-size: 14px;
+    }   
 }
 </style>

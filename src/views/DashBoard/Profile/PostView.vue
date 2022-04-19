@@ -258,4 +258,19 @@ pre {
     font-size: 17px;
     font-weight: 800;
 }
+
+/*  */
+@media only screen and (max-width: 768px) {
+    .post-view .first-col,.post-view .third-col,.post-view .second-col {
+        width: 95%;
+        display: flex;
+        font-size: 13px;
+        margin:0 auto;
+        margin-bottom: 25px;
+    }
+    .post-view .first-col h5,.post-view .third-col h5,.post-view .second-col h5{
+        font-size: 14px;
+        padding:10px;
+    }
+}
 </style>

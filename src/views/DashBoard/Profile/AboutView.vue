@@ -158,7 +158,6 @@ pre {
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top:25px;
-    max-height: 0;
 }
 .about-view .second-col .work .education,.about-view .second-col .work .employment{
     width: 46%;
@@ -173,4 +172,19 @@ pre {
     height: 100%;
 }
 
+
+/*  */
+@media only screen and (max-width: 768px) {
+    .about-view .first-col,.about-view .third-col,.about-view .second-col {
+        width: 95%;
+        display: flex;
+        font-size: 13px;
+        margin:0 auto;
+        margin-bottom: 25px;
+    }
+    .about-view .first-col h5,.about-view .third-col h5,.about-view .second-col h5{
+        font-size: 14px;
+        padding:10px;
+    }
+}
 </style>

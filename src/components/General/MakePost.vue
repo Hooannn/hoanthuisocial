@@ -1,6 +1,6 @@
 <template>
   <div class="cover">
-      <div  class="make-post">
+      <div class="make-post">
         <div class="header">Make a post<i @click='close' class="fas fa-times"></i></div>
         <div class="body">
           <div class="short-inf">
@@ -73,8 +73,9 @@ export default {
                 this.close()
             }
     },
-    close() {
+    close(e) {
       let makePost=document.querySelector('#app > div.dash-board > div.home-view > div.cover')
+
       makePost.classList.remove('show')
     },
     removeImg(img) {

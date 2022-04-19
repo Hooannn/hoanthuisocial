@@ -569,6 +569,9 @@ const actions = {
   setRole({ commit }, role) {
     commit("SET_ROLE", role);
   },
+  setType({ commit }, type) {
+    commit("SET_TYPE", type);
+  },
   setUkey({ commit }, ukey) {
     commit("SET_UKEY", ukey);
   },
@@ -630,14 +633,14 @@ const actions = {
       "#app > div > div.dbnav > div > div.dbnav__notifications > div"
     );
     let notiSpan = document.querySelector(
-      "#app > div > div.dbnav > div > div.dbnav__notifications > span"
+      "#app > div > div.dbnav > div > div.dbnav__notifications > span > div"
     );
     if (e.target != notiSpan) {
       notiDropdown.classList.remove("show");
       notiSpan.classList.remove("show");
     }
     //
-    let messageSpan=document.querySelector('#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span')
+    let messageSpan=document.querySelector('#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span > div')
     let mb=document.querySelector('#app > div.dash-board > div.message-bar')
     let usermessage=document.querySelectorAll('#app > div.dash-board > div.message-bar.show > div.message-user')
     usermessage.forEach(usermsg => {

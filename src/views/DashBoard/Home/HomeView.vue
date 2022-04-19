@@ -1,10 +1,14 @@
 <template>
   <div class="home-view ">
     <make-post />
+    <make-group-form />
     <div class="container">
     <div class="first-col">
-      <!-- -->
-      <!-- <button @click='toMyPage' class="btn btn-primary">My Page</button> -->
+      <!--<button @click='toMyPage' class="btn btn-sm btn-link">My Page</button>-->
+      <div style='marginBottom:25px;width:100%;height:40px;display:flex;alignItems:center;boxShadow:1px 1px 4px rgba(0,0,0,0.4);overflow:hidden;borderRadius:3px' class="search-bar">
+        <input placeholder="Search something..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;border:none;outline:none;backgroundColor:white;' type="text">
+        <div class='btn-search' style='color:white;width:20%;height:100%;display:flex;justifyContent:center;alignItems:center;'><i class="fas fa-search"></i></div>
+      </div>
       <div class="short-intro">
         <div style='width:100%;maxHeight:90px;overflow:hidden' class="short-bg">
           <img style='width:100%;height:100%;objectFit:cover' :src="$store.state.coverImg">
@@ -63,13 +67,10 @@
       <!-- -->
     </div>
     <div class="second-col">
-      <div style='marginBottom:25px;width:100%;height:40px;display:flex;alignItems:center;boxShadow:1px 1px 4px rgba(0,0,0,0.4);overflow:hidden;borderRadius:3px' class="search-bar">
-        <input placeholder="Search something..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;border:none;outline:none;backgroundColor:white;' type="text">
-        <div class='btn-search' style='color:white;width:20%;height:100%;display:flex;justifyContent:center;alignItems:center;'><i class="fas fa-search"></i></div>
-      </div>
       <div class="posts-list">
         <post-com :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
       </div>
+      <button style='minWidth:30%;margin:0 auto' class="btn btn-sm btn-secondary">See more</button>
     </div>
     <div class="third-col">
       <!-- -->
@@ -83,7 +84,7 @@
               <h5 style='fontWeight:bolder;border:none;padding:0;'>Connect more</h5>
               <div>Join a group to connect with more people, make more discussion, with your favorite topic, hobbies, skill. Why not ?</div>
               <button style='color:white' class="btn btn-primary">Find</button>
-              <button style='color:white' class="btn btn-primary">Create</button>
+              <button @click='showMakeGroupForm' style='color:white' class="btn btn-primary">Create</button>
       </div>
       <!-- -->
       <div class="group-overview">
@@ -103,9 +104,10 @@ import MakePost from '../../../components/General/MakePost.vue'
 import RecommendGroup from '../../../components/General/RecommendGroup.vue'
 import RecommendPerson from '../../../components/General/RecommendPerson.vue'
 import PostCom from '../../../components/Post/PostCom.vue'
+import MakeGroupForm from '../../../components/Groups/MakeGroupForm.vue'
 import db from './../../../plugins/firebase'
 export default {
-  components: { FooterCom, PostCom, RecommendPerson, MakePost, RecommendGroup },
+  components: { FooterCom, PostCom, RecommendPerson, MakePost, RecommendGroup, MakeGroupForm },
   data() {
     return {
       userFollow:[],
@@ -123,13 +125,18 @@ export default {
       let makePost=document.querySelector('#app > div.dash-board > div.home-view > div.cover')
       makePost.classList.add('show')
     },
+    showMakeGroupForm() {
+      let mgForm=document.querySelector('#app > div.dash-board > div.home-view > div.make-group-form.cover')
+      mgForm.classList.toggle('show')
+    },
     /*
     toMyPage() {
-      this.$store.dispatch('setUser', "Not null")
-      this.$store.dispatch('setRole', "Not null")
-      this.$store.dispatch('setUkey', "testpage")
+      this.$store.dispatch('setRole', "Page")
       this.$store.dispatch('setUsername', "hoanthui's Social Official")
-      this.$store.dispatch('loading')
+      this.$store.dispatch('setUkey', "-N-lHls7CAaaSJX8Pm7o")
+      this.$store.dispatch('setType', "page")
+      this.$store.dispatch('setAvatar', "https://imgkub.com/images/2022/04/16/hoanthui.png")
+      this.$store.dispatch('setCover', "https://idgadvertising.com/wp-content/uploads/2020/09/iStock-1199773764-scaled.jpg")
     }
     */
   },
@@ -186,11 +193,8 @@ export default {
       this.$store.dispatch('unload')
     })
     this.$rtdbBind('groups',db.ref('groups'))
-    //this.$rtdbBind('userFriendRequesting',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequesting'))
-    //this.$rtdbBind('userFriendRequested',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('friendrequested'))
     this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
     this.$rtdbBind('userFollow',db.ref('usersInformation').child(this.$store.state.ukey).child('follows').child('followed'))
-    
   }
 }
 </script>
@@ -356,5 +360,27 @@ export default {
     word-wrap: break-word;
 }
 /** */
-
+/*  */
+@media only screen and (max-width: 768px) {
+    .home-view .container .first-col,.home-view .container .second-col,.home-view .container .third-col {
+        width: 95%;
+        display: flex;
+        font-size: 13px;
+        margin:0 auto;
+        margin-bottom: 25px;
+    }
+    .home-view .container .first-col h5,.home-view .container .second-col h5,.home-view .container .third-col h5{
+        font-size: 14px;
+        padding:10px;
+    }
+    .home-view .container {
+      padding-top:50px;
+    }
+    .home-view .first-col .pages-introduce {
+      background-size: cover;
+    }
+    #app > div.dash-board > div.home-view > div.container > div.second-col > div div {
+      font-size: 12px;
+    }
+}
 </style>

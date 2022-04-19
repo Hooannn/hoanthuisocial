@@ -34,6 +34,7 @@ export default {
     display: flex;
     flex-direction: column;
     transition: all .3s ease-in-out;
+    z-index: 10;
 }
 .message-bar.show {
     width: 35px;

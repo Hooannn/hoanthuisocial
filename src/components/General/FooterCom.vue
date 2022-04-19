@@ -75,4 +75,11 @@ export default {
        align-items: center;
    }
 }
+@media only screen and (max-width: 420px) {
+  /* For mobile phones: */
+   .footer__left, .footer__right {
+       position: relative;
+       flex-direction: column;
+   }
+}
 </style>

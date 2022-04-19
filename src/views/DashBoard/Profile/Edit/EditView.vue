@@ -76,7 +76,7 @@ export default {
   font-weight: 800;
 }
 .your-details div {
-  padding: 15px 10px;
+    padding: 15px 10px;
     border-bottom: 1px solid rgba(0,0,0,0.2);
     display: flex;
     align-items: center;
@@ -88,4 +88,22 @@ export default {
   color:#ff7555;
 }
 /* 2 col */
+
+/*  */
+@media only screen and (max-width: 768px) {
+    .edit-view .first-col,.edit-view .second-col {
+        width: 95%;
+        display: flex;
+        font-size: 13px;
+        margin:0 auto;
+        margin-bottom: 25px;
+    }
+    .edit-view .first-col h5,.edit-view .second-col h5{
+        font-size: 14px;
+        padding:10px;
+    }
+    .edit-view .second-col div{
+      font-size: 12px;
+    }
+}
 </style>

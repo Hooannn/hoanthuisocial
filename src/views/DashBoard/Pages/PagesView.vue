@@ -11,7 +11,7 @@
                       <img :src="page.avatarImg">
                   </div>
                   <div class="detail">
-                      <div class="username"><strong style='fontSize:20px'>{{page.username}}</strong></div>
+                      <div class="username"><strong>{{page.username}}</strong></div>
                       <div class="date" style='fontSize:14px'>Create at {{page.registerDate}}</div>
                   </div>
               </div>
@@ -33,7 +33,7 @@
               </div>
           </div>
           <div style='height:auto;minHeight:55vh;marginBottom:25px;display:flex;flexWrap:wrap;justifyContent:space-between' class="container">
-              <div style='width:30%;display:flex;flexDirection:column' class="first-col">
+              <div class="first-col">
                   <div class="about">
                       <h5>About this page</h5>
                       <div style='fontSize:15px;padding:15px'>{{page.description}}</div>
@@ -45,7 +45,7 @@
                       </div>
                   </div>
               </div>
-              <div style='width:65%;display:flex;flexDirection:column' class="second-col">
+              <div class="second-col">
                   <div class='post'>
                       <h5 style='marginBottom:25px'>Post</h5>
                       <div class="posts-list">
@@ -237,5 +237,50 @@ export default {
 }
 .page__content .container .first-col .people-liked .people-list div.this-is-me div .recommend-person{
     cursor: unset;
+}
+#app > div.dash-board > div.page-view > div.page__content > div.container > div.first-col {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+#app > div.dash-board > div.page-view > div.page__content > div.container > div.second-col {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+}
+/* */
+@media only screen and (max-width: 768px) {
+    #app > div.dash-board > div.page-view > div.page__content > div.container > div.first-col,
+    #app > div.dash-board > div.page-view > div.page__content > div.container > div.second-col {
+        width: 95%;
+        display: flex;
+        font-size: 13px;
+        margin:0 auto;
+        margin-bottom: 25px;
+    }
+    #app > div.dash-board > div.page-view > div.page__content > div.page__header > div {
+        flex-direction: column;
+    }
+    .container .first-col h5,.container .second-col h5{
+        font-size: 14px;
+        padding:10px;
+    }
+    #app > div.dash-board > div.page-view > div.page__content > div.container > div.second-col > div > div div {
+        font-size: 12px;
+    }
+    #app > div.dash-board > div.page-view > div.page__content > div.page__header > div {
+        font-size: 14px;
+    }
+    .page__cover {
+        padding-top:35px;   
+        height: 200px;
+    }
+    .page__header .container .inf .avatar{
+        width: 70px;
+        height: 70px;
+        top:-15px;
+        left:5px;
+        border:1px solid white;
+    }
 }
 </style>

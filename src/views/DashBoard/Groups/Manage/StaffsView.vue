@@ -1,6 +1,6 @@
 <template>
   <div class="staffs-view">
-      <div style='width:18%' class="first-col">
+      <div class="first-col">
       <div class="manage">
         <h5>Manage</h5>
         <div
@@ -10,11 +10,13 @@
             :class='{selected:$route.name==manage.name}'
         >{{manage.title}}
         <span style='marginLeft:5px;fontWeight:bold;fontSize:13px' v-if='manage.title=="Members"'>({{members.length}})</span>
-        <span style='marginLeft:5px;fontWeight:bold;fontSize:13px' v-if='manage.title=="Join Requested"'>({{request.length}})</span>
+        <span style='display:flex;justifyContent:center;alignItems:center;fontWeight:bold;borderRadius:2px;position:absolute;color:white;backgroundColor:red;right:5px;fontSize:13px;width:18px;height:18px' v-show='request.length>0' v-if='manage.title=="Join Requested"'>{{request.length}}</span>
+        <span style='marginLeft:5px;fontWeight:bold;fontSize:13px' v-if='manage.title=="Posts"'>({{posts.length}})</span>
+        <span style='display:flex;justifyContent:center;alignItems:center;fontWeight:bold;borderRadius:2px;position:absolute;color:white;backgroundColor:red;right:5px;fontSize:13px;width:18px;height:18px' v-show='notifications.length>0' v-if='manage.title=="Notifications"'>{{notifications.length}}</span>
         </div>
       </div>
     </div>
-    <div style='width:78%' class="second-col">
+    <div class="second-col">
       <router-view></router-view>
     </div>
   </div>
@@ -27,17 +29,23 @@ export default {
     return {
       members:[],
       request:[],
+      posts:[],
+      notifications:[],
       manages: [
+        { title: `Notifications`, name: "group-manage-notifications" },
         { title: "Information", name: "group-manage-info" },
         { title: "Posts", name: "group-manage-post" },
         { title: `Members` , name: "group-manage-members" },
         { title: `Join Requested`, name: "group-manage-members-request" },
+        { title: `Deactive Group`, name: "group-manage-delete" },
       ],
     };
   },
   mounted() {
     this.$rtdbBind('members', db.ref('groups').child(this.$route.params.key).child('members'))
     this.$rtdbBind('request', db.ref('groups').child(this.$route.params.key).child('membersRequest'))
+    this.$rtdbBind('posts', db.ref('groups').child(this.$route.params.key).child('posts'))
+    this.$rtdbBind('notifications', db.ref('groups').child(this.$route.params.key).child('notifications'))
     this.$router.push({name:'group-manage-info'})
   }
 };
@@ -53,12 +61,14 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.staffs-view .first-col {
+#app > div.dash-board > div.group-view > div.group__content > div.container > div.staffs-view > div.first-col {
+  width: 18%;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-.staffs-view .second-col {
+#app > div.dash-board > div.group-view > div.group__content > div.container > div.staffs-view > div.second-col {
+  width: 78%;
   height: 100%;
 }
 /* 1 col */
@@ -74,6 +84,7 @@ export default {
   background-color: white;
   width: 100%;
   justify-content: center;
+  position: relative;
 }
 .manage h5 {
   margin: 0;
@@ -96,4 +107,18 @@ export default {
   color:#ff7555;
 }
 /* 2 col */
+
+/*  */
+@media only screen and (max-width: 768px) {
+  .staffs-view {
+      margin:0
+  }
+  #app > div.dash-board > div.group-view > div.group__content > div.container > div.staffs-view > div.first-col,
+  #app > div.dash-board > div.group-view > div.group__content > div.container > div.staffs-view > div.second-col {
+    width: 95%;
+    margin:0 auto;
+    margin-top:25px;
+    font-size: 15px;
+  }
+}
 </style>

@@ -41,6 +41,9 @@ const mutations = {
   SET_UNSEENNOTI(state, payload) {
     state.unseenNoti=payload
   },
+  SET_TYPE(state, payload) {
+    state.type=payload
+  },
   ADD_MESSAGEDATA(state, message) {
     if (state.messagesData.indexOf(message)==-1) {
       state.messagesData.push(message)

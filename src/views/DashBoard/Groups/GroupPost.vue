@@ -1,6 +1,6 @@
 <template>
   <div class="group-post">
-      <div style='width:75%' class='first-col'>
+      <div class='first-col'>
           <div class='make-post'>
               <div style='display:flex;flexDirection:column' class="content">
                   <div style='display:flex'>
@@ -23,7 +23,7 @@
               <post-com :groupKey='$route.params.key' :type='"group-post"' :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
           </div>
       </div>
-      <div style='width:20%' class='second-col'>
+      <div class='second-col'>
           <div class="short-about">
                 <h5>About</h5>
                 <div>
@@ -142,8 +142,9 @@ export default {
     justify-content: space-between;
 }
 /*  1 */
-.group-post .first-col {
+#app > div.dash-board > div.group-view > div.group__content > div.container > div.group-post > div.first-col {
     height: 100%;
+    width: 75%;
     display: flex;
     flex-direction:column;
 }
@@ -158,7 +159,8 @@ export default {
 }
 
 /*  2 */
-.group-post .second-col {
+#app > div.dash-board > div.group-view > div.group__content > div.container > div.group-post > div.second-col {
+    width: 20%;
     height: 100%;
     display: flex;
     flex-direction:column;
@@ -170,9 +172,23 @@ export default {
     overflow: hidden;
     border-radius: 2px;
     background-color:white;
+    width: 100%;
 }
 .group-post .second-col .short-about div{
     font-size: 14px;
     padding:15px;
+}
+/*  */
+@media only screen and (max-width: 768px) {
+    #app > div.dash-board > div.group-view > div.group__content > div.container > div.group-post > div.first-col, 
+    #app > div.dash-board > div.group-view > div.group__content > div.container > div.group-post > div.second-col {
+        width: 95%;
+        margin:0 auto;
+        margin-top: 25px;
+    }
+    .group-post {
+        flex-direction: column-reverse;
+        margin:0;
+    }
 }
 </style>

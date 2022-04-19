@@ -176,6 +176,7 @@ a:hover {
 }
 .login-page form {
   display: flex;
+  height: auto;
   flex-direction: column;
   width: 80%;
   padding: 50px;
@@ -282,13 +283,14 @@ a:hover {
     width: 100%;
     font-size: 14px;
   }
-  .login-page form .logo {
-    top:unset;
-    left:50%;
-    transform: translate(-50%,-15%);
+  .login-page {
+
   }
-  .login-page form .logo img{
-    transform: scale(0.6);
+  .login-page form{
+    padding:20px;
+  }
+  .login-page form .logo {
+    display: none;
   }
 }
 </style>
