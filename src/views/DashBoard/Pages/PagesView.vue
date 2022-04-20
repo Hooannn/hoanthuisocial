@@ -85,6 +85,7 @@ export default {
     },
     data() {
         return {
+            postsData:[],
             page:{},
             posts:[],
             peopleFollowed:[],
@@ -99,11 +100,18 @@ export default {
             else {
                 return
             }
+        },
+        postsData() {
+            this.postsData.forEach(post => {
+                if (post.author==this.$route.params.key) {
+                    this.posts.unshift(post)
+                }
+            });
         }
     },
     mounted() {
         //this.$store.dispatch('loading')
-        this.$rtdbBind('posts',db.ref('usersInformation').child(this.$route.params.key).child('posts'))
+        this.$rtdbBind('postsData',db.ref('postsData'))
         this.$rtdbBind('peopleFollowed',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
         this.$rtdbBind('page',db.ref('usersInformation').child(this.$route.params.key))
         .then(()=> {

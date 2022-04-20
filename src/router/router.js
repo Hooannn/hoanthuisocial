@@ -12,7 +12,14 @@ const routes = [
       {
         path:'/dashboard/home',
         name:'dhome',
-        component:() => import ('../views/DashBoard/Home/HomeView.vue')
+        component:() => import ('../views/DashBoard/Home/HomeView.vue'),
+        children: [
+          {
+            path:'/home/search',
+            name:'filter',
+            component:() => import('../views/DashBoard/Home/HomeFilter.vue')
+          }
+        ]
       },
       /*
       {
@@ -154,7 +161,7 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: () => import('../views/IntroView.vue')
+    component: () => import('../views/IntroView.vue'),
   },
   {
     path: '/login',

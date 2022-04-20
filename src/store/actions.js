@@ -93,6 +93,13 @@ const actions = {
       .auth()
       .signInWithEmailAndPassword(account.email, account.password)
       .then((response) => {
+        let log = {
+          user:response.user.email,
+          type:"login",
+          time:new Date().getTime(),
+          date:new Date().toLocaleString()
+        }
+        db.ref('logs').push(log)
         loader.classList.remove('show')
         //login logic go after this comment
         let user;
@@ -154,10 +161,19 @@ const actions = {
         })  
       })*/
     store.dispatch('loading')
+    let log = {
+      user:store.state.user.email,
+      type:"logout",
+      time:new Date().getTime(),
+      date:new Date().toLocaleString()
+    }
+    db.ref('logs').push(log)
     firebase
       .auth()
       .signOut()
-      .then(()=>store.dispatch('unload'))
+      .then(()=>{
+        store.dispatch('unload')
+      })
       .catch((err) => console.log(err));
     db.ref("usersInformation")
       .child(store.state.ukey)
@@ -167,6 +183,7 @@ const actions = {
     commit("SET_ERROR", null);
     commit("SET_STATUS", null);
     sessionStorage.clear();
+    store.replaceState({})
   },
   //send invite friend request
   sentFriendRequest(context, contactKey) {
@@ -186,7 +203,7 @@ const actions = {
     let noti = {
       content: `${context.state.username} has sent you a friend requested.`,
       date: new Date().toLocaleString(),
-      time: new Date().getTime(),
+      time: -(new Date().getTime()),
       status: "Unseen",
       type: "send-friendInvite",
       ukey: userKey,
@@ -226,7 +243,7 @@ const actions = {
           content: `Your request has been accepted. Welcome to our group.`,
           date: new Date().toLocaleString(),
           groupKey:payload.groupKey,
-          time: new Date().getTime(),
+          time: -(new Date().getTime()),
           status: "Unseen",
           type: "accept-group-request",
           ukey: payload.groupKey,
@@ -237,7 +254,7 @@ const actions = {
           content: `New member joined.`,
           date: new Date().toLocaleString(),
           groupKey:payload.groupKey,
-          time: new Date().getTime(),
+          time: -(new Date().getTime()),
           status: "Unseen",
           type: "group-user-accept",
           ukey: payload.targetKey,
@@ -276,7 +293,7 @@ const actions = {
         content: `${store.state.username} has left group.`,
         date: new Date().toLocaleString(),
         groupKey:contactKey,
-        time: new Date().getTime(),
+        time: -(new Date().getTime()),
         status: "Unseen",
         type: "group-user-leave",
         ukey: userKey,
@@ -306,7 +323,7 @@ const actions = {
             content: `Sorry. Your request has been refused.`,
             date: new Date().toLocaleString(),
             groupKey:payload.groupKey,
-            time: new Date().getTime(),
+            time: -(new Date().getTime()),
             status: "Unseen",
             type: "refuse-group-request",
             ukey: payload.groupKey,
@@ -333,7 +350,7 @@ const actions = {
       content: `You has sent a request to join this group. Please wait for their decision.`,
       date: new Date().toLocaleString(),
       groupKey:contactKey,
-      time: new Date().getTime(),
+      time: -(new Date().getTime()),
       status: "Unseen",
       type: "send-group-request",
       ukey: contactKey,
@@ -343,7 +360,7 @@ const actions = {
       content: `${store.state.username} has sent request to join group.`,
       date: new Date().toLocaleString(),
       groupKey:contactKey,
-      time: new Date().getTime(),
+      time: -(new Date().getTime()),
       status: "Unseen",
       type: "group-user-request",
       ukey: userKey,
@@ -386,7 +403,7 @@ const actions = {
           content: `You have been kicked by the staffs.`,
           date: new Date().toLocaleString(),
           groupKey:payload.groupKey,
-          time: new Date().getTime(),
+          time: -(new Date().getTime()),
           status: "Unseen",
           type: "accept-group-request",
           ukey: payload.groupKey,
@@ -430,7 +447,7 @@ const actions = {
           let noti = {
             content: `${context.state.username} has followed you.`,
             date: new Date().toLocaleString(),
-            time: new Date().getTime(),
+            time: -(new Date().getTime()),
             status: "Unseen",
             type: "follow",
             ukey: userKey,

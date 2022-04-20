@@ -57,6 +57,7 @@ export default {
         return {
             socialAccounts:{},
             posts:[],
+            postsData:[],
             placeholder:'What is new, '+this.$store.state.username + " ?",
             postContent:'',
             imagesUpload:[],
@@ -74,19 +75,20 @@ export default {
                 let newPost= {
                     author:this.$store.state.ukey,
                     date:new Date().toLocaleString(),
-                    time: new Date().getTime(),
+                    time: -(new Date().getTime()),
                     content:this.postContent,
                     images:this.imagesUpload,
+                    type:'user-post'
                 }
                 this.$store.dispatch('loading')
-                db.ref('usersInformation').child(this.$store.state.ukey).child('posts').push(newPost).then(res => {
+                db.ref('postsData').push(newPost).then(res => {
                     this.$store.dispatch('unload')
-                    db.ref('usersInformation').child(this.$store.state.ukey).child('posts').child(res.key).child('key').set(res.key)
+                    db.ref('postsData').child(res.key).child('key').set(res.key)
                     this.$bvToast.show('new-blog')
                     let noti={
                         content:`${this.$store.state.username} has post a new post.`,
                         date:new Date().toLocaleString(), 
-                        time:new Date().getTime(),
+                        time:-(new Date().getTime()),
                         status:'Unseen',
                         type:'new-blog',
                         ukey:this.$store.state.ukey,
@@ -124,10 +126,20 @@ export default {
             client.picker(options).open();
         }
     },
+    watch: {
+        postsData() {
+            this.posts=[]
+            this.postsData.forEach(post => {
+                if (post.author==this.$route.params.key) {
+                    this.posts.unshift(post)
+                }
+            });
+        }
+    },
     mounted() {
         this.$rtdbBind('user', db.ref('usersInformation').child(this.$route.params.key))
         this.$rtdbBind('socialAccounts', db.ref('usersInformation').child(this.$route.params.key).child('socialAccounts'))
-        this.$rtdbBind('posts',db.ref('usersInformation').child(this.$route.params.key).child('posts'))
+        this.$rtdbBind('postsData',db.ref('postsData'))
         this.$rtdbBind('myfollowers',db.ref('usersInformation').child(this.$store.state.ukey).child('follows').child('followed'))
     }
 }

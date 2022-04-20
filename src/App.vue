@@ -143,7 +143,8 @@ body {
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   box-sizing: content-box;
   position: relative;
   font-family: "Poppins", sans-serif;
@@ -155,7 +156,8 @@ body {
 }
 #app {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   position: relative;
 }
 a {

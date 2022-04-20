@@ -218,9 +218,6 @@ export default {
 /*  */
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
-    button>span{
-        font-size: 8px;
-    }
     .profile__cover {
         padding-top:35px;   
         height: 200px;

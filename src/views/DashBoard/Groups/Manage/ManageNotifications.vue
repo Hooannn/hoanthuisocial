@@ -16,7 +16,7 @@ export default {
         }
     },
     mounted() {
-        this.$rtdbBind('notifications',db.ref('groups').child(this.$route.params.key).child('notifications'))
+        this.$rtdbBind('notifications',db.ref('groups').child(this.$route.params.key).child('notifications').orderByChild('time'))
     }
 }
 </script>

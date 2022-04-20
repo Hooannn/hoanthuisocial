@@ -14,5 +14,7 @@ const state = {
   location:null,
   unseenNoti:null,
   messagesData:[],
+  postsData:[],
+  filterPosts:[]
 };
 export default state;

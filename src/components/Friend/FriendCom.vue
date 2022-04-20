@@ -97,7 +97,7 @@ export default {
         let noti={
           content:`${this.$store.state.username} and you have become friend.`,
           date:new Date().toLocaleString(),
-          time:new Date().getTime(),
+          time:-(new Date().getTime()),
           type:'accept-friendInvite',
           status:'Unseen',
           ukey:this.$store.state.ukey,

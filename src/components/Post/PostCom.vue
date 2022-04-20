@@ -18,7 +18,7 @@
         <div class="control">
           <i @click='showControl' class="grey fas fa-ellipsis-v"></i>
           <div class="drop-down">
-            <span v-if='$route.name!="post-detail" && author.type!="page" && type!="group-post"' @click='viewPost'>View</span>
+            <span v-if='$route.name!="post-detail" && author.type!="page"' @click='viewPost'>View</span>
             <span v-if='authorKey==$store.state.ukey'>Hide</span>
             <span v-if='authorKey==$store.state.ukey'>Edit</span>
             <span @click='deletePost' v-if='authorKey==$store.state.ukey'>Delete</span>
@@ -42,13 +42,13 @@
           <div @click='showPostComment' class="comments"><i class="grey fas fa-comment-alt"></i> Comment {{comments.length}}</div>
         </div>
         <div class="right">
-          <div v-if='author.type!="page" && type!="group-post"' class="views">
+          <div v-if='author.type!="page"' class="views">
             <i class="grey fas fa-eye"></i>  View {{views.length}}
           </div>
         </div>
       </div>
       <div class="post-comments">
-        <post-comment :groupKey='groupKey' :type='type' :class='comment.key' v-for='comment in post.comments' :key='comment.key' :commentKey='comment.key' :authorCommentKey='comment.author' :authorPostKey='post.author' :postKey='post.key'/>
+        <post-comment :class='comment.key' v-for='comment in post.comments' :key='comment.key' :commentKey='comment.key' :authorCommentKey='comment.author' :authorPostKey='post.author' :postKey='post.key'/>
       </div>
       <div class="post-input-comment">
         <div style='width:30px;height:30px;borderRadius:50%;overflow:hidden'>
@@ -70,8 +70,6 @@ export default {
     postKey:String,
     authorKey:String,
     postImages:Array,
-    type:String,
-    groupKey:String,
   },
   data() {
     return {
@@ -126,13 +124,12 @@ export default {
 
     //
     likePost() {
-      if (this.type!='group-post') {
         if (!this.isLiked) {
-          db.ref("usersInformation").child(this.authorKey).child('posts').child(this.postKey).child('likes').child(this.$store.state.ukey).set('liked')
+          db.ref("postsData").child(this.postKey).child('likes').child(this.$store.state.ukey).set('liked')
           let noti={
             content:`${this.$store.state.username} has liked your blog.`,
             date:new Date().toLocaleString(),
-            time:new Date().getTime(),
+            time:-(new Date().getTime()),
             status:'Unseen',
             type:'like-blog',
             ukey:this.$store.state.ukey,
@@ -143,29 +140,8 @@ export default {
           }
         }
         else if (this.isLiked) {
-          db.ref("usersInformation").child(this.authorKey).child('posts').child(this.postKey).child('likes').child(this.$store.state.ukey).remove()
+          db.ref("postsData").child(this.postKey).child('likes').child(this.$store.state.ukey).remove()
         }
-      }
-      else if (this.type=='group-post') {
-        if (!this.isLiked) {
-          db.ref("groups").child(this.groupKey).child('posts').child(this.postKey).child('likes').child(this.$store.state.ukey).set('liked')
-          let noti={
-            content:`${this.$store.state.username} has liked your blog.`,
-            date:new Date().toLocaleString(),
-            time:new Date().getTime(),
-            status:'Unseen',
-            type:'like-blog',
-            ukey:this.$store.state.ukey,
-            postKey:this.postKey,
-          }
-          if (this.authorKey!=this.$store.state.ukey) {
-              db.ref("usersInformation").child(this.authorKey).child('notifications').push(noti).catch(err => console.log(err))
-          }
-        }
-        else if (this.isLiked) {
-          db.ref("groups").child(this.groupKey).child('posts').child(this.postKey).child('likes').child(this.$store.state.ukey).remove()
-        }
-      }
     },
     showControl() {
       let dd=document.querySelector(`div.post-com.${this.post.key} > div.post-header > div.control > div`)
@@ -191,20 +167,19 @@ export default {
       }
     },
     postComment() {
-      if (this.type!='group-post') {
         if (this.comment!=null && this.comment.trim()!="") {
         let comment= {
           author:this.$store.state.ukey,
           content:this.comment,
           date:new Date().toLocaleString(),
-          time:new Date().getTime(),
+          time:-(new Date().getTime()),
         }
-        db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('comments').push(comment).then(res => {
-          db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('comments').child(res.key).child('key').set(res.key)
+        db.ref('postsData').child(this.postKey).child('comments').push(comment).then(res => {
+          db.ref('postsData').child(this.postKey).child('comments').child(res.key).child('key').set(res.key)
           let noti= {
             content:`${this.$store.state.username} has commented to your blog.`,
             date:new Date().toLocaleString(),
-            time:new Date().getTime(),
+            time:-(new Date().getTime()),
             status:'Unseen',
             type:'comment-blog',
             ukey:this.$store.state.ukey,
@@ -220,43 +195,12 @@ export default {
         else {
           return
         }
-      }
-      else if (this.type=='group-post') {
-        if (this.comment!=null && this.comment.trim()!="") {
-        let comment= {
-          author:this.$store.state.ukey,
-          content:this.comment,
-          date:new Date().toLocaleString(),
-          time:new Date().getTime(),
-        }
-        db.ref('groups').child(this.groupKey).child('posts').child(this.postKey).child('comments').push(comment).then(res => {
-          db.ref('groups').child(this.groupKey).child('posts').child(this.postKey).child('comments').child(res.key).child('key').set(res.key)
-          let noti= {
-            content:`${this.$store.state.username} has commented to your blog.`,
-            date:new Date().toLocaleString(),
-            time:new Date().getTime(),
-            status:'Unseen',
-            type:'comment-blog',
-            ukey:this.$store.state.ukey,
-            postKey:this.postKey,
-            commentKey:res.key
-          }
-          if (this.authorKey!=this.$store.state.ukey) {
-            db.ref("usersInformation").child(this.authorKey).child('notifications').push(noti).catch(err => console.log(err))
-          }
-        })
-        this.comment=''
-        }
-        else {
-          return
-        }
-      }
     },
     //more control 
     viewPost() {
       if (this.$route.name!='post-detail') {
         if (this.views.length==0 || this.views.filter(view=> view['.value']==this.$store.state.ukey).length==0) {
-          db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('views').push(this.$store.state.ukey).catch(err=>console.log(err))
+          db.ref('postsData').child(this.postKey).child('views').push(this.$store.state.ukey).catch(err=>console.log(err))
         }
         this.$router.push({name:'post-detail',params:{key:this.authorKey,postKey:this.postKey}})
       }
@@ -265,22 +209,12 @@ export default {
       }
     },
     deletePost() {
-      if (this.type!='group-post') {
-        db.ref('usersInformation').child(this.$store.state.ukey).child('posts').child(this.postKey).remove()
+        db.ref('postsData').child(this.postKey).remove()
         .then(()=> {
           let post=document.querySelector(`div.post-com.${this.post.key}`)
           post.remove()
         })
         .catch(err=> console.log(err))
-      }
-      else if (this.type=='group-post') {
-        db.ref('groups').child(this.groupKey).child('posts').child(this.postKey).remove()
-        .then(()=> {
-          let post=document.querySelector(`div.post-com.${this.post.key}`)
-          post.remove()
-        })
-        .catch(err=> console.log(err))
-      }
     },
     //
     /*
@@ -308,24 +242,14 @@ export default {
 
   },
   mounted() {
-    if (this.type=='group-post') {
+    this.$rtdbBind('post',db.ref('postsData').child(this.postKey))
     this.$rtdbBind('author',db.ref('usersInformation').child(this.authorKey))
     //this.$rtdbBind('author',db.ref('pages').child(this.groupKey))
-    this.$rtdbBind('post',db.ref('groups').child(this.groupKey).child('posts').child(this.postKey))
     //this.$rtdbBind('post',db.ref('pages').child(this.groupKey).child('posts').child(this.postKey))
-    this.$rtdbBind('likes',db.ref('groups').child(this.groupKey).child('posts').child(this.postKey).child('likes'))
-    this.$rtdbBind('views',db.ref('groups').child(this.groupKey).child('posts').child(this.postKey).child('views'))
-    this.$rtdbBind('comments',db.ref('groups').child(this.groupKey).child('posts').child(this.postKey).child('comments'))
-    }
-    else if(this.type!='group') {
-    this.$rtdbBind('author',db.ref('usersInformation').child(this.authorKey))
-    //this.$rtdbBind('author',db.ref('pages').child(this.authorKey))
-    this.$rtdbBind('post',db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey))
-    //this.$rtdbBind('post',db.ref('pages').child(this.authorKey).child('posts').child(this.postKey))
-    this.$rtdbBind('likes',db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('likes'))
-    this.$rtdbBind('views',db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('views'))
-    this.$rtdbBind('comments',db.ref('usersInformation').child(this.authorKey).child('posts').child(this.postKey).child('comments'))
-    }
+    this.$rtdbBind('likes',db.ref('postsData').child(this.postKey).child('likes'))
+    this.$rtdbBind('views',db.ref('postsData').child(this.postKey).child('views'))
+    this.$rtdbBind('comments',db.ref('postsData').child(this.postKey).child('comments'))
+    
     //let images =document.querySelectorAll(`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list div.post-com.${this.postKey} > div.post-content > div.images div.image`)
     // add esc event to close image preview
     window.addEventListener('keydown', function(e) {
@@ -602,7 +526,7 @@ pre {
   display: none;
   transition: .1s;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: column-reverse;
 }
 .post-com .post-comments.show {
   display:flex;

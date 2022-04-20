@@ -19,8 +19,8 @@
               </div>
           </div>
           <h5>Posts</h5>
-          <div class="posts-list">
-              <post-com :groupKey='$route.params.key' :type='"group-post"' :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
+          <div style='width:100%' class="posts-list">
+              <post-com  :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
           </div>
       </div>
       <div class='second-col'>
@@ -44,6 +44,7 @@ export default {
         return {
             group:{},
             members:[],
+            postsData:[],
             posts:[],
             placeholder:'Want to share something, '+this.$store.state.username + " ?",
             postContent:'',
@@ -76,20 +77,22 @@ export default {
                 let newPost= {
                     author:this.$store.state.ukey,
                     date:new Date().toLocaleString(),
-                    time: new Date().getTime(),
+                    time: -(new Date().getTime()),
                     content:this.postContent,
                     images:this.imgsUpload,
+                    type:'group-post',
+                    groupKey:this.$route.params.key
                 }
                 this.$store.dispatch('loading')
-                db.ref('groups').child(this.$route.params.key).child('posts').push(newPost).then(res => {
-                    db.ref('groups').child(this.$route.params.key).child('posts').child(res.key).child('key').set(res.key)
+                db.ref('postsData').push(newPost).then(res => {
+                    db.ref('postsData').child(res.key).child('key').set(res.key)
                     this.$store.dispatch('unload')
                     this.$bvToast.show('new-blog')
                     //member noti
                     let mnoti={
                         content:`${this.$store.state.username} has post a new post in ${this.group.groupname}.`,
                         date:new Date().toLocaleString(), 
-                        time:new Date().getTime(),
+                        time:-(new Date().getTime()),
                         status:'Unseen',
                         type:'group-new-blog',
                         ukey:this.$store.state.ukey,
@@ -104,7 +107,7 @@ export default {
                     let gnoti={
                         content:`${this.$store.state.username} has post a new post.`,
                         date:new Date().toLocaleString(), 
-                        time:new Date().getTime(),
+                        time: -(new Date().getTime()),
                         status:'Unseen',
                         type:'group-new-blog',
                         ukey:this.$store.state.ukey,
@@ -122,11 +125,23 @@ export default {
           this.imgsUpload.splice(index,1)
       }
   },
+  watch: {
+      postsData() {
+          this.posts=[]
+          this.postsData.forEach(post => {
+              if (post.type='group-post') {
+                  if (post.groupKey==this.$route.params.key) {
+                      this.posts.unshift(post) 
+                  }
+              }
+          });
+      }
+  },
   mounted() {
+      this.$rtdbBind('postsData', db.ref('postsData'))
       this.$rtdbBind('user', db.ref('usersInformation').child(this.$store.state.ukey))
       this.$rtdbBind('group', db.ref('groups').child(this.$route.params.key))
       this.$rtdbBind('members', db.ref('groups').child(this.$route.params.key).child('members'))
-      this.$rtdbBind('posts', db.ref('groups').child(this.$route.params.key).child('posts'))
   }
 }
 </script>

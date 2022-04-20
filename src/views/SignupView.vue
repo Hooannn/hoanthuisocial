@@ -194,7 +194,7 @@ a:hover {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   background-color:rgba(119, 107, 107, 0.2);
 }
 .signup-page div.result {

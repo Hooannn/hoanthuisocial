@@ -155,6 +155,7 @@ div.friends-view.container > div > h5 > i:hover{
     opacity: 0;
     visibility: hidden;
     flex-wrap: wrap;
+    display: flex;
 }
 @keyframes slide-down {
     0% {

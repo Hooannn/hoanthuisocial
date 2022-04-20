@@ -45,19 +45,20 @@ export default {
                 let newPost= {
                     author:this.$store.state.ukey,
                     date:new Date().toLocaleString(),
-                    time: new Date().getTime(),
+                    time: -(new Date().getTime()),
                     content:this.postContent,
                     images:this.imgsUpload,
+                    type:'user-post'
                 }
                 this.$store.dispatch('loading')
-                db.ref('usersInformation').child(this.$store.state.ukey).child('posts').push(newPost).then(res => {
-                    db.ref('usersInformation').child(this.$store.state.ukey).child('posts').child(res.key).child('key').set(res.key)
+                db.ref('postsData').push(newPost).then(res => {
+                    db.ref('postsData').child(res.key).child('key').set(res.key)
                     this.$store.dispatch('unload')
                     this.$bvToast.show('new-blog')
                     let noti={
                         content:`${this.$store.state.username} has post a new post.`,
                         date:new Date().toLocaleString(), 
-                        time:new Date().getTime(),
+                        time:-(new Date().getTime()),
                         status:'Unseen',
                         type:'new-blog',
                         ukey:this.$store.state.ukey,
@@ -75,7 +76,6 @@ export default {
     },
     close(e) {
       let makePost=document.querySelector('#app > div.dash-board > div.home-view > div.cover')
-
       makePost.classList.remove('show')
     },
     removeImg(img) {
@@ -136,8 +136,8 @@ div.images-container img:hover {
   opacity: 1;
 }
 .cover .make-post{
-  width: 40%;
-  height: 50%;
+  width:600px;
+  height: 500px;
   box-shadow:0 0 3px rgba(0,0,0,0.5);
   border-radius: 3px;
   background-color:whitesmoke;
@@ -223,5 +223,11 @@ div.images-container img:hover {
   justify-content: center;
   align-items: center;
   border-top:1px solid grey;
+}
+/*  */ 
+@media only screen and (max-width: 768px) {
+  .cover .make-post {
+    width: 95%;
+  }
 }
 </style>

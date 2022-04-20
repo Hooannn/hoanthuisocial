@@ -11,24 +11,22 @@ export default {
   components: { PostCom },
   data() {
       return {
-          data:[],
-          posts:[],
+          postsData:[],
           post:'',
       }
   },
   watch: {
-      data() {
-        this.posts=[]
-        this.data.forEach(data => {
-          if (data.posts) {
-              this.posts.push(data.posts)
+      postsData() {
+        this.post=''
+        this.postsData.forEach(data => {
+          if (data.author==this.$route.params.key && data.key==this.$route.params.postKey) {
+            this.post=data
           }
         });
-        this.post=this.posts.find(post => post[this.$route.params.postKey])[this.$route.params.postKey]
       }
   },
   mounted() {
-      this.$rtdbBind('data',db.ref('usersInformation'))
+      this.$rtdbBind('postsData',db.ref('postsData'))
   }
 }
 </script>

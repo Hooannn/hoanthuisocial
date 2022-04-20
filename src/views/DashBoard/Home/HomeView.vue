@@ -1,14 +1,15 @@
 <template>
-  <div class="home-view ">
+  <div id='home-view' class="home-view ">
     <make-post />
     <make-group-form />
     <div class="container">
     <div class="first-col">
       <!--<button @click='toMyPage' class="btn btn-sm btn-link">My Page</button>-->
       <div style='marginBottom:25px;width:100%;height:40px;display:flex;alignItems:center;boxShadow:1px 1px 4px rgba(0,0,0,0.4);overflow:hidden;borderRadius:3px' class="search-bar">
-        <input placeholder="Search something..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;border:none;outline:none;backgroundColor:white;' type="text">
-        <div class='btn-search' style='color:white;width:20%;height:100%;display:flex;justifyContent:center;alignItems:center;'><i class="fas fa-search"></i></div>
+        <input v-model='searchInput' @keypress.enter="search" placeholder="Search something..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;border:none;outline:none;backgroundColor:white;' type="text">
+        <div @click='search' class='btn-search' style='color:white;width:20%;height:100%;display:flex;justifyContent:center;alignItems:center;'><i class="fas fa-search"></i></div>
       </div>
+      <router-view></router-view>
       <div class="short-intro">
         <div style='width:100%;maxHeight:90px;overflow:hidden' class="short-bg">
           <img style='width:100%;height:100%;objectFit:cover' :src="$store.state.coverImg">
@@ -68,9 +69,9 @@
     </div>
     <div class="second-col">
       <div class="posts-list">
-        <post-com :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
+        <post-com :class='post.key' v-for='post in $store.state.filterPosts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
       </div>
-      <button style='minWidth:30%;margin:0 auto' class="btn btn-sm btn-secondary">See more</button>
+      <button @click='loadPost' style='minWidth:30%;margin:0 auto' class="btn btn-sm btn-secondary">See more</button>
     </div>
     <div class="third-col">
       <!-- -->
@@ -83,7 +84,7 @@
       <div class="group-introduce">
               <h5 style='fontWeight:bolder;border:none;padding:0;'>Connect more</h5>
               <div>Join a group to connect with more people, make more discussion, with your favorite topic, hobbies, skill. Why not ?</div>
-              <button style='color:white' class="btn btn-primary">Find</button>
+              <button @click='findGr' style='color:white' class="btn btn-primary">Find</button>
               <button @click='showMakeGroupForm' style='color:white' class="btn btn-primary">Create</button>
       </div>
       <!-- -->
@@ -99,6 +100,7 @@
 </template>
 
 <script>
+import router from '../../../router/router'
 import FooterCom from '../../../components/General/FooterCom.vue'
 import MakePost from '../../../components/General/MakePost.vue'
 import RecommendGroup from '../../../components/General/RecommendGroup.vue'
@@ -110,17 +112,62 @@ export default {
   components: { FooterCom, PostCom, RecommendPerson, MakePost, RecommendGroup, MakeGroupForm },
   data() {
     return {
+      searchInput:'',
       userFollow:[],
+      userFollowing:[],
       //
       people:[],
-      posts:[],
+      postsData:[],
       groups:[],
       // friend handle
       userFriend:[],
       //
+      newPosts:[],
+      myGroups:[],
     }
   },
   methods: {
+    scrollEvent(e) {
+      let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+      if (bottomOfWindow) {
+        this.loadPost()
+      }
+      else {
+        return
+      }
+      /*
+      let home=document.getElementById('home-view')
+      console.log(home.scrollHeight)
+      console.log(home.scrollTop)
+      */
+    },
+    filterPosts(postsData) {
+      let filterPosts=[]
+      postsData.forEach(post => {
+        if (this.userFollowing.find(user=>user[".value"]==post.author) && post.type=='user-post') {
+          filterPosts.push(post)
+        }
+        else if (this.myGroups.find(group=>group.groupKey==post.groupKey) && post.type=='group-post') {
+          filterPosts.push(post)
+        }
+      });
+      return filterPosts.sort(() => Math.random() - 0.5)
+    },
+    search() {
+        if (this.$route.name=='filter') {
+          router.go(-1)
+          let input=this.searchInput
+          setTimeout(function() {
+            router.push({name:'filter',query:{q:input}})
+          },1)
+        }
+        this.$router.push({name:'filter',query:{q:this.searchInput}})
+        this.searchInput=''
+    },
+    findGr() {
+      let searchInput=document.querySelector('#app > div.dash-board > div.home-view > div.container > div.first-col > div.search-bar > input[type=text]')
+      searchInput.focus()
+    },
     showMakePost() {
       let makePost=document.querySelector('#app > div.dash-board > div.home-view > div.cover')
       makePost.classList.add('show')
@@ -129,6 +176,19 @@ export default {
       let mgForm=document.querySelector('#app > div.dash-board > div.home-view > div.make-group-form.cover')
       mgForm.classList.toggle('show')
     },
+    loadPost() {
+      let index=this.$store.state.postsData[this.$store.state.postsData.length-1].time
+      this.$store.dispatch('loading')
+      this.$rtdbBind('newPosts',db.ref('postsData').orderByChild('time').startAt(index+1).limitToFirst(10)).then(()=>{
+        this.$store.state.postsData=[...this.$store.state.postsData,...this.newPosts]
+        let filter=this.filterPosts(this.newPosts)
+        this.$store.state.filterPosts=[...this.$store.state.filterPosts,...filter]
+        this.$store.dispatch('unload')
+      }).catch(err=>{
+        alert(err)
+        this.$store.dispatch('unload')
+      })
+    }
     /*
     toMyPage() {
       this.$store.dispatch('setRole', "Page")
@@ -160,33 +220,13 @@ export default {
       return mutualFriend.length
     }
   },
-  watch: {
-    people() {
-      this.posts=[]
-      this.people.forEach(person => {
-        if (person.posts!=undefined && person.posts!=null) {
-          if (typeof person.posts != Array) {
-              person.posts=Object.keys(person.posts).sort().map((key) => ({
-                key: person.posts[key].key,
-                author: person.posts[key].author,
-                content: person.posts[key].content,
-                comments:person.posts[key].comments,
-                date:person.posts[key].date,
-                time:person.posts[key].time,
-                likes:person.posts[key].likes,
-                images:person.posts[key].images,
-            }));
-          }
-          person.posts.forEach(post => {
-            this.posts.push(post)
-          });
-        }
-      });
-    }
-  },
   mounted() {
     this.$store.dispatch('loading')
-    this.$rtdbBind('people',db.ref('usersInformation')).then(()=>{
+    this.$rtdbBind('postsData',db.ref('postsData').orderByChild('time').limitToFirst(10)).then(()=>{
+      this.$store.state.postsData=[...this.postsData]
+      let filter=this.filterPosts(this.postsData)
+      this.$store.state.filterPosts=[...filter]
+      this.loadPost()
       this.$store.dispatch('unload')
     }).catch(err=>{
       alert(err)
@@ -195,6 +235,15 @@ export default {
     this.$rtdbBind('groups',db.ref('groups'))
     this.$rtdbBind('userFriend',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
     this.$rtdbBind('userFollow',db.ref('usersInformation').child(this.$store.state.ukey).child('follows').child('followed'))
+    this.$rtdbBind('userFollowing',db.ref('usersInformation').child(this.$store.state.ukey).child('follows').child('following'))
+    this.$rtdbBind('people',db.ref('usersInformation'))
+    this.$rtdbBind('myGroups',db.ref('usersInformation').child(this.$store.state.ukey).child('groups'))
+  },
+  created() {
+    window.addEventListener('scroll', this.scrollEvent)
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent)
   }
 }
 </script>

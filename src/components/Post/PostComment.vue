@@ -32,8 +32,6 @@ export default {
         commentKey:String,
         authorPostKey:String,
         postKey:String,
-        type:String,
-        groupKey:String
     },
     data() {
         return {
@@ -47,32 +45,17 @@ export default {
             dd.classList.toggle('show')
         },
         deleteComment() {
-          if (this.type!='group-post') {
-            db.ref('usersInformation').child(this.authorPostKey).child('posts').child(this.postKey).child('comments').child(this.commentKey).remove()
+            db.ref('postsData').child(this.postKey).child('comments').child(this.commentKey).remove()
               .then(()=> {
                 let comment=document.querySelector(`div.post-com.${this.postKey} > div.post-comments >div.post-comment.${this.commentKey}`)
                 comment.remove()
               })
               .catch(err=> console.log(err))
-          }
-          else if (this.type=='group-post') {
-            db.ref('groups').child(this.groupKey).child('posts').child(this.postKey).child('comments').child(this.commentKey).remove()
-              .then(()=> {
-                let comment=document.querySelector(`div.post-com.${this.postKey} > div.post-comments >div.post-comment.${this.commentKey}`)
-                comment.remove()
-              })
-              .catch(err=> console.log(err))
-          }
         }
     },
     mounted() {
         this.$rtdbBind('author',db.ref('usersInformation').child(this.authorCommentKey))
-        if (this.type=='group-post') {
-          this.$rtdbBind('comment',db.ref('groups').child(this.groupKey).child('posts').child(this.postKey).child('comments').child(this.commentKey))
-        }
-        else if (this.type!='group-post') {
-          this.$rtdbBind('comment',db.ref('usersInformation').child(this.authorPostKey).child('posts').child(this.postKey).child('comments').child(this.commentKey))
-        }
+        this.$rtdbBind('comment',db.ref('postsData').child(this.postKey).child('comments').child(this.commentKey))
     }
 }
 </script>

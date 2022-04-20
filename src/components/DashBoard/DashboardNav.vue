@@ -25,9 +25,9 @@
               </span>
               <div class="drop-down">
                   <div class='vl' style='pointerEvents:none;top:0;position:absolute;left:13.5%;borderLeft:2px solid rgb(255, 117, 85,0.5);height:100%'></div>
+                  <div @click='clearNoti' style='zIndex:1;backgroundColor:whitesmoke;width:100%;display:flex;justifyContent:center;'><button style='color:grey' class='btn btn-sm btn-link'>Clear</button></div>
                   <div style='zIndex:1;padding:5px 10px;background-color:white;borderBottom:1px solid grey' v-if='notis.length==0'>You have no notifications.</div>
                   <noti-com :class='noti[".key"]' v-for='noti in notis' :key='noti[".key"]' :notiKey="noti['.key']"/>
-                  <div @click='clearNoti' style='zIndex:1;backgroundColor:whitesmoke;width:100%;display:flex;justifyContent:center'><button style='color:grey' class='btn btn-sm btn-link'>Clear</button></div>
               </div>
           </div>
           <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-wd'>Market</button>
@@ -172,7 +172,7 @@ export default {
     },
     mounted() {
         this.$rtdbBind('messages',db.ref('messagesData'))
-        this.$rtdbBind('notis',db.ref('usersInformation').child(this.$store.state.ukey).child('notifications'))    
+        this.$rtdbBind('notis',db.ref('usersInformation').child(this.$store.state.ukey).child('notifications').orderByChild('time'))    
         this.interval=setInterval(() => {
             if (store.state.unseenNoti>0) {
                 this.$bvToast.show('unseen-notifications')
