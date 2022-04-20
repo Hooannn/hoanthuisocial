@@ -221,6 +221,7 @@ export default {
     }
   },
   mounted() {
+    document.documentElement.scrollTop=0
     this.$store.dispatch('loading')
     this.$rtdbBind('postsData',db.ref('postsData').orderByChild('time').limitToFirst(10)).then(()=>{
       this.$store.state.postsData=[...this.postsData]
