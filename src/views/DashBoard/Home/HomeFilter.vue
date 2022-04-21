@@ -47,7 +47,7 @@ export default {
               .replace(/\s+/g, "")
               .includes(
                 this.$route.query.q.toLowerCase().trim().replace(/\s+/g, "")
-              )) {
+              )||"groups".includes(this.$route.query.q.toLowerCase().trim().replace(/\s+/g, ""))) {
           this.groups.push(group)
         }
       });

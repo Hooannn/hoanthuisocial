@@ -51,14 +51,14 @@ export default {
     },
     viewProfile() {
       let key=this.ukey
-      router.push({name:'dhome'})
+      router.push({name:'/'})
       setTimeout(function() {
         router.push({name:'post',params:{key:key}})
       },50)
     },
     viewPage() {
       let key=this.ukey
-      router.push({name:'dhome'})
+      router.push({name:'/'})
       setTimeout(function() {
         router.push({name:'pages',params:{key:key}})
       },50)

@@ -111,7 +111,8 @@ export default {
         }
     },
     mounted() {
-        //this.$store.dispatch('loading')
+        document.documentElement.scrollTop=0
+        this.$store.dispatch('loading')
         this.$rtdbBind('postsData',db.ref('postsData'))
         this.$rtdbBind('peopleFollowed',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
         this.$rtdbBind('page',db.ref('usersInformation').child(this.$route.params.key))

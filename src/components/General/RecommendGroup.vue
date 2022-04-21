@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     viewGroup(key) {
-      this.$router.push({name:'group',params:{key:key}})
+      this.$router.push({name:'group-post',params:{key:key}})
     }
   },
   mounted() {

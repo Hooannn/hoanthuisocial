@@ -40,9 +40,15 @@ export default {
         }
     },
     mounted() {
-        this.$rtdbBind('group',db.ref('groups').child(this.$route.params.key))
-        this.$rtdbBind('members',db.ref('groups').child(this.$route.params.key).child('members'))
-        this.$rtdbBind('rules',db.ref('groups').child(this.$route.params.key).child('rules'))
+        this.$rtdbBind('members', db.ref('groups').child(this.$route.params.key).child('members')).then(()=> {
+          if (this.members.find(user=>user.key==this.$store.state.ukey)) {
+            this.$rtdbBind('group',db.ref('groups').child(this.$route.params.key))
+            this.$rtdbBind('rules',db.ref('groups').child(this.$route.params.key).child('rules'))
+          }
+          else {
+            this.$router.push({name:'group'})
+          }
+        })
     }
 }
 </script>

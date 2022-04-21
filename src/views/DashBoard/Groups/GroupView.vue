@@ -92,24 +92,25 @@ export default {
             membersRequest:[],
         }
     },
-    watch:{
-        members() {
+    mounted() {
+        document.documentElement.scrollTop=0
+        this.$store.dispatch('loading')
+        this.$rtdbBind('members',db.ref('groups').child(this.$route.params.key).child('members'))
+        /*
+        .then(()=>{
             if (this.members.find(user => (user.key!=this.$store.state.ukey))) {
                 this.$router.push({name:'group'})
             }
-        }
-    },
-    mounted() {
-        this.$store.dispatch('loading')
-        this.$rtdbBind('members',db.ref('groups').child(this.$route.params.key).child('members'))
-        .then(()=>{
-            if (this.members.find(user => user.key==this.$store.state.ukey).role=='member') {
-                this.$router.push({name:'group-post'})
-            }
-            if (this.members.find(user => user.key==this.$store.state.ukey).role=='staff') {
-                this.$router.push({name:'group-post'})
+            if (this.$route.name=='group') {
+                if (this.members.find(user => user.key==this.$store.state.ukey).role=='member') {
+                    this.$router.push({name:'group-post'})
+                }
+                if (this.members.find(user => user.key==this.$store.state.ukey).role=='staff') {
+                    this.$router.push({name:'group-post'})
+                }
             }
         })
+        */
         this.$rtdbBind('membersRequest',db.ref('groups').child(this.$route.params.key).child('membersRequest'))
         this.$rtdbBind('rules',db.ref('groups').child(this.$route.params.key).child('rules'))
         this.$rtdbBind('group',db.ref('groups').child(this.$route.params.key))
@@ -120,7 +121,7 @@ export default {
             this.$store.dispatch('unload')
         })
         this.profileKey=this.$route.params.key
-    },
+    }
 }
 </script>
 

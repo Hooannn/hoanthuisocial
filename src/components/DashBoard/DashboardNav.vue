@@ -46,8 +46,8 @@
           <div style='width:150px' class="drop-down">
             <div @click='viewMyProfile'><span>Profile</span></div>
             <div><span>Credit</span></div>
-            <div @click='viewMyFriend'><span>Friends</span></div>
-            <div><span>Invite</span></div>
+            <div v-if='$store.state.type!="page"' @click='viewMyFriend'><span>Friends</span></div>
+            <div v-if='$store.state.type!="page"'><span>Invite</span></div>
             <div><span>Setting</span></div>
             <div @click='logOut'><span>Logout</span></div>
           </div>
@@ -151,9 +151,9 @@ export default {
         }, 1000);
         },
         viewMyProfile() {
-            router.push({name:'dhome'})
+            router.push({name:'/'})
             setTimeout(function(){
-                router.push({name:"post",params:{key:store.state.ukey}})
+               router.push({name:"post",params:{key:store.state.ukey}})
             }, 50)
         },
         viewMyFriend() {
@@ -171,8 +171,8 @@ export default {
         }
     },
     mounted() {
-        this.$rtdbBind('messages',db.ref('messagesData'))
         this.$rtdbBind('notis',db.ref('usersInformation').child(this.$store.state.ukey).child('notifications').orderByChild('time'))    
+        this.$rtdbBind('messages',db.ref('messagesData'))
         this.interval=setInterval(() => {
             if (store.state.unseenNoti>0) {
                 this.$bvToast.show('unseen-notifications')

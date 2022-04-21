@@ -93,7 +93,7 @@
 </template>
 
 <script>
-
+import store from '../store/store'
 import FooterCom from '../components/General/FooterCom.vue';
 import db from "../plugins/firebase";
 export default {
@@ -179,7 +179,11 @@ export default {
       wrapper.scrollLeft = wrapper.scrollLeft - 100
     },
   },
-  
+  beforeRouteEnter(to, from, next) {
+    if (store.state.user != null) {
+      next({ name: "dhome" });
+    } else next();
+  },
  detroyed() {
    clearInterval(this.slideInterval)
    clearInterval(this.usersInterval)

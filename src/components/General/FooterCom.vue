@@ -1,7 +1,7 @@
 <template>
   <div id="footer">
       <div class='footer__left'>
-          <a target="_blank" href='https://github.com/Hooannn' class="footer__github">Github</a>
+          <a href='#' class="footer__github">Github</a>
           <div class="footer__about">About</div>
           <div class="footer__faqs">FAQs</div>
       </div>

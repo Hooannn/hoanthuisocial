@@ -42,11 +42,18 @@ export default {
     };
   },
   mounted() {
-    this.$rtdbBind('members', db.ref('groups').child(this.$route.params.key).child('members'))
-    this.$rtdbBind('request', db.ref('groups').child(this.$route.params.key).child('membersRequest'))
-    this.$rtdbBind('posts', db.ref('groups').child(this.$route.params.key).child('posts'))
-    this.$rtdbBind('notifications', db.ref('groups').child(this.$route.params.key).child('notifications'))
-    this.$router.push({name:'group-manage-info'})
+    this.$rtdbBind('members', db.ref('groups').child(this.$route.params.key).child('members')).then(()=> {
+          if (this.members.find(user=>user.key==this.$store.state.ukey)) {
+            this.$rtdbBind('request', db.ref('groups').child(this.$route.params.key).child('membersRequest'))
+            this.$rtdbBind('posts', db.ref('groups').child(this.$route.params.key).child('posts'))
+            this.$rtdbBind('notifications', db.ref('groups').child(this.$route.params.key).child('notifications'))
+            this.$router.push({name:'group-manage-info'})
+          }
+          else {
+            this.$router.push({name:'group'})
+          }
+    })
+    
   }
 };
 </script>

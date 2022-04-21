@@ -48,7 +48,14 @@ export default {
         }
     },
     mounted() {
-        this.$rtdbBind('membersData',db.ref('groups').child(this.$route.params.key).child('members'))
+        this.$rtdbBind('membersData', db.ref('groups').child(this.$route.params.key).child('members')).then(()=> {
+          if (this.membersData.find(user=>user.key==this.$store.state.ukey)) {
+            
+          }
+          else {
+            this.$router.push({name:'group'})
+          }
+      })
     }
 }
 </script>

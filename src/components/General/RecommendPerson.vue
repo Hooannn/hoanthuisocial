@@ -10,7 +10,7 @@
             <div v-if="person.type!='page' && person['.key']!=$store.state.ukey" style='fontSize:10px;color:grey;fontWeight:lighter'>Mutual {{mutualFriend.length}}</div>
             <div v-if="person.type=='page'" style='fontSize:10px;color:grey;fontWeight:lighter'>Like {{userFollowed.length}}</div>
           </div>
-          <button v-if='person.type!="page" && !userFriend.find((user)=> (user[".value"]==person[".key"])) && person[".key"]!=$store.state.ukey' :disabled='userFriend.find((user)=> (user[".value"]==person[".key"])) || userFriendRequesting.find((user)=> (user[".value"]==person[".key"])) || userFriendRequested.find((user)=> (user[".value"]==person[".key"]))' @click='$store.dispatch("sentFriendRequest",person[".key"]),$store.dispatch("follow",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-warning btn-sm"><i class="fas fa-user-plus"></i></button>
+          <button v-if='$store.state.type!="page"&&person.type!="page" && !userFriend.find((user)=> (user[".value"]==person[".key"])) && person[".key"]!=$store.state.ukey' :disabled='userFriend.find((user)=> (user[".value"]==person[".key"])) || userFriendRequesting.find((user)=> (user[".value"]==person[".key"])) || userFriendRequested.find((user)=> (user[".value"]==person[".key"]))' @click='$store.dispatch("sentFriendRequest",person[".key"]),$store.dispatch("follow",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-warning btn-sm"><i class="fas fa-user-plus"></i></button>
           <button v-if='person.type=="page"' :disabled='userFollowed.find((user)=> (user[".value"]==$store.state.ukey))' @click='$store.dispatch("follow",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-primary btn-sm"><i class="fas fa-thumbs-up"></i></button>
         </div>
     </div>
@@ -24,7 +24,7 @@
             <div v-if="person.type!='page' && person['.key']!=$store.state.ukey" style='fontSize:10px;color:grey;fontWeight:lighter'>Mutual {{mutualFriend.length}}</div>
             <div v-if="person.type=='page'" style='fontSize:10px;color:grey;fontWeight:lighter'>Like {{userFollowed.length}}</div>
           </div>
-          <button v-if='person.type!="page" && !userFriend.find((user)=> (user[".value"]==person[".key"])) && person[".key"]!=$store.state.ukey' :disabled='userFriend.find((user)=> (user[".value"]==person[".key"])) || userFriendRequesting.find((user)=> (user[".value"]==person[".key"])) || userFriendRequested.find((user)=> (user[".value"]==person[".key"]))' @click='$store.dispatch("sentFriendRequest",person[".key"]),$store.dispatch("follow",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-warning btn-sm"><i class="fas fa-user-plus"></i></button>
+          <button v-if='$store.state.type!="page"&&person.type!="page" && !userFriend.find((user)=> (user[".value"]==person[".key"])) && person[".key"]!=$store.state.ukey' :disabled='userFriend.find((user)=> (user[".value"]==person[".key"])) || userFriendRequesting.find((user)=> (user[".value"]==person[".key"])) || userFriendRequested.find((user)=> (user[".value"]==person[".key"]))' @click='$store.dispatch("sentFriendRequest",person[".key"]),$store.dispatch("follow",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-warning btn-sm"><i class="fas fa-user-plus"></i></button>
           <button v-if='person.type=="page" && !userFollowed.find((user)=> (user[".value"]==$store.state.ukey))' :disabled='userFollowed.find((user)=> (user[".value"]==$store.state.ukey))' @click='$store.dispatch("follow",person[".key"])' style='width:30px;height:30px;display:flex;justifyContent:center;alignItems:center;fontSize:13px;' class="add-fr btn btn-primary btn-sm"><i class="fas fa-thumbs-up"></i></button>
         </div>
     </div>
@@ -75,7 +75,7 @@ export default {
             if (this.person.type!='page' && this.ukey!=this.$store.state.ukey) {
                 this.$router.push({name:'post',params:{key:key}})
             }
-            else if (this.person.type=='page' && this.ukey!=this.$store.state.ukey) {
+            else if (this.person.type=='page') {
                 this.$router.push({name:'pages',params:{key:key}})
             }
         }

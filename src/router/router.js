@@ -39,6 +39,11 @@ const routes = [
             component:() => import('../views/DashBoard/Groups/GroupPost.vue')
           },
           {
+            path:'/dashboard/group/:key/post-detail/:postKey',
+            name:'group-post-detail',
+            component:() => import('../views/DashBoard/Groups/GroupPostDetail.vue')
+          },
+          {
             path:'/dashboard/group/:key/about',
             name:'group-about',
             component:() => import('../views/DashBoard/Groups/AboutView.vue')

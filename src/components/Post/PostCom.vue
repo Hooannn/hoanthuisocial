@@ -19,7 +19,8 @@
         <div class="control">
           <i @click='showControl' class="grey fas fa-ellipsis-v"></i>
           <div class="drop-down">
-            <span v-if='$route.name!="post-detail" && author.type!="page"' @click='viewPost'>View</span>
+            <span v-if='$route.name!="post-detail" && author.type!="page" && post.type=="user-post"' @click='viewUserPost'>View</span>
+            <span v-if='$route.name!="group-post-detail" && post.type=="group-post"' @click='viewGroupPost'>View</span>
             <span v-if='authorKey==$store.state.ukey'>Hide</span>
             <span v-if='authorKey==$store.state.ukey'>Edit</span>
             <span @click='deletePost' v-if='authorKey==$store.state.ukey'>Delete</span>
@@ -200,12 +201,23 @@ export default {
         }
     },
     //more control 
-    viewPost() {
+    viewUserPost() {
       if (this.$route.name!='post-detail') {
         if (this.views.length==0 || this.views.filter(view=> view['.value']==this.$store.state.ukey).length==0) {
           db.ref('postsData').child(this.postKey).child('views').push(this.$store.state.ukey).catch(err=>console.log(err))
         }
         this.$router.push({name:'post-detail',params:{key:this.authorKey,postKey:this.postKey}})
+      }
+      else {
+        return
+      }
+    },
+    viewGroupPost() {
+      if (this.$route.name!='group-post-detail') {
+        if (this.views.length==0 || this.views.filter(view=> view['.value']==this.$store.state.ukey).length==0) {
+          db.ref('postsData').child(this.postKey).child('views').push(this.$store.state.ukey).catch(err=>console.log(err))
+        }
+        this.$router.push({name:'group-post-detail',params:{key:this.post['groupKey'],postKey:this.postKey}})
       }
       else {
         return
@@ -245,15 +257,60 @@ export default {
 
   },
   mounted() {
-    this.$rtdbBind('post',db.ref('postsData').child(this.postKey))
-    this.$rtdbBind('author',db.ref('usersInformation').child(this.authorKey))
-    this.$rtdbBind('myGroups',db.ref('usersInformation').child(this.$store.state.ukey).child('groups'))
-    //this.$rtdbBind('author',db.ref('pages').child(this.groupKey))
-    //this.$rtdbBind('post',db.ref('pages').child(this.groupKey).child('posts').child(this.postKey))
-    this.$rtdbBind('likes',db.ref('postsData').child(this.postKey).child('likes'))
-    this.$rtdbBind('views',db.ref('postsData').child(this.postKey).child('views'))
-    this.$rtdbBind('comments',db.ref('postsData').child(this.postKey).child('comments'))
+    if (this.postKey!=null && this.authorKey!=null) {
+      this.$rtdbBind('post',db.ref('postsData').child(this.postKey))
+      this.$rtdbBind('author',db.ref('usersInformation').child(this.authorKey))
+      this.$rtdbBind('myGroups',db.ref('usersInformation').child(this.$store.state.ukey).child('groups'))
+      //this.$rtdbBind('author',db.ref('pages').child(this.groupKey))
+      //this.$rtdbBind('post',db.ref('pages').child(this.groupKey).child('posts').child(this.postKey))
+      this.$rtdbBind('likes',db.ref('postsData').child(this.postKey).child('likes'))
+      this.$rtdbBind('views',db.ref('postsData').child(this.postKey).child('views'))
+      this.$rtdbBind('comments',db.ref('postsData').child(this.postKey).child('comments'))
+      //style image
+    //`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com.${this.postKey} > div.post-content > div.images > div.image`
     
+      if (this.post.images!=undefined && this.post.images.length>0) {
+        if (this.post.images.length%3==0) {
+        let images=document.querySelectorAll(`div.post-com.${this.postKey} > div.post-content > div.images div.image`)
+        images.forEach(image => {
+          image.style.width='33.3%'
+        });
+      }
+      else if (this.post.images.length%3==1) {
+        let images=document.querySelectorAll(`div.post-com.${this.postKey} > div.post-content > div.images div.image`)
+        if (this.post.images.length==1) {
+          images[0].style.width='100%'
+        }
+        else {
+        let fullIndex=this.post.images.length-1-1
+        for (let index = 0; index <= fullIndex; index++) {
+          images[index].style.width='33.3%'
+        }
+        images[this.post.images.length-1].style.width='100%'
+        }
+      }
+      else if (this.post.images.length%3==2) {
+        let images=document.querySelectorAll(`div.post-com.${this.postKey} > div.post-content > div.images div.image`)
+        if (this.post.images.length==2) {
+          images[0].style.width='50%'
+          images[1].style.width='50%'
+        }
+        else {
+          let fullIndex=this.post.images.length-1-1
+          for (let index = 0; index <= fullIndex; index++) {
+            images[index].style.width='33.3%'
+          }
+          images[this.post.images.length-1].style.width='50%'
+          images[this.post.images.length-2].style.width='50%'
+          }
+        }
+      }
+      //style image
+      if (this.$store.state.ukey!=this.authorKey) {
+        let authorElement=document.querySelector(`div.post-com.${this.postKey} .post-header .author`)
+        authorElement.style.cursor='pointer'
+      }
+    }
     //let images =document.querySelectorAll(`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list div.post-com.${this.postKey} > div.post-content > div.images div.image`)
     // add esc event to close image preview
     window.addEventListener('keydown', function(e) {
@@ -267,50 +324,7 @@ export default {
       }
     })
     //
-    //style image
-    //`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list > div.post-com.${this.postKey} > div.post-content > div.images > div.image`
     
-    if (this.post.images!=undefined && this.post.images.length>0) {
-      if (this.post.images.length%3==0) {
-      let images=document.querySelectorAll(`div.post-com.${this.postKey} > div.post-content > div.images div.image`)
-      images.forEach(image => {
-        image.style.width='33.3%'
-      });
-    }
-    else if (this.post.images.length%3==1) {
-      let images=document.querySelectorAll(`div.post-com.${this.postKey} > div.post-content > div.images div.image`)
-      if (this.post.images.length==1) {
-        images[0].style.width='100%'
-      }
-      else {
-      let fullIndex=this.post.images.length-1-1
-      for (let index = 0; index <= fullIndex; index++) {
-        images[index].style.width='33.3%'
-      }
-      images[this.post.images.length-1].style.width='100%'
-      }
-    }
-    else if (this.post.images.length%3==2) {
-      let images=document.querySelectorAll(`div.post-com.${this.postKey} > div.post-content > div.images div.image`)
-      if (this.post.images.length==2) {
-        images[0].style.width='50%'
-        images[1].style.width='50%'
-      }
-      else {
-        let fullIndex=this.post.images.length-1-1
-        for (let index = 0; index <= fullIndex; index++) {
-          images[index].style.width='33.3%'
-        }
-        images[this.post.images.length-1].style.width='50%'
-        images[this.post.images.length-2].style.width='50%'
-      }
-    }
-    }
-    //style image
-    if (this.$store.state.ukey!=this.authorKey) {
-      let authorElement=document.querySelector(`div.post-com.${this.postKey} .post-header .author`)
-      authorElement.style.cursor='pointer'
-    }
 
   },
   /*

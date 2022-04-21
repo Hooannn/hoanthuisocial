@@ -112,6 +112,7 @@ export default {
     let status = sessionStorage.getItem("status");
     let cover = sessionStorage.getItem("cover");
     let location = sessionStorage.getItem("location");
+    let type = sessionStorage.getItem("type");
     this.$store.dispatch("setUsername", username);
     this.$store.dispatch("setUser", account);
     this.$store.dispatch("setRole", role);
@@ -121,9 +122,9 @@ export default {
     this.$store.dispatch("setDob", dob);
     this.$store.dispatch("setCover", cover);
     this.$store.dispatch("setLocation", location);
-    
+    this.$store.state.type=type
     if (this.$store.state.user != null) {
-      //this.$router.push({ name: "dhome" });
+      
     } else if (this.$store.state.user == null) {
       this.$router.push("/home");
     }

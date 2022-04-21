@@ -18,7 +18,7 @@
               </div>
               <div class="more-inf">
                   <button v-if='$store.state.ukey==profileKey' @click='$router.push({name:"personal"}),isSelect="Edit"' class='btn btn-dark btn-sm edit'>Edit Profile</button>
-                  <button :disabled='userFriend.find((user)=>(user[".value"]==$route.params.key))||userFriendRequesting.find((user)=>(user[".value"]==$route.params.key))||userFriendRequested.find((user)=>(user[".value"]==$route.params.key))' @click='$store.dispatch("sentFriendRequest",$route.params.key),$store.dispatch("follow",$route.params.key),isSelect="Add Friend"' v-if='$store.state.ukey!=profileKey' class='btn btn-dark btn-sm edit'>
+                  <button :disabled='userFriend.find((user)=>(user[".value"]==$route.params.key))||userFriendRequesting.find((user)=>(user[".value"]==$route.params.key))||userFriendRequested.find((user)=>(user[".value"]==$route.params.key))' @click='$store.dispatch("sentFriendRequest",$route.params.key),$store.dispatch("follow",$route.params.key)' v-if='$store.state.type!="page"&&$store.state.ukey!=profileKey' class='btn btn-dark btn-sm edit'>
                       <span v-if='!userFriend.find((user)=>(user[".value"]==$route.params.key))'>Add Friend</span>
                       <span v-if='userFriend.find((user)=>(user[".value"]==$route.params.key))'>Friend</span>
                   </button>
@@ -44,7 +44,7 @@
               <div class="profile__nav">
                   <div @click='$router.push({name:"post",params:{key:profileKey}})' class="post" :class="{active:$route.name=='post'}">Post</div>
                   <div @click='$router.push({name:"about",params:{key:profileKey}})' class="about" :class="{active:$route.name=='about'}">About</div>
-                  <div v-if='$store.state.ukey==$route.params.key' @click='$router.push({name:"friends",params:{key:profileKey}})' class="friends-list" :class="{active:$route.name=='friends'}">Friends ({{friends.length+follows.length+following.length+userFriendRequested.length+userFriendRequesting.length}})</div>
+                  <div v-if='$store.state.ukey==$route.params.key && $store.state.type!="page"' @click='$router.push({name:"friends",params:{key:profileKey}})' class="friends-list" :class="{active:$route.name=='friends'}">Friends ({{friends.length+follows.length+following.length+userFriendRequested.length+userFriendRequesting.length}})</div>
                   <div v-if='$store.state.ukey!=$route.params.key' @click='$router.push({name:"friends",params:{key:profileKey}})' class="friends-list" :class="{active:$route.name=='friends'}">Friends ({{friends.length+follows.length+following.length}})</div>
                   <div class="images" :class="{active:$route.name=='images'}">Images</div>
                   <div class="credits" :class="{active:$route.name=='credits'}">Credits</div>
@@ -80,7 +80,7 @@ export default {
     },
     watch: {
         user() {
-            if (this.user.type=="page") {
+            if (this.user.type=="page" && this.user[".key"]!=this.$store.state.ukey) {
                 this.$router.push({name:'pages',params:{key:this.$route.params.key}})
             }
             else {
@@ -89,6 +89,7 @@ export default {
         }
     },
     mounted() {
+        document.documentElement.scrollTop=0
         this.$store.dispatch('loading')
         this.$rtdbBind('friends',db.ref('usersInformation').child(this.$route.params.key).child('friends').child('isfriend'))
         this.$rtdbBind('follows',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))

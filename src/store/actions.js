@@ -17,6 +17,7 @@ const objectToArray = (obj) =>
       dob: obj[key].dob,
       coverImg: obj[key].coverImg,
       location: obj[key].location,
+      type:obj[key].type
     }));
 const usersInf = db.ref("usersInformation");
 
@@ -100,7 +101,6 @@ const actions = {
           date:new Date().toLocaleString()
         }
         db.ref('logs').push(log)
-        loader.classList.remove('show')
         //login logic go after this comment
         let user;
         commit("SET_USER", response.user);
@@ -115,6 +115,7 @@ const actions = {
             user = objectToArray(res.val()).filter(
               (user) => user.email == response.user.email
             );
+            store.state.type=user[0].type
             commit("SET_ROLE", user[0].role);
             commit("SET_UKEY", user[0].key);
             commit("SET_AVATAR", user[0].avatarImg);
@@ -139,9 +140,14 @@ const actions = {
             sessionStorage.setItem("avatar", user[0].avatarImg);
             sessionStorage.setItem("cover", user[0].coverImg);
             sessionStorage.setItem("location", user[0].location);
+            sessionStorage.setItem("type", user[0].type);
+            loader.classList.remove('show')
+            router.push({name:'dhome'})
           })
-          .catch((err) => console.log(err));
-        router.push({name:'dhome'})
+          .catch((err) => {
+            loader.classList.remove('show')
+            console.log(err)
+          });
       })
       .catch((error) => {
         commit("SET_USER", null);
@@ -172,18 +178,21 @@ const actions = {
       .auth()
       .signOut()
       .then(()=>{
+        sessionStorage.clear();
+        store.replaceState({})
         store.dispatch('unload')
+        location.reload()
       })
       .catch((err) => console.log(err));
     db.ref("usersInformation")
       .child(store.state.ukey)
       .child("status")
       .set("Offline");
+      /*
     commit("SET_USER", null);
     commit("SET_ERROR", null);
     commit("SET_STATUS", null);
-    sessionStorage.clear();
-    store.replaceState({})
+    */
   },
   //send invite friend request
   sentFriendRequest(context, contactKey) {
@@ -485,13 +494,14 @@ const actions = {
             .child("notifications")
             .push(noti);
         } else {
+          store.dispatch('unload')
           return;
         }
         store.dispatch('unload')
       })
       .catch((err) => {
         store.dispatch('unload')
-        console.log(err)
+        alert(err)
       });
   },
   unfollow(context, contactKey) {

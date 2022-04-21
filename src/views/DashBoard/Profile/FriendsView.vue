@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import store from '../../../store/store'
 import FriendCom from '../../../components/Friend/FriendCom.vue'
 import db from '../../../plugins/firebase'
 export default {
@@ -117,6 +118,14 @@ export default {
         this.$rtdbBind('friendsRequesting',db.ref('usersInformation').child(this.$route.params.key).child('friends').child('friendrequesting'))
         this.$rtdbBind('following', db.ref('usersInformation').child(this.$route.params.key).child('follows').child('following'))
         this.$rtdbBind('followed', db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
+    },
+    beforeRouteEnter(to,from,next) {
+        if (store.state.type=='page') {
+            next(false)
+        }
+        else {
+            next()
+        }
     }
 }
 </script>

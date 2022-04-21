@@ -1,12 +1,12 @@
 <template>
   <div id='home-view' class="home-view ">
-    <make-post />
-    <make-group-form />
+    <make-post/>
+    <make-group-form/>
     <div class="container">
     <div class="first-col">
       <!--<button @click='toMyPage' class="btn btn-sm btn-link">My Page</button>-->
       <div style='marginBottom:25px;width:100%;height:40px;display:flex;alignItems:center;boxShadow:1px 1px 4px rgba(0,0,0,0.4);overflow:hidden;borderRadius:3px' class="search-bar">
-        <input v-model='searchInput' @keypress.enter="search" placeholder="Search something..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;border:none;outline:none;backgroundColor:white;' type="text">
+        <input v-model='searchInput' @keypress.enter="search" placeholder="Search something..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;outline:none;backgroundColor:white;' type="text">
         <div @click='search' class='btn-search' style='color:white;width:20%;height:100%;display:flex;justifyContent:center;alignItems:center;'><i class="fas fa-search"></i></div>
       </div>
       <router-view></router-view>
@@ -36,7 +36,7 @@
       </div>
       <!-- -->
       <!-- -->
-      <div class="people-overview">
+      <div v-if='$store.state.type!="page"' class="people-overview">
         <h5>People you may know</h5>
         <recommend-person :type='"home"' v-show='person.type!="page" && $store.state.ukey!=person[".key"]' v-for='person in people' :ukey="person['.key']" :key="person['.key']"/>
         <!--
@@ -178,7 +178,10 @@ export default {
       mgForm.classList.toggle('show')
     },
     loadPost() {
-      let index=this.$store.state.postsData[this.$store.state.postsData.length-1].time
+      let index
+      if (this.$store.state.postsData[this.$store.state.postsData.length-1].time!=null&&this.$store.state.postsData[this.$store.state.postsData.length-1].time!=undefined) {
+        index=this.$store.state.postsData[this.$store.state.postsData.length-1].time
+      }
       this.$store.dispatch('loading')
       this.$rtdbBind('newPosts',db.ref('postsData').orderByChild('time').startAt(index+1).limitToFirst(10)).then(()=>{
         this.$store.state.postsData=[...this.$store.state.postsData,...this.newPosts]
@@ -241,6 +244,11 @@ export default {
     this.$rtdbBind('people',db.ref('usersInformation'))
     this.$rtdbBind('myGroups',db.ref('usersInformation').child(this.$store.state.ukey).child('groups'))
   },
+  beforeRouteLeave(to,from,next) {
+    this.$store.state.postsData=[]
+    this.$store.state.filterPosts=[]
+    next()
+  },
   created() {
     window.addEventListener('scroll', this.scrollEvent)
   },
@@ -291,6 +299,13 @@ export default {
     font-weight: 800;
 }
 /*1 column */
+  /* Search Bar */
+.home-view .first-col .search-bar input {
+  border:none;
+}
+.home-view .first-col .search-bar input:focus {
+  border:1px solid #FB5252;
+}
   /* short introduce */
 .home-view .first-col .short-intro {
     display: flex;
