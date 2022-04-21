@@ -62,12 +62,13 @@
       <!-- -->
       <!-- -->
       <div class="pages-overview">
-        <h5>Pages</h5>
+        <h5>Popular Pages</h5>
         <recommend-person :type='"home"' v-show='person.type=="page"' v-for='person in people' :ukey="person['.key']" :key="person['.key']"/>
       </div>
       <!-- -->
     </div>
     <div class="second-col">
+      <h5 style='color:grey;margin:0 0 25px 0;borderBottom:3px solid orange'>New Feed</h5>
       <div class="posts-list">
         <post-com :class='post.key' v-for='post in $store.state.filterPosts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
       </div>
@@ -89,7 +90,7 @@
       </div>
       <!-- -->
       <div class="group-overview">
-        <h5>Group</h5>
+        <h5>Active Groups</h5>
         <recommend-group v-for='group in groups' :key='group[".key"]' :class='group[".key"]' :gKey='group[".key"]'/>
       </div>
       <!-- -->
@@ -147,7 +148,7 @@ export default {
         if (this.userFollowing.find(user=>user[".value"]==post.author) && post.type=='user-post') {
           filterPosts.push(post)
         }
-        else if (this.myGroups.find(group=>group.groupKey==post.groupKey) && post.type=='group-post') {
+        if (this.myGroups.find(group=>group.groupKey==post.groupKey) && post.type=='group-post') {
           filterPosts.push(post)
         }
       });

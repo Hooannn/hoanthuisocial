@@ -81,7 +81,7 @@ export default {
                     content:this.postContent,
                     images:this.imgsUpload,
                     type:'group-post',
-                    groupKey:this.$route.params.key
+                    groupKey:this.$route.params.key,
                 }
                 this.$store.dispatch('loading')
                 db.ref('postsData').push(newPost).then(res => {

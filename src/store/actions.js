@@ -223,8 +223,12 @@ const actions = {
       key:payload.targetKey,
       role:'member'
     }
+    let newGroup={
+      groupKey:payload.groupKey
+    }
     db.ref('groups').child(payload.groupKey).child('members').push(newMember).then(()=>
     {
+      db.ref('usersInformation').child(payload.targetKey).child('groups').push(newGroup)
       db.ref('groups').child(payload.groupKey).child('membersRequest').get().then(res => {
         let rqKey
         let resVal = res.val();
@@ -276,6 +280,18 @@ const actions = {
     let userKey = context.state.ukey;
     db.ref('groups').child(contactKey).child('members').get()
     .then((res) => {
+      db.ref('usersInformation').child(userKey).child('groups').get().then((res)=>{
+        let resVal=res.val()
+        let gKey
+        if (resVal) {
+          resVal=Object.keys(resVal).map((key)=>({key:key,groupKey:resVal[key].groupKey}))
+          gKey=resVal.find(e=>e.groupKey==contactKey).key
+        }
+        if (gKey != null&& gKey !=undefined) {
+          db.ref('usersInformation').child(userKey).child('groups').child(gKey).remove().catch(err=>alert(err))
+        }
+      })
+      //
       let rqKey
       let resVal = res.val();
       if (resVal) {
@@ -395,6 +411,18 @@ const actions = {
   banUser(context,payload) {
     store.dispatch('loading')
     db.ref('groups').child(payload.groupKey).child('members').get().then(res=> {
+      db.ref('usersInformation').child(payload.targetKey).child('groups').get().then(res=>{
+        let resVal=res.val()
+        let gKey
+        if (resVal) {
+          resVal=Object.keys(resVal).map((key)=>({key:key,groupKey:resVal[key].groupKey}))
+          gKey=resVal.find(e=>e.groupKey==payload.groupKey).key
+        }
+        if (gKey!=null && gKey!=undefined) {
+          db.ref('usersInformation').child(payload.targetKey).child('groups').child(gKey).remove().catch(err=>alert(err))
+        }
+      })
+      /////
       let resVal=res.val()
       resVal=Object.keys(resVal).map((key)=>({key:key,ukey:resVal[key].key}))
       let memberKey=resVal.find(user=>user.ukey==payload.targetKey).key

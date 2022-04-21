@@ -7,6 +7,7 @@
         </div>
         <i @click.prevent='closeImgPreview' @click='next' style='position:absolute;fontSize:18px;border:1px solid white;padding:5px;top:50%;right:0;transform:translateY(-50%)' class="fas fa-chevron-right"></i>
       </div>
+      <group-info :groupKey="post.groupKey" v-if='$route.name=="dhome" && myGroups.find(group=>group.groupKey==post.groupKey)'/>
       <div class="post-header">
         <div @click='viewAuthorProfile' class="author">
           <div class="avatar"><img style='width:100%;height:100%;objectFit:cover' :src="author.avatarImg"></div>
@@ -64,8 +65,9 @@
 import EventBus from '../../eventbus'
 import db from '../../plugins/firebase'
 import PostComment from '../Post/PostComment.vue'
+import GroupInfo from './GroupInfo.vue'
 export default {
-  components: { PostComment },
+  components: { PostComment, GroupInfo },
   props:{
     postKey:String,
     authorKey:String,
@@ -80,7 +82,8 @@ export default {
       views:[],
       comment:'',
       isLiked:false,
-      selectedImg:''
+      selectedImg:'',
+      myGroups:[],
     }
   },
   methods: {
@@ -244,6 +247,7 @@ export default {
   mounted() {
     this.$rtdbBind('post',db.ref('postsData').child(this.postKey))
     this.$rtdbBind('author',db.ref('usersInformation').child(this.authorKey))
+    this.$rtdbBind('myGroups',db.ref('usersInformation').child(this.$store.state.ukey).child('groups'))
     //this.$rtdbBind('author',db.ref('pages').child(this.groupKey))
     //this.$rtdbBind('post',db.ref('pages').child(this.groupKey).child('posts').child(this.postKey))
     this.$rtdbBind('likes',db.ref('postsData').child(this.postKey).child('likes'))

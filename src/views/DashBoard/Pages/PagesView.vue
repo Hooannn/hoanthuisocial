@@ -102,8 +102,9 @@ export default {
             }
         },
         postsData() {
+            this.posts=[]
             this.postsData.forEach(post => {
-                if (post.author==this.$route.params.key) {
+                if (post.author==this.$route.params.key && post.type=='user-post') {
                     this.posts.unshift(post)
                 }
             });
