@@ -30,12 +30,18 @@ export default {
     methods:{
         close(e) {
             let mgForm=document.querySelector('#app > div.dash-board > div.home-view > div.make-group-form.cover')
-            if (e.target.parentElement!=document.querySelector('div.make-group-form.cover div.form')&&
+            if (e.target) {
+                if (e.target==document.querySelector('#home-view > div.make-group-form.cover.show > div > button')) {
+                    mgForm.classList.remove('show')
+                }
+                if (e.target.parentElement!=document.querySelector('div.make-group-form.cover div.form')&&
                 e.target.parentElement!=document.querySelector('div.make-group-form.cover')&&
                 e.target!=document.querySelector('div.make-group-form.cover div.form div.grImg img')&&
                 e.target!=document.querySelector('div.make-group-form.cover div.form div.grImg .icon')
-            )
-            mgForm.classList.remove('show')
+                ) {
+                    mgForm.classList.remove('show')
+                }
+            }
         },
         createGroup() {
             if (this.groupName==null || this.groupName.trim()=='' ||
@@ -59,6 +65,11 @@ export default {
             db.ref('groups').push(newGroup).then((res)=>{
                 db.ref('groups').child(res.key).child('key').set(res.key)
                 db.ref('groups').child(res.key).child('members').push(member)
+                let newGrinUser= {
+                    groupKey:res.key,
+                    role:'staff',
+                }
+                db.ref('usersInformation').child(this.$store.state.ukey).child('groups').push(newGrinUser)
                 let noti= {
                 content: `Your group "${this.groupName}" has been created. You can now add rules in group manage.`,
                 date: new Date().toLocaleString(),
@@ -69,10 +80,10 @@ export default {
                 ukey: res.key,
                 }
                 db.ref('usersInformation').child(this.$store.state.ukey).child('notifications').push(noti)
-                this.close()
                 this.groupName=''
                 this.groupDes=''
                 this.groupImg=null
+                this.close()
                 this.$store.dispatch('unload')
             }).catch((err)=>{
                 alert(err)

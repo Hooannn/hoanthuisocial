@@ -14,6 +14,7 @@
         <ion-icon v-if="noti.type=='refuse-group-request'||noti.type=='group-delete'" class='icon' name="close-outline"></ion-icon>
         <ion-icon v-if="noti.type=='group-create'" class='icon' name="checkmark-done"></ion-icon>
         <ion-icon v-if="noti.type=='group-user-leave'" class='icon' name="person-remove-outline"></ion-icon>
+        <ion-icon v-if="noti.type=='page-create'" class='icon' name="document-outline"></ion-icon>
     </div>
     <div v-if='noti.type!="group-delete"' class="avatar"><img :src="ava['.value']" ></div>
     <div class="content">
@@ -49,21 +50,21 @@ export default {
             db.ref('usersInformation').child(this.$store.state.ukey).child('notifications').child(this.notiKey).child('status').set("Seen")
                 .then(()=> {
                     if (this.noti.type=='follow' || this.noti.type=='accept-friendInvite' ) {
-                        this.$router.push({name:'dhome'})
+                        this.$router.push({name:'/'})
                         let ukey=this.noti.ukey
                         setTimeout(function() {
                             router.push({name:'post',params:{key:ukey}})
                         },50)
                     }
                     else if (this.noti.type=='send-friendInvite') {
-                        this.$router.push({name:'dhome'})
+                        this.$router.push({name:'/'})
 
                         setTimeout(function() {
                             router.push({name:'friends',params:{key:store.state.ukey}})
                         },50)
                     }
                     else if (this.noti.type=='like-blog'|| this.noti.type=='new-blog') {
-                        this.$router.push({name:'dhome'})
+                        this.$router.push({name:'/'})
                         let postKey=this.noti.postKey
                         let ukey=this.noti.ukey
                         setTimeout(function() {
@@ -72,7 +73,7 @@ export default {
                     }
                     else if (this.noti.type=='comment-blog') {
                         let commentKey=this.noti.commentKey
-                        this.$router.push({name:'dhome'})
+                        this.$router.push({name:'/'})
                         let postKey=this.noti.postKey
                         let ukey=this.noti.ukey
                         setTimeout(function() {
@@ -85,14 +86,20 @@ export default {
                         */
                     }
                     else if (this.noti.type=="send-group-request" ||this.noti.type=="accept-group-request"||this.noti.type=="refuse-group-request"|| this.noti.type=="group-create") {
-                        this.$router.push({name:'dhome'})
+                        router.push({name:'/'})
                         let groupKey=this.noti.groupKey
                         setTimeout(function() {
-                            router.push({name:'group',params:{key:groupKey}})
+                            router.push({name:'group-post',params:{key:groupKey}})
                         },50)
                     }
                     else if (this.noti.type=='send-message') {
                         this.$store.dispatch('addMsgData',this.noti.messageKey)
+                    }
+                    else if (this.noti.type=='page-create') {
+                        router.push({name:'/'})
+                        setTimeout(function() {
+                            router.push({name:'communities',params:{key:store.state.ukey}})
+                        },50)
                     }
                     else {
                         return

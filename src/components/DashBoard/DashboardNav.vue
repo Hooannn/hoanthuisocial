@@ -1,5 +1,4 @@
 <template>
-    
     <div class="dbnav">
         <!-- window screen -->
       <div class="dbnav__content container">
@@ -50,6 +49,7 @@
             <div v-if='$store.state.type!="page"'><span>Invite</span></div>
             <div><span>Setting</span></div>
             <div @click='logOut'><span>Logout</span></div>
+            <div @click='$router.push({name:"console"})' v-if='$store.state.role=="Admin"'>Console</div>
           </div>
         </div>
       </div>

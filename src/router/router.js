@@ -118,6 +118,11 @@ const routes = [
             component:() => import('../views/DashBoard/Profile/AboutView.vue')
           },
           {
+            path:'/dashboard/profile/:key/communities',
+            name:'communities',
+            component:() => import('../views/DashBoard/Profile/CommunitiesView.vue')
+          },
+          {
             path:'/dashboard/profile/:key/friends',
             name:'friends',
             component:() => import('../views/DashBoard/Profile/FriendsView.vue')
@@ -167,6 +172,11 @@ const routes = [
     path: '/home',
     name: 'home',
     component: () => import('../views/IntroView.vue'),
+  },
+  {
+    path: '/console',
+    name: 'console',
+    component: () => import('../views/Admin/ConsoleView.vue'),
   },
   {
     path: '/login',

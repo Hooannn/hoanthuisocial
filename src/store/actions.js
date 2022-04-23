@@ -115,7 +115,6 @@ const actions = {
             user = objectToArray(res.val()).filter(
               (user) => user.email == response.user.email
             );
-            store.state.type=user[0].type
             commit("SET_ROLE", user[0].role);
             commit("SET_UKEY", user[0].key);
             commit("SET_AVATAR", user[0].avatarImg);
@@ -124,6 +123,7 @@ const actions = {
             commit("SET_USERSTATUS", user[0].status);
             commit("SET_COVER", user[0].coverImg);
             commit("SET_LOCATION", user[0].location);
+            store.state.type=user[0].type
             db.ref("usersInformation")
               .child(user[0].key)
               .child("status")
@@ -232,9 +232,12 @@ const actions = {
       key:payload.targetKey,
       role:'member'
     }
+    
     let newGroup={
-      groupKey:payload.groupKey
+      groupKey:payload.groupKey,
+      role:'member'
     }
+    
     db.ref('groups').child(payload.groupKey).child('members').push(newMember).then(()=>
     {
       db.ref('usersInformation').child(payload.targetKey).child('groups').push(newGroup)

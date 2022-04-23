@@ -2,6 +2,7 @@
   <div id='home-view' class="home-view ">
     <make-post/>
     <make-group-form/>
+    <make-page-form/>
     <div class="container">
     <div class="first-col">
       <!--<button @click='toMyPage' class="btn btn-sm btn-link">My Page</button>-->
@@ -57,7 +58,7 @@
       <div class="pages-introduce">
               <h5 style='fontWeight:bolder;border:none;padding:0;'>Create a Page</h5>
               <div>Want to create and manage your page for mutiple purposes. Let's try.</div>
-              <button style='color:white' class="btn btn-outline-warning">Try now</button>
+              <button @click='showMakePageForm' style='color:white' class="btn btn-outline-warning">Try now</button>
       </div>
       <!-- -->
       <!-- -->
@@ -109,8 +110,9 @@ import RecommendPerson from '../../../components/General/RecommendPerson.vue'
 import PostCom from '../../../components/Post/PostCom.vue'
 import MakeGroupForm from '../../../components/Groups/MakeGroupForm.vue'
 import db from './../../../plugins/firebase'
+import MakePageForm from '@/components/Page/MakePageForm.vue'
 export default {
-  components: { FooterCom, PostCom, RecommendPerson, MakePost, RecommendGroup, MakeGroupForm },
+  components: { FooterCom, PostCom, RecommendPerson, MakePost, RecommendGroup, MakeGroupForm, MakePageForm },
   data() {
     return {
       searchInput:'',
@@ -176,6 +178,10 @@ export default {
     showMakeGroupForm() {
       let mgForm=document.querySelector('#app > div.dash-board > div.home-view > div.make-group-form.cover')
       mgForm.classList.toggle('show')
+    },
+    showMakePageForm() {
+      let mgPage=document.querySelector('#app > div.dash-board > div.home-view > div.make-page-form.cover')
+      mgPage.classList.toggle('show')
     },
     loadPost() {
       let index
