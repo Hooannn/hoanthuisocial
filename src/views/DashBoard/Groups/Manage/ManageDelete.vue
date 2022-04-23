@@ -3,7 +3,7 @@
     <h5>Deactivate Group</h5>
     <div style='width:80%;fontSize:16px;fontWeight:bolder'>Your feedback</div>
     <textarea placeholder="Feedback for us to improve the experience." style='width:80%;minHeight:100px'></textarea>
-    <button @click='deactiveGroup' style='width:10%' class="btn btn-sm btn-danger">Deactivate</button>
+    <button @click='deactivateGroupConfirm' style='width:10%' class="btn btn-sm btn-danger">Deactivate</button>
   </div>
 </template>
 
@@ -17,31 +17,57 @@ export default {
         }
     },
     methods: {
-        deactiveGroup() {
-            if (confirm("Are you sure ?")) {
-                this.$store.dispatch('loading')
-                let noti={
-                        content: `Your group "${this.group.groupname}" has been deleted`,
-                        date: new Date().toLocaleString(),
-                        time: new Date().getTime(),
-                        status: "Unseen",
-                        type: "group-delete",
-                    }
-                    this.members.forEach(member => {
-                        db.ref('usersInformation').child(member.key).child('notifications').push(noti)
-                    });
-                db.ref('groups').child(this.group[".key"]).remove().then(()=>{
-                    this.$router.push({name:'dhome'})
-                    this.$bvToast.show('edit')
-                    this.$store.dispatch('unload')
-                }).catch((err)=> {
-                    alert(err)
-                    this.$store.dispatch('unload')
-                })
-            }
-            else {
-                return
-            }
+        deactivateGroupConfirm() {
+            this.$bvModal.msgBoxConfirm('Confirm that you want to deactivate your group ?',{
+              title: 'Please Confirm',
+              size: 'sm',
+              buttonSize: 'sm',
+              okVariant: 'danger',
+              okTitle: 'YES',
+              cancelTitle: 'NO',
+              footerClass: 'p-2',
+              hideHeaderClose: false,
+              centered: true
+            }) 
+            .then(value => {
+              if (value==true) {
+                this.deactivateGroup()
+              }
+            })
+            .catch(err => {
+             if (err==false) {
+               return
+             }
+            })
+        },
+        deactivateGroup() {
+          this.$store.dispatch('loading')
+          let noti={
+            content: `Your group "${this.group.groupname}" has been deleted`,
+            date: new Date().toLocaleString(),
+            time: new Date().getTime(),
+            status: "Unseen",
+            type: "group-delete",
+          }
+          this.members.forEach(member => {
+              db.ref('usersInformation').child(member.key).child('notifications').push(noti)
+            });
+          this.members.forEach(member => {
+              db.ref('usersInformation').child(member.key).child('groups').get().then((res)=>{
+              let resVal=res.val()
+              resVal=Object.keys(resVal).map((key)=>({key:key,groupKey:resVal[key].groupKey}))
+              let groupKey=resVal.find(ele=>ele.groupKey==this.$route.params.key).key
+              db.ref('usersInformation').child(member.key).child('groups').child(groupKey).remove()
+            })
+          });
+          db.ref('groups').child(this.group[".key"]).remove().then(()=>{
+            this.$router.push({name:'dhome'})
+            this.$bvToast.show('edit')
+            this.$store.dispatch('unload')
+          }).catch((err)=> {
+            alert(err)
+            this.$store.dispatch('unload')
+          })
         }
     },
     mounted() {

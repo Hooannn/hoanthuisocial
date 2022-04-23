@@ -30,7 +30,7 @@ export default {
     methods:{
         close(e) {
             let mgForm=document.querySelector('#app > div.dash-board > div.home-view > div.make-group-form.cover')
-            if (e.target) {
+            if (e.target!=null && e.target!=undefined) {
                 if (e.target==document.querySelector('#home-view > div.make-group-form.cover.show > div > button')) {
                     mgForm.classList.remove('show')
                 }

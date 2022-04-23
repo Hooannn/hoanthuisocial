@@ -72,6 +72,7 @@
       <h5 style='color:grey;margin:0 0 25px 0;borderBottom:3px solid orange'>New Feed</h5>
       <div class="posts-list">
         <post-com :class='post.key' v-for='post in $store.state.filterPosts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
+        <div style='fontSize:14px;padding:0 0 25px 0' v-if='$store.state.filterPosts.length==0'>You have no post in current. You can add more friend, follow page, join some group to get new post from them.</div>
       </div>
       <button @click='loadPost' style='minWidth:30%;margin:0 auto' class="btn btn-sm btn-secondary">See more</button>
     </div>

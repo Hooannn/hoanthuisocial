@@ -7,6 +7,8 @@ import "@/plugins/firebase";
 import { rtdbPlugin as VueFire } from 'vuefire'
 import PortalVue from 'portal-vue'
 import { ToastPlugin } from 'bootstrap-vue'
+import { ModalPlugin } from 'bootstrap-vue'
+Vue.use(ModalPlugin)
 Vue.use(ToastPlugin)
 Vue.use(PortalVue)
 Vue.use(VueFire)

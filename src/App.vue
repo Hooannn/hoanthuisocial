@@ -155,6 +155,9 @@ body {
 .bar {
   background:orange;
 }
+.modal-backdrop {
+  background-color:rgba(0,0,0,0.4);
+}
 #app {
   width: 100vw;
   min-height: 100vh;

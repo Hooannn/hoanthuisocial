@@ -25,7 +25,6 @@ export default {
         { title: "Personal Info", name: "personal" },
         { title: "Profile", name: "profile-edit" },
         { title: "Social Networks", name: "social-networks" },
-        { title: "Email Setting", name: "email-setting"},
         { title: "Change Password", name: "change-password" },
         { title: "Deactivate Account", name: "deactivate-account" },
       ],
