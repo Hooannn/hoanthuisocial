@@ -39,8 +39,8 @@ export default {
         return {
             pageName:'',
             pageDes:'',
-            pageAvatarImg:'https://imgkub.com/images/2022/04/06/google-removebg-preview.png',
-            pageCoverImg:'https://wallpaperaccess.com/full/2651906.jpg'
+            pageAvatarImg:null,
+            pageCoverImg:null
         }
     },
     methods:{

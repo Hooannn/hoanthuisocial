@@ -46,8 +46,8 @@
                   <div @click='$router.push({name:"about",params:{key:profileKey}})' class="about" :class="{active:$route.name=='about'}">About</div>
                   <div v-if='$store.state.ukey==$route.params.key && $store.state.type!="page"' @click='$router.push({name:"friends",params:{key:profileKey}})' class="friends-list" :class="{active:$route.name=='friends'}">Friends ({{friends.length+follows.length+following.length+userFriendRequested.length+userFriendRequesting.length}})</div>
                   <div v-if='$store.state.ukey!=$route.params.key' @click='$router.push({name:"friends",params:{key:profileKey}})' class="friends-list" :class="{active:$route.name=='friends'}">Friends ({{friends.length+follows.length+following.length}})</div>
-                  <div class="images" :class="{active:$route.name=='images'}">Images</div>
-                  <div @click='$router.push({name:"communities",params:{key:profileKey}})' class="communities" :class="{active:$route.name=='communities'}">Coms</div>
+                  <div @click='$router.push({name:"images",params:{key:profileKey}})' class="images" :class="{active:$route.name=='images'}">Albums</div>
+                  <div v-if='$store.state.ukey==$route.params.key' @click='$router.push({name:"communities",params:{key:profileKey}})' class="communities" :class="{active:$route.name=='communities'}">Coms</div>
                   <div class="more" :class="{active:$route.name=='see-more'}">See more <ion-icon style="marginLeft:5px" name="chevron-down-outline"></ion-icon></div>
               </div>
               <router-view class='router-view'></router-view>

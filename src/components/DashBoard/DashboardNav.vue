@@ -44,10 +44,10 @@
           </div>
           <div style='width:150px' class="drop-down">
             <div @click='viewMyProfile'><span>Profile</span></div>
-            <div><span>Credit</span></div>
+            <div @click='$router.push({name:"images",params:{key:$store.state.ukey}})'><span>Albums</span></div>
             <div v-if='$store.state.type!="page"' @click='viewMyFriend'><span>Friends</span></div>
             <div @click="$router.push({name:'communities',params:{key:$store.state.ukey}})"><span>Communities</span></div>
-            <div><span>Setting</span></div>
+            <div @click='$router.push({name:"personal",params:{key:$store.state.ukey}})'><span>Edit</span></div>
             <div @click='logOut'><span>Logout</span></div>
             <div @click='$router.push({name:"console"})' v-if='$store.state.role=="Admin"'>Console</div>
           </div>

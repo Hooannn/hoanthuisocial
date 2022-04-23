@@ -1,7 +1,7 @@
 <template>
   <div class="communities-view">
       <h5 v-if='$store.state.type!="page"'>My Page</h5>
-      <div v-if='pages.length==0 && $store.state.type!="page"'>You don't have any page. Want to create one ?<button class="btn btn-sm btn-link">Create page</button></div>
+      <div v-if='pages.length==0 && $store.state.type!="page"'>You don't have any page. Want to create one ?<button @click='$router.push({name:"dhome"})' class="btn btn-sm btn-link">Create page</button></div>
       <div v-for='page in pages' :key="page.pageKey" v-show='$store.state.type!="page"' class="my-page" :class='page[".key"]'>
           <div class="pages">
               <recommend-person :type='"home"' :ukey="page.pageKey"/>
@@ -17,7 +17,7 @@
           </div>
       </div>
       <h5>My Group</h5>
-      <div v-if='groups.length==0'>You aren't a member in any groups. Want to find one ? <button class="btn btn-sm btn-link">Find group</button> Or just create your own group.<button class="btn btn-sm btn-link">Create group</button></div>
+      <div v-if='groups.length==0'>You aren't a member in any groups. Want to find one ? <button @click='$router.push({name:"dhome"})' class="btn btn-sm btn-link">Find group</button> Or just create your own group.<button @click='$router.push({name:"dhome"})' class="btn btn-sm btn-link">Create group</button></div>
       <div v-for='group in groups' :key='group.groupKey' class="my-group" :class='group[".key"]'>
           <div class="groups">
               <recommend-group :class='group.groupKey' :gKey='group.groupKey'/>
@@ -34,8 +34,10 @@ import store from '../../../store/store'
 import db from '../../../plugins/firebase'
 import RecommendPerson from '@/components/General/RecommendPerson.vue'
 import RecommendGroup from '@/components/General/RecommendGroup.vue'
+import MakePageForm from '@/components/Page/MakePageForm.vue'
+import MakeGroupForm from '@/components/Groups/MakeGroupForm.vue'
 export default {
-  components: { RecommendPerson, RecommendGroup },
+  components: { RecommendPerson, RecommendGroup, MakePageForm, MakeGroupForm },
     data() {
         return {
             pages:[],

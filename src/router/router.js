@@ -118,6 +118,18 @@ const routes = [
             component:() => import('../views/DashBoard/Profile/AboutView.vue')
           },
           {
+            path:'/dashboard/profile/:key/images',
+            name:'images',
+            component:() => import('../views/DashBoard/Profile/UImage/ImagesView.vue'),
+            children: [
+              {
+                path:'/dashboard/profile/:key/images/:albumKey',
+                name:'album',
+                component:()=> import('../views/DashBoard/Profile/UImage/AlbumView.vue'),
+              }
+            ]
+          },
+          {
             path:'/dashboard/profile/:key/communities',
             name:'communities',
             component:() => import('../views/DashBoard/Profile/CommunitiesView.vue')
