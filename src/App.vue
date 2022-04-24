@@ -113,6 +113,7 @@ export default {
     let cover = sessionStorage.getItem("cover");
     let location = sessionStorage.getItem("location");
     let type = sessionStorage.getItem("type");
+    let credit = sessionStorage.getItem("credit");
     this.$store.dispatch("setUsername", username);
     this.$store.dispatch("setUser", account);
     this.$store.dispatch("setRole", role);
@@ -123,9 +124,8 @@ export default {
     this.$store.dispatch("setCover", cover);
     this.$store.dispatch("setLocation", location);
     this.$store.state.type=type
-    if (this.$store.state.user != null) {
-      
-    } else if (this.$store.state.user == null) {
+    this.$store.state.credit=credit
+    if (this.$store.state.user == null) {
       this.$router.push("/home");
     }
   },

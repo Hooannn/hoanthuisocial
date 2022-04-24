@@ -305,8 +305,5 @@ export default {
         height: 100vh;
         position: fixed;
     }
-    #app > div.dash-board > div.profile-view > div.profile__content > div.container > div.images-view.router-view > div.cover {
-        
-    }
 }
 </style>

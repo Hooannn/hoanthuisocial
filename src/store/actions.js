@@ -17,7 +17,8 @@ const objectToArray = (obj) =>
       dob: obj[key].dob,
       coverImg: obj[key].coverImg,
       location: obj[key].location,
-      type:obj[key].type
+      type:obj[key].type,
+      credit:obj[key].credit
     }));
 const usersInf = db.ref("usersInformation");
 
@@ -73,6 +74,7 @@ const actions = {
           gender: newAccount.gender,
           statusrel: newAccount.statusrel,
           password: newAccount.password,
+          credit:0,
           registerDate: new Date().toLocaleDateString(),
         });
         store.dispatch('login',newAccount)
@@ -124,6 +126,7 @@ const actions = {
             commit("SET_COVER", user[0].coverImg);
             commit("SET_LOCATION", user[0].location);
             store.state.type=user[0].type
+            store.state.credit=user[0].credit
             db.ref("usersInformation")
               .child(user[0].key)
               .child("status")
@@ -141,6 +144,7 @@ const actions = {
             sessionStorage.setItem("cover", user[0].coverImg);
             sessionStorage.setItem("location", user[0].location);
             sessionStorage.setItem("type", user[0].type);
+            sessionStorage.setItem("credit", user[0].credit);
             loader.classList.remove('show')
             router.push({name:'dhome'})
           })

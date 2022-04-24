@@ -1,5 +1,5 @@
 <template>
-  <div id='home-view' class="home-view ">
+  <div id='home-view' class="home-view">
     <make-post/>
     <make-group-form/>
     <make-page-form/>
@@ -21,7 +21,7 @@
         <div style='fontSize:15px;marginBottom:2px' >
           <span style='fontWeight:800;'>{{$store.state.username}}</span><span style='fontSize:14px'> ({{$store.state.role}})</span>
         </div>
-        <div style='color:grey'><i style='color:orangered'  class="fas fa-map-marker-alt"></i> {{$store.state.location}}</div>
+        <div style='color:grey'><i style='color:orangered' class="fas fa-map-marker-alt"></i> {{$store.state.location}}</div>
         <div style='borderBottom:1px solid gainsboro;display:flex;alignItems:center;justifyContent:space-around;width:100%;height:80px'>
           <div style='heigth:100%;width:45%;display:flex;justifyContent:space-between;;flexDirection:column;alignItems:center'>
             <span style='fontSize:14.5px;fontWeight:700'>Friends</span>
@@ -69,7 +69,7 @@
       <!-- -->
     </div>
     <div class="second-col">
-      <h5 style='color:grey;margin:0 0 25px 0;borderBottom:3px solid orange'>New Feed</h5>
+      <h5 style='color:grey;margin:0 0 25px 0;borderBottom:3px solid orange;position:relative'>New Feed <i style='position:absolute;right:10px;cursor:pointer' onMouseOver="this.style.color='orange'" onMouseOut="this.style.color='unset'" class="fas fa-filter"></i></h5>
       <div class="posts-list">
         <post-com :class='post.key' v-for='post in $store.state.filterPosts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
         <div style='fontSize:14px;padding:0 0 25px 0' v-if='$store.state.filterPosts.length==0'>You have no post in current. You can add more friend, follow page, join some group to get new post from them.</div>
@@ -277,7 +277,7 @@ export default {
   background-color:#fb5252e5;
 }
 .home-view .container{
-    padding-top:100px;
+    padding-top:80px;
     width: 100%;
     display: flex;
     flex-wrap: wrap;

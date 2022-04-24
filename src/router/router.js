@@ -10,6 +10,11 @@ const routes = [
     component: () => import('../views/DashBoard.vue'),
     children: [
       {
+        path:'/dashboard/market',
+        name:'market',
+        component:() => import ('../views/DashBoard/Market/MarketView.vue'),
+      },
+      {
         path:'/dashboard/home',
         name:'dhome',
         component:() => import ('../views/DashBoard/Home/HomeView.vue'),
@@ -21,13 +26,6 @@ const routes = [
           }
         ]
       },
-      /*
-      {
-        path:'/dashboard/messages',
-        name:'messages',
-        component:() => import ('../views/DashBoard/Messages/MessagesView.vue')
-      },
-      */
       {
         path:'/dashboard/group/:key',
         name:'group',
@@ -215,7 +213,6 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes
 })
 

@@ -29,7 +29,7 @@
                   <noti-com :class='noti[".key"]' v-for='noti in notis' :key='noti[".key"]' :notiKey="noti['.key']"/>
               </div>
           </div>
-          <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-wd'>Market</button>
+          <button @click='$router.push({name:"market"})' style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-wd'>Market</button>
           <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-mb'><ion-icon name="cart"></ion-icon></button>
         <div class="dbnav__short-info">
           <div @click='showMoreInfo' class="more-setting">
