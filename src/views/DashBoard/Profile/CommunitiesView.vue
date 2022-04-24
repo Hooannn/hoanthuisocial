@@ -7,10 +7,10 @@
               <recommend-person :type='"home"' :ukey="page.pageKey"/>
           </div>
           <div class="pages-info">
-              <div style='display:flex;justifyContent:space-between;alignItems:center;height:100%' >
-                  <div style='position:relative;userSelect:text'>
+              <div style='position:relative;display:flex;justifyContent:space-between;alignItems:center;height:100%' >
+                  <div style='userSelect:text;maxWidth:80%;'>
                       <div>Email:{{page.account.email}}</div>
-                      <div style='position:relative;display:flex;alignItems:center' class='page-password'>Password:******</div><i @click='showPassword(page[".key"],page.account.password)' class="fas fa-low-vision"></i>
+                      <div style='display:flex;alignItems:center' class='page-password'>Password:******</div><i @click='showPassword(page[".key"],page.account.password)' class="fas fa-low-vision"></i>
                   </div>
                   <button style='color:orange' class="btn btn-link btn-sm"><i class="fas fa-cog"></i></button>
               </div>
@@ -70,12 +70,12 @@ export default {
 
 <style>
 #app > div.dash-board > div.profile-view > div.profile__content > div.container > div.communities-view.router-view > div.my-page > div.pages-info > div > div > i {
-    margin-left: 5px;
     font-size: 12px;
     cursor: pointer;
     position: absolute;
-    left: 110px;
-    bottom: 5px;
+    right: 30px;
+    top:50%;
+    transform: translateY(-50%);
 }
 #app > div.dash-board > div.profile-view > div.profile__content > div.container > div.communities-view.router-view > div.my-page > div.pages-info > div > div > i:hover {
     color: orange;

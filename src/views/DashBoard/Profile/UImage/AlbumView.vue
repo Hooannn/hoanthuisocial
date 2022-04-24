@@ -1,5 +1,5 @@
 <template>
-  <div class="cover">
+  <div style='visibility:visible;opacity:1' class="cover">
       <div class="album-view">
           <div class="image-review">
               <i v-if="$store.state.ukey==$route.params.key" @click='deleteImg' class="fas fa-trash-alt delete"></i>
@@ -161,8 +161,9 @@ export default {
         }
     },
     mounted() {
-        this.$rtdbBind('album',db.ref('usersInformation').child(this.$route.params.key).child('albums').child(this.$route.params.albumKey))
-        this.$rtdbBind('images',db.ref('usersInformation').child(this.$route.params.key).child('albums').child(this.$route.params.albumKey).child('images'))
+        this.$store.dispatch('loading')
+        this.$rtdbBind('album',db.ref('usersInformation').child(this.$route.params.key).child('albums').child(this.$route.params.albumKey)).then(()=>{this.$store.dispatch('unload')})
+        this.$rtdbBind('images',db.ref('usersInformation').child(this.$route.params.key).child('albums').child(this.$route.params.albumKey).child('images')).then(()=>{this.$store.dispatch('unload')})
     }
 }
 </script>
@@ -177,7 +178,7 @@ export default {
     position: fixed;
     top:0;
     left:0;
-    z-index:20;
+    z-index:10;
     background-color:rgba(0,0,0,0.3);
 }
 .cover .album-view {

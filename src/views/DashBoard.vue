@@ -5,7 +5,7 @@
     <div class="messages-m-container">
       <mini-message v-for='message in $store.state.messagesData' :key='message' :class='message' :messageKey='message'/>
     </div>
-    <router-view></router-view>
+    <router-view :key='$route.fullPath'></router-view>
   </div>
 </template>
 

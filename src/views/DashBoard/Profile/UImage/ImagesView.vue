@@ -1,6 +1,5 @@
 <template>
   <div class="images-view">
-      <router-view></router-view>
       <div @click="closeForm" class="create-album-form cover">
         <div class="form">
             <h5 style='position:relative;padding:15px;width:100%'>New Album <i @click='closeForm' class="fas fa-times"></i></h5>
@@ -14,13 +13,15 @@
             <button @click='createAlbum' style='width:20%;margin:10px auto' class="btn btn-sm btn-danger">Create</button>
         </div>
       </div>
-      <div style='padding:5px;fontSize:14px' v-if='albums.length==0'>You don't have any album. Let's create one.</div>
+      <div style='padding:5px;fontSize:14px' v-if='albums.length==0 && $store.state.ukey==$route.params.key'>You don't have any album. Let's create one.</div>
+      <div style='padding:5px;fontSize:14px' v-if='albums.length==0 && $store.state.ukey!=$route.params.key'>This user don't have any album.</div>
       <button @click='showCreateAlbum' style='color:orangered;fontSize:15px' v-if='$store.state.ukey==$route.params.key' class="btn btn-sm btn-link">Create new album</button>
       <div class="albums">
           <div @click='viewAlbum(album[".key"])' v-for='album in albums' :key='album[".key"]' class="album" :class='album[".key"]'>
               <img style='width:100%;height:100%;objectFit:cover' :src="album.cover">
           </div>
       </div>
+      <router-view></router-view>
   </div>
 </template>
 
@@ -39,10 +40,7 @@ export default {
     },
     methods: {
         viewAlbum(key) {
-            let ukey=this.$route.params.key
-            setTimeout(function() {
-                router.push({name:'album',params:{key:ukey,albumKey:key}})
-            },100)
+            router.push({name:"album",params:{albumKey:key}})
         },
         showCreateAlbum() {
             let form=document.querySelector('.images-view .create-album-form.cover')
@@ -60,6 +58,7 @@ export default {
                     name:this.albumName
                 }
                 db.ref('usersInformation').child(this.$store.state.ukey).child('albums').push(newAlbum).then(()=>{
+                    this.closeForm()
                     this.$store.dispatch('unload')
                     this.$bvToast.show('edit')
                 })

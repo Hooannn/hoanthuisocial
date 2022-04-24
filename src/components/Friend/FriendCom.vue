@@ -51,17 +51,11 @@ export default {
     },
     viewProfile() {
       let key=this.ukey
-      router.push({name:'/'})
-      setTimeout(function() {
-        router.push({name:'post',params:{key:key}})
-      },50)
+      router.push({name:'post',params:{key:key}})
     },
     viewPage() {
       let key=this.ukey
-      router.push({name:'/'})
-      setTimeout(function() {
-        router.push({name:'pages',params:{key:key}})
-      },50)
+      router.push({name:'pages',params:{key:key}})
     },
     unfriend() {
       this.$store.dispatch('loading')

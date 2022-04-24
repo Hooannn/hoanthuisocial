@@ -50,7 +50,7 @@
                   <div v-if='$store.state.ukey==$route.params.key' @click='$router.push({name:"communities",params:{key:profileKey}})' class="communities" :class="{active:$route.name=='communities'}">Coms</div>
                   <div class="more" :class="{active:$route.name=='see-more'}">See more <ion-icon style="marginLeft:5px" name="chevron-down-outline"></ion-icon></div>
               </div>
-              <router-view class='router-view'></router-view>
+              <router-view :key='$route.fullPath' class='router-view'></router-view>
           </div>
           <footer-com/>
       </div>

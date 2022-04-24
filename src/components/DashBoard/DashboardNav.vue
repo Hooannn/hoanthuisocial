@@ -151,16 +151,16 @@ export default {
         }, 1000);
         },
         viewMyProfile() {
-            router.push({name:'/'})
-            setTimeout(function(){
+            //router.push({name:'/'})
+            //setTimeout(function(){
                router.push({name:"post",params:{key:store.state.ukey}})
-            }, 50)
+            //}, 50)
         },
         viewMyFriend() {
-            router.push({name:'dhome'})
-            setTimeout(function(){
+            //router.push({name:'dhome'})
+            //setTimeout(function(){
                 router.push({name:"friends",params:{key:store.state.ukey}})
-            }, 50)
+            //}, 50)
         },
         showNoti() {
             this.selected=''

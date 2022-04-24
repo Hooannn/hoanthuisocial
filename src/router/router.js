@@ -123,7 +123,7 @@ const routes = [
             component:() => import('../views/DashBoard/Profile/UImage/ImagesView.vue'),
             children: [
               {
-                path:'/dashboard/profile/:key/images/:albumKey',
+                path:':albumKey',
                 name:'album',
                 component:()=> import('../views/DashBoard/Profile/UImage/AlbumView.vue'),
               }

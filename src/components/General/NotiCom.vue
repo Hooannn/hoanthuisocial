@@ -50,35 +50,22 @@ export default {
             db.ref('usersInformation').child(this.$store.state.ukey).child('notifications').child(this.notiKey).child('status').set("Seen")
                 .then(()=> {
                     if (this.noti.type=='follow' || this.noti.type=='accept-friendInvite' ) {
-                        this.$router.push({name:'/'})
                         let ukey=this.noti.ukey
-                        setTimeout(function() {
-                            router.push({name:'post',params:{key:ukey}})
-                        },50)
+                        router.push({name:'post',params:{key:ukey}})
                     }
                     else if (this.noti.type=='send-friendInvite') {
-                        this.$router.push({name:'/'})
-
-                        setTimeout(function() {
-                            router.push({name:'friends',params:{key:store.state.ukey}})
-                        },50)
+                        router.push({name:'friends',params:{key:store.state.ukey}})
                     }
                     else if (this.noti.type=='like-blog'|| this.noti.type=='new-blog') {
-                        this.$router.push({name:'/'})
                         let postKey=this.noti.postKey
-                        let ukey=this.noti.ukey
-                        setTimeout(function() {
-                            router.push({name:'post-detail',params:{key:ukey,postKey:postKey}})
-                        },50)
+                        let ukey=this.$store.state.ukey
+                        router.push({name:'post-detail',params:{key:ukey,postKey:postKey}})
                     }
                     else if (this.noti.type=='comment-blog') {
                         let commentKey=this.noti.commentKey
-                        this.$router.push({name:'/'})
                         let postKey=this.noti.postKey
-                        let ukey=this.noti.ukey
-                        setTimeout(function() {
-                            router.push({name:'post-detail',params:{key:ukey,postKey:postKey}})
-                        },50)
+                        let ukey=this.$store.state.ukey
+                        router.push({name:'post-detail',params:{key:ukey,postKey:postKey}})
                         /*
                         setTimeout(function() {
                             EventBus.$emit('showCom', commentKey)
@@ -86,20 +73,14 @@ export default {
                         */
                     }
                     else if (this.noti.type=="send-group-request" ||this.noti.type=="accept-group-request"||this.noti.type=="refuse-group-request"|| this.noti.type=="group-create") {
-                        router.push({name:'/'})
                         let groupKey=this.noti.groupKey
-                        setTimeout(function() {
-                            router.push({name:'group-post',params:{key:groupKey}})
-                        },50)
+                        router.push({name:'group-post',params:{key:groupKey}})
                     }
                     else if (this.noti.type=='send-message') {
                         this.$store.dispatch('addMsgData',this.noti.messageKey)
                     }
                     else if (this.noti.type=='page-create') {
-                        router.push({name:'/'})
-                        setTimeout(function() {
-                            router.push({name:'communities',params:{key:store.state.ukey}})
-                        },50)
+                        router.push({name:'communities',params:{key:store.state.ukey}})
                     }
                     else {
                         return
