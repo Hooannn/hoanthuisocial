@@ -10,7 +10,7 @@
           </div>
           <div class="album-header">
               <button @click='goBack' style='color:black;fontSize:16px;position:absolute;left:5px' class="btn btn-sm btn-link"><ion-icon name="return-down-back-outline"></ion-icon> Back</button>
-              <button @click='deleteAlbum' style='position:absolute;right:0;color:red;fontWeight:bold' class="btn btn-sm btn-link">Delete</button>
+              <button v-if="$store.state.ukey==$route.params.key" @click='deleteAlbum' style='position:absolute;right:0;color:red;fontWeight:bold' class="btn btn-sm btn-link">Delete</button>
               <div style='fontSize:20px;fontWeight:bolder'>{{album.name}}</div>
           </div>
           <div class="images">
