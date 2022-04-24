@@ -6,7 +6,7 @@
         <div
           v-for="(detail, index) in yourDetails"
           :key="index"
-          @click="$router.push({ name: detail.name })"
+          @click="$router.push({ name: detail.name, params:{key:$store.state.ukey} })"
             :class='{selected:$route.name==detail.name}'
         >{{detail.title}}</div>
       </div>

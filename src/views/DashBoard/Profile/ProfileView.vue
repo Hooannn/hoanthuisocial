@@ -17,7 +17,7 @@
                   </div>
               </div>
               <div class="more-inf">
-                  <button v-if='$store.state.ukey==profileKey' @click='$router.push({name:"personal"}),isSelect="Edit"' class='btn btn-dark btn-sm edit'>Edit Profile</button>
+                  <button v-if='$store.state.ukey==profileKey' @click='$router.push({name:"personal",params:{key:$store.state.ukey}}),isSelect="Edit"' class='btn btn-dark btn-sm edit'>Edit Profile</button>
                   <button :disabled='userFriend.find((user)=>(user[".value"]==$route.params.key))||userFriendRequesting.find((user)=>(user[".value"]==$route.params.key))||userFriendRequested.find((user)=>(user[".value"]==$route.params.key))' @click='$store.dispatch("sentFriendRequest",$route.params.key),$store.dispatch("follow",$route.params.key)' v-if='$store.state.type!="page"&&$store.state.ukey!=profileKey' class='btn btn-dark btn-sm edit'>
                       <span v-if='!userFriend.find((user)=>(user[".value"]==$route.params.key))'>Add Friend</span>
                       <span v-if='userFriend.find((user)=>(user[".value"]==$route.params.key))'>Friend</span>

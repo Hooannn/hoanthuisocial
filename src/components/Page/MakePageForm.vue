@@ -202,4 +202,18 @@ export default {
     height: 100%;
     object-fit: cover;
 }
+/* */
+@media only screen and (max-width: 768px) {
+    .make-page-form div.form {
+        height: 100vh;
+        font-size: 14px;
+    }
+    .make-page-form div.form span{
+        padding:3px;
+    }
+    .make-page-form div.form .page-avatar-img,.make-page-form div.form .page-cover-img{
+        height: 100px;
+        width: 50%;
+    }
+}
 </style>
