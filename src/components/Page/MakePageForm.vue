@@ -1,7 +1,7 @@
 <template>
   <div @click="close" class="make-page-form cover">
       <div class="form">
-          <h5 style='position:relative;padding:15px;width:100%'>Page Form <i @click='close' class="fas fa-times"></i></h5>
+          <h5 style='position:relative;padding:15px;width:100%;color:orangered'>Page Form <i @click='close' class="fas fa-times"></i></h5>
           <span>Page Name:</span>
           <input placeholder="Enter page name..." v-model='pageName' type="text">
           <span>Description:</span>
@@ -156,6 +156,7 @@ export default {
     width: 400px;
     display: flex;
     flex-direction: column;
+    border-top:5px solid salmon;
 }
 .make-page-form .form h5 i{
   position: absolute;

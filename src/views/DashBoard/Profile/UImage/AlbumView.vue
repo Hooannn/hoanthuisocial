@@ -1,5 +1,5 @@
 <template>
-  <div style='visibility:visible;opacity:1' class="cover">
+  <div @click='close' style='visibility:visible;opacity:1' class="cover">
       <div class="album-view">
           <div class="image-review">
               <i v-if="$store.state.ukey==$route.params.key" @click='deleteImg' class="fas fa-trash-alt delete"></i>
@@ -158,6 +158,11 @@ export default {
         },
         goBack(e) {
             this.$router.go(-1)
+        },
+        close(e) {
+            if (e.target==document.querySelector(`#app > div.dash-board > div.profile-view > div.profile__content > div.container > div.images-view.router-view > div:nth-child(4)`)) {
+                this.$router.go(-1)
+            }
         }
     },
     mounted() {

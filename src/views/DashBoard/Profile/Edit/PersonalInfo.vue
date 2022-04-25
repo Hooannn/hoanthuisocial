@@ -87,7 +87,7 @@
       </div>
     <!--  --> 
     <!--  --> 
-      <button @click='saveChanges' style='color:white;fontWeight:800;width:10%;overflow:hidden' class="btn btn-danger btn-sm">Save</button>
+      <button @click='saveChanges' style='color:white;fontWeight:800;width:50px;overflow:hidden' class="btn btn-danger btn-sm">Save</button>
     <!--  --> 
   </div>
 </template>

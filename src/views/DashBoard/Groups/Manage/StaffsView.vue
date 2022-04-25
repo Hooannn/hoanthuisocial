@@ -47,7 +47,6 @@ export default {
             this.$rtdbBind('request', db.ref('groups').child(this.$route.params.key).child('membersRequest'))
             this.$rtdbBind('posts', db.ref('groups').child(this.$route.params.key).child('posts'))
             this.$rtdbBind('notifications', db.ref('groups').child(this.$route.params.key).child('notifications'))
-            this.$router.push({name:'group-manage-info'})
           }
           else {
             this.$router.push({name:'group'})

@@ -13,6 +13,13 @@ const routes = [
         path:'/dashboard/market',
         name:'market',
         component:() => import ('../views/DashBoard/Market/MarketView.vue'),
+        children:[
+          {
+            path:'/dashboard/market/sell',
+            name:'sell',
+            component:() => import ('../views/DashBoard/Market/MarketSell.vue'),
+          }
+        ]
       },
       {
         path:'/dashboard/home',

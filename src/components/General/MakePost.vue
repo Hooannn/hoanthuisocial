@@ -1,7 +1,7 @@
 <template>
-  <div class="cover">
+  <div @click='close_' class="cover">
       <div class="make-post">
-        <div class="header">Make a post<i @click='close' class="fas fa-times"></i></div>
+        <div style='color:orangered' class="header">Make a post<i @click='close' class="fas fa-times"></i></div>
         <div class="body">
           <div class="short-inf">
             <img style='borderRadius:50%;width:40px;maxHeight:80%;marginLeft:10px' :src="$store.state.avatarImg">
@@ -78,6 +78,12 @@ export default {
       let makePost=document.querySelector('#app > div.dash-board > div.home-view > div.cover')
       makePost.classList.remove('show')
     },
+    close_(e) {
+      if (e.target==document.querySelector(`#home-view > div.cover.show`)) {
+        let makePost=document.querySelector('#app > div.dash-board > div.home-view > div.cover')
+        makePost.classList.remove('show')
+      }
+    },
     removeImg(img) {
             let index=this.imgsUpload.indexOf(img)
             this.imgsUpload.splice(index,1)
@@ -144,6 +150,7 @@ div.images-container img:hover {
   display: flex;
   flex-direction: column;
   padding:0;
+  border-top:5px solid salmon;
 }
 .cover .make-post .header{
   width: 100%;

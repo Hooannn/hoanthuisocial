@@ -1,12 +1,13 @@
 <template>
   <div class="market-view">
+      <router-view></router-view>
       <div class="container">
           <div class="first-col">
             <div style='marginBottom:25px;width:100%;height:40px;display:flex;alignItems:center;boxShadow:1px 1px 4px rgba(0,0,0,0.4);overflow:hidden;borderRadius:3px' class="search-bar">
                 <input placeholder="Search product..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;outline:none;backgroundColor:white;' type="text">
                 <div class='btn-search' style='color:white;width:20%;height:100%;display:flex;justifyContent:center;alignItems:center;'><i class="fas fa-search"></i></div>
             </div>
-            <button style='backgroundColor:#FB5252;borderColor:#FB5252' class="btn btn-sm btn-danger">Sell something</button>
+            
             <div class="short-intro">
                 <div style='width:100%;maxHeight:90px;overflow:hidden' class="short-bg">
                     <img style='width:100%;height:100%;objectFit:cover' :src="$store.state.coverImg">
@@ -18,10 +19,11 @@
                     <span style='fontWeight:800;'>{{$store.state.username}}</span><span style='fontSize:14px'> ({{$store.state.role}})</span>
                 </div>
                 <div style='fontWeight:800;fontSize:14px;marginBottom:2px;color:green' class="credit">
-                    Credit: {{$store.state.credit}}$
+                    Credit: {{credit[".value"]}}$
                 </div>
                 <div style='color:grey'><i style='color:orangered'  class="fas fa-map-marker-alt"></i> {{$store.state.location}}</div>
-                <button @click='$router.push({name:"post",params:{key:$store.state.ukey}})' style='{textDecoration:none;color:black;padding:10px;}' class="btn btn-link btn-sm">View Profile</button>
+                <button @click='$router.push({name:"post",params:{key:$store.state.ukey}})' style='{textDecoration:none;color:black;padding:5px;}' class="btn btn-link btn-sm">View Profile</button>
+                <button @click='$router.push({name:"sell"})' style='{textDecoration:none;color:black;padding:5px;}' class="btn btn-sm btn-link">Sell something</button>
             </div>
             <div class="category">
                 <h5>Category</h5>
@@ -60,11 +62,13 @@ export default {
                 {name:"More",icon:moreicon},
             ],
             market:[],
+            credit:{},
         }
     },
     mounted() {
         this.$store.dispatch('loading')
-        this.$rtdbBind('market',db.ref('market')).then(()=>{this.$store.dispatch('unload')}).catch(()=>{this.$store.dispatch('unload')})
+        this.$rtdbBind('market',db.ref('market').orderByChild('time')).then(()=>{this.$store.dispatch('unload')}).catch(()=>{this.$store.dispatch('unload')})
+        this.$rtdbBind('credit',db.ref('usersInformation').child(this.$store.state.ukey).child('credit')).then(()=>{this.$store.dispatch('unload')}).catch(()=>{this.$store.dispatch('unload')})
     }
 }
 </script>
@@ -153,5 +157,18 @@ export default {
     align-items: center;
     flex-direction: column;
     margin-top:25px;
+}
+
+
+/*  */
+@media only screen and (max-width: 768px) {
+    .market-view .container .first-col{
+        width: 95%;
+        margin:0 auto;
+    }
+    .market-view .container .second-col{
+        width: 95%;
+        margin:0 auto;
+    }
 }
 </style>

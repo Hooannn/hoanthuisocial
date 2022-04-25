@@ -30,7 +30,7 @@
               </div>
           </div>
           <button @click='$router.push({name:"market"})' style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-wd'>Market</button>
-          <button style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-mb'><ion-icon name="cart"></ion-icon></button>
+          <button @click='$router.push({name:"market"})' style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-mb'><ion-icon name="cart"></ion-icon></button>
         <div class="dbnav__short-info">
           <div @click='showMoreInfo' class="more-setting">
               <div class="user-avatar">
@@ -43,6 +43,7 @@
               ></ion-icon>
           </div>
           <div style='width:150px' class="drop-down">
+            <div style='display:flex;justifyContent:space-between'><span>Credit</span><span>${{credit[".value"]}}</span></div>
             <div @click='viewMyProfile'><span>Profile</span></div>
             <div @click='$router.push({name:"images",params:{key:$store.state.ukey}})'><span>Albums</span></div>
             <div v-if='$store.state.type!="page"' @click='viewMyFriend'><span>Friends</span></div>
@@ -77,6 +78,7 @@ export default {
     },
     data() {
         return {
+            credit:{},
             logo:logo,
             selected:'Home',
             notis:[],
@@ -171,6 +173,7 @@ export default {
         }
     },
     mounted() {
+        this.$rtdbBind('credit',db.ref('usersInformation').child(this.$store.state.ukey).child('credit'))
         this.$rtdbBind('notis',db.ref('usersInformation').child(this.$store.state.ukey).child('notifications').orderByChild('time'))    
         this.$rtdbBind('messages',db.ref('messagesData'))
         this.interval=setInterval(() => {

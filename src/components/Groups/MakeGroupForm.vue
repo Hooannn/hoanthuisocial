@@ -1,7 +1,7 @@
 <template>
   <div @click="close" class="make-group-form cover">
       <div class="form">
-          <h5 style='position:relative;padding:15px;width:100%'>Group Form <i @click='close' class="fas fa-times"></i></h5>
+          <h5 style='position:relative;padding:15px;width:100%;color:orangered'>Group Form <i @click='close' class="fas fa-times"></i></h5>
           <span>Groupname:</span>
           <input placeholder="Enter group name..." v-model='groupName' type="text">
           <span>Description:</span>
@@ -86,7 +86,6 @@ export default {
                 this.close()
                 this.$store.dispatch('unload')
             }).catch((err)=>{
-                alert(err)
                 this.$store.dispatch('unload')
             })
         },
@@ -113,6 +112,7 @@ export default {
     width: 400px;
     display: flex;
     flex-direction: column;
+    border-top:5px solid salmon;
 }
 .make-group-form .form h5 i{
   position: absolute;

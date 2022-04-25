@@ -21,7 +21,7 @@
               <img style='width:100%;height:100%;objectFit:cover' :src="album.cover">
           </div>
       </div>
-      <router-view></router-view>
+      <router-view ></router-view>
   </div>
 </template>
 
@@ -61,6 +61,8 @@ export default {
                     this.closeForm()
                     this.$store.dispatch('unload')
                     this.$bvToast.show('edit')
+                }).catch(()=>{
+                    this.$store.dispatch('unload')
                 })
             }
         },

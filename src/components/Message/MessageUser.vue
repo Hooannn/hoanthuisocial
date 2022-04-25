@@ -1,6 +1,6 @@
 <template>
   <div @click='showMessage' class="message-user">
-      <img style='width:100%;height:100%;objectFit:cover;borderRadius:50%' :src="user.avatarImg">
+      <img style='width:100%;height:100%;objectFit:cover;borderRadius:15%' :src="user.avatarImg">
       <span class='username'>{{user.username}}</span>
       <div v-if='unseenMsg>0' class='unseen-msg'>{{unseenMsg}}</div>
       <div :class='{online:user.status=="Online"}' class="status"></div>

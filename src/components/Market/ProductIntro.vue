@@ -1,5 +1,7 @@
 <template>
   <div class="product-intro">
+      <product-detail :timeremain='timeremain' :currentBidding='currentBidding' :author="author" :productImages='productImages' :productKey='productKey' :authorKey='authorKey'/>
+      <div style='color:white;height:30px;background-color:rgb(255, 117, 85,0.9)'><button @click='viewDetail(productKey)' style='color:white' class="btn btn-sm btn-link">View Detail</button></div>
       <div class="images-overview">
           <div class="image-overview">
               <i @click='previousImg' class="fas fa-angle-left left"></i>
@@ -43,7 +45,9 @@
 
 <script>
 import db from '../../plugins/firebase'
+import ProductDetail from './ProductDetail.vue';
 export default {
+  components: { ProductDetail },
     props:{
         productKey:String,
         authorKey:String,
@@ -98,11 +102,15 @@ export default {
                 if (this.timeremain==0) {
                     return
                 }
-                this.timeremain=(24*60*60)-(Math.floor((new Date().getTime()-this.biddingTime['.value'])/1000))
+                this.timeremain=((this.product.timetowin)*60*60)-(Math.floor((new Date().getTime()-this.biddingTime['.value'])/1000))
             }
             else {
                 return
             }
+        },
+        viewDetail(key) {
+            let productDetail=document.querySelector(`.product-intro.${key} .cover`)
+            productDetail.classList.toggle('show')
         }
     },
     watch: {
@@ -141,10 +149,26 @@ export default {
 </script>
 
 <style>
+.product-intro .cover{
+    min-width: 100vw;
+    min-height: 100vh;
+    position: fixed;
+    top:0;
+    left:0;
+    background-color:rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition:.2s all linear;
+    z-index: 100;
+    visibility: hidden;
+    opacity: 0;
+}
 .product-intro {
     width: 80%;
-    height: 330px;
-    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+    height: 360px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    margin-bottom: 25px;
 }
 .product-intro .time-remain{
     width: 100%;
@@ -154,6 +178,8 @@ export default {
     align-items: center;
     color:red;
     font-size: 18px;
+    font-weight: bolder;
+    background-color: seashell;
 }
 .product-intro .image-overview{
     width: 100%;
@@ -190,7 +216,7 @@ export default {
     border-top: 0;
     display: flex;
     justify-content: space-between;
-    background-color:rgb(245, 245, 245,0.5);
+    background-color:rgb(245, 245, 245,0.7);
 }
 .product-intro .image-overview i{
     position: absolute;
@@ -218,7 +244,7 @@ export default {
     align-items: center;
     justify-content: center;
     justify-content: space-between;
-    max-width: 80%;
+    width: 80%;
 }
 .product-intro .product-info .product-info-des{
     display: flex;
@@ -228,5 +254,13 @@ export default {
     overflow: hidden;
     word-wrap: break-word;
     font-size: 14px;
+}
+
+
+/*  */
+@media only screen and (max-width: 768px) {
+    .product-intro {
+        width: 100%;
+    }
 }
 </style>
