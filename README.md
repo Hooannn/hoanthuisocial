@@ -2,4 +2,4 @@
 
 ### A socialnetwork built by VueJS and Firebase
 
-See [Page is live now](https://keen-torrone-765162.netlify.app).
+See [Page is live now](https://hoanthuisocial.netlify.app).
