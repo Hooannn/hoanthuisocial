@@ -76,7 +76,7 @@ const actions = {
           password: newAccount.password,
           credit:0,
           registerDate: new Date().toLocaleDateString(),
-        });
+        })
         store.dispatch('login',newAccount)
       })
       .catch((error) => {

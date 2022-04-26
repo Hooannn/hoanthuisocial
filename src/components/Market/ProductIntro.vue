@@ -10,7 +10,9 @@
           </div>
       </div>
       <div class="time-remain">
-          {{formatDate}}
+          <span v-if='timeremain!=0'>{{formatDate}}</span>
+          <span style='color:black;fontSize:15px;fontWeight:light' v-if='timeremain==0 && currentBidding.username=="None"'>No one's bidded yet.</span>
+          <span v-if='timeremain==0&&currentBidding.username!="None"'>{{currentBidding.username}} has won.</span>
       </div>
       <div class="product-info">
           <div onMouseOut='this.style.backgroundColor="unset"' onMouseOver='this.style.backgroundColor="rgba(0,0,0,0.1)"' @click='$router.push({name:"post",params:{key:author[".key"]}})' style='cursor:pointer;width:100px;height:100%;display:flex;justifyContent:center;alignItems:center;flexDirection:column;' class="product-author">
@@ -36,7 +38,7 @@
               </div>
               <div style='width:18%'>
                   <div style='fontWeight:bolder'>Bidder: </div>
-                  <div style='cursor:pointer' onMouseOver='this.style.color="orangered"' onMouseOut='this.style.color="unset"' @click='$router.push({name:"post",params:{key:currentBidding[".key"]}})'><img style='width:20px;height:20px;borderRadius:5px;' :src="currentBidding.avatarImg"> {{currentBidding.username}}</div>
+                  <div style='cursor:pointer' onMouseOver='this.style.color="orangered"' onMouseOut='this.style.color="unset"' @click='$router.push({name:"post",params:{key:currentBidding[".key"]}})'><img v-if='currentBidding.username!="None"' style='width:20px;height:20px;borderRadius:5px;' :src="currentBidding.avatarImg"> {{currentBidding.username}}</div>
               </div>
           </div>
       </div>
@@ -99,10 +101,10 @@ export default {
         },
         getTimeRemain() {
             if (this.biddingTime['.value']!=null&&this.biddingTime['.value']!=undefined) {
+                this.timeremain=((this.product.timetowin)*60*60)-(Math.floor((new Date().getTime()-this.biddingTime['.value'])/1000))
                 if (this.timeremain==0) {
                     return
                 }
-                this.timeremain=((this.product.timetowin)*60*60)-(Math.floor((new Date().getTime()-this.biddingTime['.value'])/1000))
             }
             else {
                 return
@@ -120,7 +122,7 @@ export default {
         product(e) {
             clearInterval(this.timeInterval)
             this.currentBiddingKey=null
-            this.timeremain=null
+            this.timeremain=0
             this.currentBidding={
                 username:"None",
                 avatarImg:null,
@@ -131,6 +133,21 @@ export default {
                 }
             })
             this.timeInterval=setInterval(this.getTimeRemain,1000)
+        },
+        timeremain(e) {
+            if (e<=0) {
+                clearInterval(this.timeInterval)
+                this.timeremain=0
+                /*
+                let productIntro=document.querySelector(`#app > div.dash-board > div.market-view > div > div.second-col > div > div.product-intro.${this.productKey}`)
+                productIntro.remove()
+                this.$store.dispatch('loading')
+                db.ref('market').child(this.productKey).remove().then(()=>{
+                    this.$store.dispatch('unload')
+                })
+                */
+                //login winning here
+            }
         }
     },
     mounted() {

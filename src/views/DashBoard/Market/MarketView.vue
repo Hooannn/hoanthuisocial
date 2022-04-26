@@ -4,7 +4,7 @@
       <div class="container">
           <div class="first-col">
             <div style='marginBottom:25px;width:100%;height:40px;display:flex;alignItems:center;boxShadow:1px 1px 4px rgba(0,0,0,0.4);overflow:hidden;borderRadius:3px' class="search-bar">
-                <input placeholder="Search product..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;outline:none;backgroundColor:white;' type="text">
+                <input v-model='inputFilter' placeholder="Search product..." style='fontSize:15px;padding:0 10px;width:80%;height:100%;outline:none;backgroundColor:white;' type="text">
                 <div class='btn-search' style='color:white;width:20%;height:100%;display:flex;justifyContent:center;alignItems:center;'><i class="fas fa-search"></i></div>
             </div>
             
@@ -63,6 +63,7 @@ export default {
             ],
             market:[],
             credit:{},
+            inputFilter:'',
         }
     },
     mounted() {

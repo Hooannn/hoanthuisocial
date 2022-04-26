@@ -38,10 +38,11 @@
           <div class="market-introduce">
               <h5 style='fontWeight:bolder'>Want to Sell your items</h5>
               <div>Post your items to the market for free. Just add it through the simple form. Then wait for another users pay for it. Try out ours bidding system.</div>
-              <button style='color:white;fontWeight:400' class="btn btn-warning ">Try it now</button>
+              <button @click='$router.push({name:"sell"})' style='color:white;fontWeight:400' class="btn btn-warning ">Try it now</button>
           </div>
           <div class="new-item-market">
               <h5>New Item on Market</h5>
+              <new-item-market v-for='item in myMarket' :key='item[".key"]' :itemImages='item.images' :title='item.title' :currentPrice='item.currentprice'></new-item-market>
           </div>
       </div>
   </div>
@@ -51,8 +52,12 @@
 import PostCom from '../../../components/Post/PostCom.vue'
 import db from './../../../plugins/firebase'
 import client from '../../../plugins/filestack'
+import NewItemMarket from '../../../components/Profile/NewItemMarket.vue'
 export default {
-  components: { PostCom },
+  firebase:{
+      market:db.ref('market')
+  },
+  components: { PostCom,NewItemMarket },
     data() {
         return {
             socialAccounts:{},
@@ -63,6 +68,8 @@ export default {
             imagesUpload:[],
             user:{},
             myfollowers:[],
+            market:[],
+            myMarket:[],
         }
     },
     methods: {
@@ -127,6 +134,14 @@ export default {
         }
     },
     watch: {
+        market() {
+            this.myMarket=[]
+            this.market.forEach(item => {
+                if (item.author==this.$route.params.key) {
+                    this.myMarket.unshift(item)
+                }
+            });
+        },
         postsData() {
             this.posts=[]
             this.postsData.forEach(post => {
@@ -260,7 +275,6 @@ pre {
     border-radius: 2px;
     text-overflow: ellipsis;
     background-color:white;
-    height: 300px;
 }
 .new-item-market h5{
     margin:0;

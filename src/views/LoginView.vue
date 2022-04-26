@@ -1,7 +1,6 @@
 <template>
   <div class="login-page">
     <form>
-      <div style='position:absolute;width:250px;height:250px;top:-60px;right:80px;' class="logo"><img style='width:100%;height:100%;objectFit:cover' :src="logo"></div>
       <span @click='$router.push("/home")' style='display:flex;alignsItem:center;cursor:pointer'><ion-icon style='marginRight:5px' name="return-down-back-outline"></ion-icon> Back to Home</span>
       <h2><strong style='fontSize:25px'>Sign In</strong></h2>
       <div class="result" :class="{ success: getStatus }" v-if="getMessage">

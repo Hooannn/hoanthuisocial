@@ -88,9 +88,13 @@ export default {
                     currentprice:this.startPrice,
                     time:new Date().getTime(),
                     type:this.type,
-                    title:this.productName
+                    title:this.productName,
+                    timetowin:this.timetowin,
+                    status:'none',
                 }
                 db.ref('market').push(item).then(()=>{
+                    this.close_()
+                    this.$bvToast.show('edit')
                     this.$store.dispatch('unload')
                 }).catch((err)=>{
                     console.log(err)
@@ -168,5 +172,16 @@ export default {
     border:1px solid gainsboro;
     background:transparent;
     padding:8px 10px;
+}
+
+
+/*  */
+@media only screen and (max-width: 768px) {
+    .cover .market-sell {
+        width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        overflow-y:auto ;
+    }
 }
 </style>

@@ -21,8 +21,11 @@
           </div>
           <div class="second-col">
               <div class="time-remaining">
-                  <div >This item will be bought by <span @click='$router.push({name:"post",params:{key:currentBidding[".key"]}})' style='fontWeight:bolder;cursor:pointer' onMouseOver="this.style.color='black'" onMouseOut="this.style.color='unset'"><img style='width:30px;height:30px;borderRadius:5px' :src="currentBidding.avatarImg"> {{currentBidding.username}}</span> in </div>
-                  <div style='fontSize:20px;color:red;fontWeight:bolder'>{{formatDate}}</div>
+                  <div v-if='currentBidding.username!="None"&& timeremain!=0'>This item will be bought by <span @click='$router.push({name:"post",params:{key:currentBidding[".key"]}})' style='fontWeight:bolder;cursor:pointer' onMouseOver="this.style.color='black'" onMouseOut="this.style.color='unset'"><img style='width:30px;height:30px;borderRadius:5px' :src="currentBidding.avatarImg"> {{currentBidding.username}}</span> in </div>
+                  <div v-if='currentBidding.username!="None" && timeremain==0 && $store.state.ukey!=currentBidding[".key"]'>This item has been bought by <span @click='$router.push({name:"post",params:{key:currentBidding[".key"]}})' style='fontWeight:bolder;cursor:pointer' onMouseOver="this.style.color='black'" onMouseOut="this.style.color='unset'"><img style='width:30px;height:30px;borderRadius:5px' :src="currentBidding.avatarImg"> {{currentBidding.username}}</span></div>
+                  <div v-if='timeremain!=0' style='fontSize:20px;color:red;fontWeight:bolder'>{{formatDate}}</div>
+                  <div style='fontSize:16px;fontWeight:bold' v-if='currentBidding.username=="None" &&timeremain==0'>No one's bidded yet.</div>
+                  <div style='fontSize:16px;fontWeight:bold' v-if='currentBidding.username!="None" && timeremain==0 && $store.state.ukey==currentBidding[".key"]'>You are owner of this item. Please fill out the confirm form.</div>
               </div>
               <div class="product-more-detail">
                   <div style='fontWeight:bolder;fontSize:16px'>Product name: <span style='color:orangered;fontSize:19px;fontWeight:unset'>{{product.title}}</span></div>
@@ -33,7 +36,7 @@
                   <div style='fontWeight:bolder;fontSize:16px'>Seller: <span onMouseOut='this.style.fontWeight="lighter"' onMouseOver='this.style.fontWeight="bolder"' @click='$router.push({name:"post",params:{key:author[".key"]}})' style='cursor:pointer;fontSize:17px;fontWeight:lighter'><img style='width:25px;height:25px;borderRadius:5px' :src="author.avatarImg"> {{author.username}}</span></div>
                   <div style='fontWeight:bolder;fontSize:16px'>Sell date: <span style='color:black;fontWeight:lighter'>{{product.date}}</span></div>
               </div>
-              <div class="bidding-form">
+              <div v-if='timeremain!=0' class="bidding-form">
                   <h6 style='fontWeight:bolder;fontSize:17px'>Start Bidding</h6>
                   <div>Email:</div>
                   <input style='border:none;outline:none;backgroundColor:rgba(255,255,255,0.1);color:white' type="text" v-model='user.email' disabled>
@@ -49,6 +52,16 @@
                   <button @click='biddingConfirm' v-if='$store.state.ukey!=authorKey&&$store.state.ukey!=currentBidding[".key"]' :disabled='err!=null&&err.trim()!=""' class="btn btn-sm btn-danger">Bid</button>
                   <span style='color:green;fontWeight:bolder' v-if='$store.state.ukey==authorKey'>Your are the seller.</span>
                   <span style='color:green;fontWeight:bolder' v-if='$store.state.ukey==currentBidding[".key"]'>Your are the lastest bidder.</span>
+              </div>
+              <div v-if='timeremain==0&&currentBidding[".key"]==$store.state.ukey' class="bidding-form">
+                  <h6 style='fontWeight:bolder;fontSize:17px'>Confirm</h6>
+                  <div>Email:</div>
+                  <input style='border:none;outline:none;backgroundColor:rgba(255,255,255,0.1);color:white' type="text" v-model='user.email' disabled>
+                  <div>Phone:</div>
+                  <input style='border:none;outline:none;backgroundColor:rgba(255,255,255,0.1);color:white' type="text" v-model='user.phone' disabled>
+                  <div>Address:</div>
+                  <input style='border:none;outline:none;backgroundColor:rgba(255,255,255,0.1);color:white' type="text" v-model='confirmAddress'>
+                  <button style='color:white;fontWeight:bolder' @click='ownerConfirm' v-if='$store.state.ukey!=authorKey' class="btn btn-sm btn-warning">Confirm</button>
               </div>
           </div>
       </div>
@@ -131,11 +144,13 @@ export default {
                         let oldCredit=realtimePrice
                         db.ref('market').child(this.productKey).child('currentbidding').get().then(res=>
                             {
-                                let ukey=res.val()
-                                db.ref('usersInformation').child(ukey).child('credit').get().then(res=>{
-                                    oldCredit+=res.val()
-                                    db.ref('usersInformation').child(ukey).child('credit').set(oldCredit)
-                                })
+                                if (res.val()) {
+                                    let ukey=res.val()
+                                    db.ref('usersInformation').child(ukey).child('credit').get().then(res=>{
+                                        oldCredit+=res.val()
+                                        db.ref('usersInformation').child(ukey).child('credit').set(oldCredit)
+                                    })
+                                }
                             }
                         )
                         //
@@ -234,12 +249,18 @@ export default {
             if (e>this.user.credit) {
                 this.err="You don't have enough money."
             }
+        },
+        timeremain(e) {
+            if (e<=0) {
+                clearInterval(this.timeInterval)
+                this.timeremain=0
+            }
         }
     },
     mounted() {
         this.$rtdbBind('product',db.ref('market').child(this.productKey))
         this.$rtdbBind('user',db.ref('usersInformation').child(this.$store.state.ukey))
-        this.bidprice=this.product.currentprice+10
+        this.bidprice=parseInt(this.product.currentprice,10)+10
         this.timeInterval=setInterval(this.count,1000)
     },
     destroyed() {
@@ -273,6 +294,7 @@ input::-webkit-inner-spin-button {
     flex-wrap: wrap;
     border-top:5px solid salmon;
     position: relative;
+    overflow-y:auto;
 }
 #app > div.dash-board > div.market-view > div > div.second-col > div div.product-intro > div.cover.show > div > div.first-col {
     width: 60%;
@@ -343,6 +365,7 @@ input::-webkit-inner-spin-button {
 }
 .product-intro .product-detail .first-col .images-detail .images-bar .image-item{
     min-width: 20%;
+    width: 20%;
     height: auto;
     padding:0 2.5px;
 }
@@ -396,9 +419,22 @@ input::-webkit-inner-spin-button {
     }
     #app > div.dash-board > div.market-view > div > div.second-col > div div.product-intro > div.cover.show > div > div.first-col {
         width: 95%;
+        margin-bottom: 10px;
     }
     #app > div.dash-board > div.market-view > div > div.second-col > div div.product-intro > div.cover.show > div > div.second-col {
         width: 95%;
+    }
+    #app > div.dash-board > div.market-view > div > div.second-col > div div.product-intro > div.cover.show > div > div.second-col>div{
+        margin-bottom: 10px;
+    }
+    .product-intro .product-detail .second-col .product-more-detail>div {
+        margin:5px;
+    }
+    .product-intro .product-detail .second-col .bidding-form {
+        width: 100%;
+    }
+    .product-intro .product-detail .second-col .bidding-form input{
+        width: 60%;
     }
 }
 </style>

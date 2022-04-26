@@ -88,10 +88,7 @@ export default {
             }
         },
         viewProfile(key) {
-            router.push({name:'dhome'})
-            setTimeout(function() {
-                router.push({name:'post',params:{key:key}})
-            },50)
+            router.push({name:'post',params:{key:key}})
         },
         minimize() {
             let msg=document.querySelector(`#app > div.dash-board > div.messages-m-container > div.mini-message.${this.messageKey}`)
@@ -253,5 +250,10 @@ export default {
 .mini-message .input .control .icon:hover{
     background-color:white;
     color:black;
+}
+
+/*  */
+@media only screen and (max-width: 768px) {
+    
 }
 </style>
