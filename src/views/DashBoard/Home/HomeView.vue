@@ -55,7 +55,7 @@
       </div>
       <!-- -->
       <!-- -->
-      <div class="pages-introduce">
+      <div v-if='$store.state.type!="page"' class="pages-introduce">
               <h5 style='fontWeight:bolder;border:none;padding:0;'>Create a Page</h5>
               <div>Want to create and manage your page for mutiple purposes. Let's try.</div>
               <button @click='showMakePageForm' style='color:white' class="btn btn-outline-warning">Try now</button>
@@ -185,10 +185,9 @@ export default {
       mgPage.classList.toggle('show')
     },
     loadPost() {
-      let index
-      let time=this.$store.state.postsData[this.$store.state.postsData.length-1].time
-      if (time!=null&&time!=undefined) {
-        index=time
+      let index=0
+      if (this.$store.state.postsData[this.$store.state.postsData.length-1].time!=null&&this.$store.state.postsData[this.$store.state.postsData.length-1].time!=undefined) {
+        index=this.$store.state.postsData[this.$store.state.postsData.length-1].time
       }
       this.$store.dispatch('loading')
       this.$rtdbBind('newPosts',db.ref('postsData').orderByChild('time').startAt(index+1).limitToFirst(10)).then(()=>{

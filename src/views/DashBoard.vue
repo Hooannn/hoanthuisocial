@@ -3,7 +3,7 @@
     <dashboard-nav :key='$route.name'/>
     <message-bar/>
     <div class="messages-m-container">
-      <mini-message v-for='message in $store.state.messagesData' :key='message' :class='message' :messageKey='message'/>
+        <mini-message v-for='message in $store.state.messagesData' :key='message' :class='message' :messageKey='message'/>
     </div>
     <router-view :key='$route.fullPath'></router-view>
   </div>
@@ -38,8 +38,8 @@ export default {
 }
 .dash-board .messages-m-container{
   overflow-y:visible;
-  width: 90%;
   pointer-events: none;
+  width: 90%;
   position: fixed;
   bottom: 0;
   left:50%;

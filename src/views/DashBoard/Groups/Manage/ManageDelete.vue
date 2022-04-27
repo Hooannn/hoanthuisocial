@@ -23,8 +23,8 @@ export default {
               size: 'sm',
               buttonSize: 'sm',
               okVariant: 'danger',
-              okTitle: 'YES',
-              cancelTitle: 'NO',
+              okTitle: 'Confirm',
+              cancelTitle: 'Cancle',
               footerClass: 'p-2',
               hideHeaderClose: false,
               centered: true

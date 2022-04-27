@@ -135,4 +135,5 @@ export default {
   font-size: 17px;
   font-weight: 800;
 }
+
 </style>

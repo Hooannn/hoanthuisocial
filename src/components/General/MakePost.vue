@@ -8,9 +8,12 @@
             <h6 style='marginLeft:10px;fontWeight:bold'>{{$store.state.username}}</h6>
           </div>
           <textarea style='width:98%;maxHeight:50%;height:50%;minHeight:50%' v-model='postContent' class='content' :placeholder="phd"></textarea>
-          <div style='width:100%;display:flex;flexWrap:wrap;maxHeight:50%;overflowY:auto' class="images-container">
-              <img style='width:25%' @click='removeImg(img)' v-for='(img,index) in imgsUpload' :key="index" :src="img">
-            </div>
+          <div style='width:100%;display:flex;flexWrap:wrap;maxHeight:50%;overflowY:auto;backgroundColor:whitesmoke;boxShadow:0 0 2px rgba(0,0,0,0.5)' class="images-container">
+              <div v-for='(img,index) in imgsUpload' :key="index" style='padding:5px;width:25%;maxHeight:100px;position:relative' class="image-container">
+                <ion-icon @click='removeImg(img)' style='cursor:pointer;position:absolute;top:0;right:0;color:orangered;' onMouseOver='this.style.transform="scale(1.1)"' onMouseOut='this.style.transform="scale(1)"' name="close-circle-outline"></ion-icon>
+                <img style='width:100%;height:100%;objectFit:contain' :src="img">
+              </div>
+          </div>
           <div class="add-more">
             <i @click='uploadImgs' class="fas fa-images"></i>
             <i class="fas fa-video"></i>
@@ -116,10 +119,6 @@ export default {
   background-color:transparent;
   outline:none;
   border:none;
-}
-div.images-container img:hover {
-  cursor: pointer;
-  opacity: 0.5;
 }
 .cover {
   min-width: 100vw;

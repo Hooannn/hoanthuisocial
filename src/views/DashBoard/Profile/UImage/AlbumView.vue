@@ -15,7 +15,7 @@
           </div>
           <div class="images">
               <div @click='startPreview(image[".value"])' v-for='image in images' :key='image[".key"]' :class='image[".key"]' class="image">
-                  <img style='width:100%;height:100%;objectFit:cover' :src="image['.value']">
+                  <img style='width:100%;height:100%;objectFit:contain' :src="image['.value']">
               </div>
               <div v-if="$store.state.ukey==$route.params.key" @click='addImage' class="add-image">
                   <ion-icon style='color:grey' name="add-outline"></ion-icon>

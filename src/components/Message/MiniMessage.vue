@@ -21,12 +21,18 @@
       </div>
       <div class="content">
           <!-- message -->
-          <message-com v-for='msg in messageData' :key='msg[".key"]' :class='msg[".key"]' :msg='msg'/>
+          <message-com v-for='msg in messageData' :key='msg[".key"]' :messageKey='messageKey' :class='msg[".key"]' :msg='msg' :msgKey="msg['.key']"/>
       </div>
       <div class="input">
+          <div class="images">
+              <div style='position:relative' v-for='(image,index) in images' :key='index' class="image">
+                <ion-icon @click='removeImg(image)' style='cursor:pointer;position:absolute;top:0;right:0;color:orangered;' onMouseOver='this.style.transform="scale(1.1)"' onMouseOut='this.style.transform="scale(1)"' name="close-circle-outline"></ion-icon>
+                <img :src="image">
+              </div>
+          </div>
           <input @focus="getLastestMsg" @keypress.enter="sendMsg" placeholder="Message..." v-model='inputMsg' type="text" id="input-message">
           <div class="control">
-              <div class='icon' style='display:flex;justifyContent:center;alignItems:center'><ion-icon name="image-outline"></ion-icon></div>
+              <div @click='uploadImgs' class='icon' style='display:flex;justifyContent:center;alignItems:center'><ion-icon name="image-outline"></ion-icon></div>
               <div @click='sendMsg' class='icon' style='display:flex;justifyContent:center;alignItems:center'><ion-icon name="send-outline"></ion-icon></div>
           </div>
       </div>
@@ -35,6 +41,7 @@
 
 <script>
 import store from '../../store/store'
+import client from '../../plugins/filestack'
 import router from '../../router/router'
 import db from '../../plugins/firebase'
 import MessageCom from './MessageCom.vue'
@@ -48,10 +55,31 @@ export default {
             message:{},
             contactUser:{},
             messageData:[],
+            images:[],
             inputMsg:'',
         }
     },
     methods: {
+        uploadImgs() {
+            const options = {
+                accept: ["image/*"],
+                maxFiles: 20,
+                uploadInBackground: false,
+                onUploadDone: (res) => {
+                    let images = res.filesUploaded.map((item) => item.url);
+                    if (images.length == 1 ) {
+                        this.images.push(images[0]);
+                    } else if (images.length > 1 ) {
+                        this.images = [...this.images, ...images];
+                    }
+                },
+            };
+            client.picker(options).open();
+        },
+        removeImg(img) {
+            let index=this.images.indexOf(img)
+            this.images.splice(index,1)
+        },
         getLastestMsg() {
             let msgContent=document.querySelector(`#app > div.dash-board > div.messages-m-container > div.mini-message.${this.messageKey} > div.content`)
             setTimeout(function(){
@@ -64,24 +92,13 @@ export default {
                 date:new Date().toLocaleString(),
                 content:this.inputMsg,
                 author:this.$store.state.ukey,
-                status:'Unseen'
+                status:'Unseen',
+                images:this.images
             }
-            if (this.inputMsg!=null && this.inputMsg.trim()!='') {
+            if ((this.inputMsg!=null && this.inputMsg.trim()!='') || (this.images.length!=0)) {
                 db.ref('messagesData').child(this.messageKey).child('data').push(msg)
-                //notification
-                /*
-                let noti= {
-                    time:new Date().getTime(),
-                    date:new Date().toLocaleString(),
-                    content:`${this.$store.state.username} has sent you a message.`,
-                    status:'Unseen',
-                    type:'send-message',
-                    ukey:this.$store.state.ukey,
-                    messageKey:this.messageKey,
-                }
-                db.ref('usersInformation').child(this.contactUser[".key"]).child('notifications').push(noti)
-                */
                 this.inputMsg=''
+                this.images=[]
             }
             else {
                 return
@@ -123,7 +140,6 @@ export default {
         }
     },
     mounted() {
-        this.getLastestMsg()
         this.$rtdbBind('messageData',db.ref('messagesData').child(this.messageKey).child('data'))
         this.$rtdbBind('message',db.ref('messagesData').child(this.messageKey))
         if (this.message['user1']==this.$store.state.ukey) {
@@ -132,6 +148,7 @@ export default {
         else if (this.message['user2']==this.$store.state.ukey) {
             this.$rtdbBind('contactUser',db.ref('usersInformation').child(this.message['user1']))
         }
+        this.getLastestMsg()
     }
 }
 </script>
@@ -152,6 +169,7 @@ export default {
     margin:0 10px;
     transition: .2s;
     overflow: hidden;
+    position: relative;
 }
 .mini-message.show {
     transform: translateY(300px);
@@ -218,6 +236,29 @@ export default {
     height: 35px;
     width: 100%;
     display: flex;
+    position: relative;
+}
+.mini-message .input .images{
+    width: 100%;
+    position: absolute;
+    bottom:100%;
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 100px;
+    overflow-y:auto;
+    background-color:whitesmoke;
+    box-shadow: 0 0 2px rgba(0,0,0,0.4);
+}
+.mini-message .input .images .image{
+    width: 25%;
+    padding:5px 2px;
+    max-height: 70px;
+    object-fit: contain;
+}
+.mini-message .input .images .image img{
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
 }
 .mini-message .input.show{
     height: 0;

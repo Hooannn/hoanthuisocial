@@ -14,7 +14,8 @@
           <div class="infor">
             <div class="username">{{author.username}}</div>
             <div style='display:flex; alignItems:center'>
-              <div class="time">{{getTime}} </div>
+              <div style='fontSize:13px;color:grey' v-if='post.time==null||post.time==undefined'>Loading...</div>
+              <div v-if='post.time!=null||post.time!=undefined' class="time">{{getTime}} </div>
               <span style='fontSize:14px;marginLeft:5px;color:black;fontWeight:bold' v-if='$route.name=="post-detail"||$route.name=="group-post-detail"' class="date"> At {{post.date}}</span>
             </div>
           </div>

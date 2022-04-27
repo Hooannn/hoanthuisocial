@@ -22,7 +22,7 @@
                   <button @click='$store.dispatch("unfollow",$route.params.key)' v-if='peopleFollowed.find(user=> user[".value"]==$store.state.ukey)' class="btn btn-dark btn-sm market">
                       Unlike
                   </button>
-                  <button class="btn btn-success btn-sm market">
+                  <button @click='contactPage' class="btn btn-success btn-sm market">
                       Contact
                   </button>
                   <div class="follows">
@@ -90,6 +90,8 @@ export default {
             posts:[],
             peopleFollowed:[],
             profileKey:'',
+            messagesData:[],
+            messageKey:null,
         }
     },
     watch:{
@@ -108,11 +110,45 @@ export default {
                     this.posts.unshift(post)
                 }
             });
+        },
+        messagesData() {
+            this.messageKey=null
+            this.messagesData.forEach(message => {
+                if (message['user1']==this.$store.state.ukey && message['user2']==this.$route.params.key) {
+                    this.messageKey=message[".key"]
+                }
+                else if (message['user2']==this.$store.state.ukey && message['user1']==this.$route.params.key) {
+                    this.messageKey=message[".key"]
+                }
+            });
+        }
+    },
+    methods: {
+        contactPage() {
+            if (this.messageKey==null) {
+                //create new conversation
+                this.$store.dispatch('loading')
+                let newConversation= {
+                    user1:this.$store.state.ukey,
+                    user2:this.$route.params.key,
+                }
+                db.ref('messagesData').push(newConversation).then((res)=>{
+                    this.$store.dispatch('addMsgData', res.key)
+                    this.$store.dispatch('unload')
+                }).catch((err)=>{
+                    alert(err)
+                    this.$store.dispatch('unload')
+                })
+            }
+            else {
+                this.$store.dispatch('addMsgData', this.messageKey)
+            }
         }
     },
     mounted() {
         document.documentElement.scrollTop=0
         this.$store.dispatch('loading')
+        this.$rtdbBind('messagesData',db.ref('messagesData'))
         this.$rtdbBind('postsData',db.ref('postsData'))
         this.$rtdbBind('peopleFollowed',db.ref('usersInformation').child(this.$route.params.key).child('follows').child('followed'))
         this.$rtdbBind('page',db.ref('usersInformation').child(this.$route.params.key))

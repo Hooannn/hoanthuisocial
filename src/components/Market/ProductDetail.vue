@@ -322,7 +322,7 @@ input::-webkit-inner-spin-button {
     align-items: center;
 }
 .product-intro .product-detail .first-col .images-detail .image-show img{
-    object-fit: cover;
+    object-fit: contain;
     padding:5px;
     min-width: 100%;
     height: 100%;
@@ -366,13 +366,14 @@ input::-webkit-inner-spin-button {
 .product-intro .product-detail .first-col .images-detail .images-bar .image-item{
     min-width: 20%;
     width: 20%;
-    height: auto;
+    max-height: 150px;
     padding:0 2.5px;
+    overflow: hidden;
 }
 .product-intro .product-detail .first-col .images-detail .images-bar .image-item img{
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     user-select: none;
     -webkit-user-drag: none;
     cursor: pointer;

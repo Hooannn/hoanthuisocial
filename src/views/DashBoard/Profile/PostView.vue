@@ -19,9 +19,10 @@
                       <div style='borderRadius:50%;width:35px;height:35px;overflow:hidden'><img style='width:100%;height:100%;objectFit:cover' :src="user.avatarImg"></div>
                       <textarea v-model='postContent' style='fontSize:14px;minHeight:100px;width:100%;outline:none;border:none;marginLeft:10px;marginBottom:10px' :placeholder="placeholder" ></textarea>
                   </div>
-                  <div style='display:flex;flexWrap:wrap;width:100%;justifyContent:space-around;padding:15px' class="images-pre">
-                      <div v-for='(img,index) in imagesUpload' :key='index' style='width:30%;marginTop:10px' class="image-pre">
-                          <img style='width:100%;height:100%;objectFit:cover;border:2px solid orange' :src="img" @click='removeImg(img)'>
+                  <div style='display:flex;flexWrap:wrap;width:100%;justifyContent:space-around;backgroundColor:whitesmoke;boxShadow:0 0 2px rgba(0,0,0,0.5)' class="images-pre">
+                      <div v-for='(img,index) in imagesUpload' :key='index' style='width:30%;padding:10px;maxHeight:100px;position:relative' class="image-pre">
+                          <ion-icon @click='removeImg(img)' style='cursor:pointer;position:absolute;top:0;right:0;color:orangered;' onMouseOver='this.style.transform="scale(1.1)"' onMouseOut='this.style.transform="scale(1)"' name="close-circle-outline"></ion-icon>
+                          <img style='width:100%;height:100%;objectFit:contain;' :src="img" >
                       </div>
                   </div>
               </div>
@@ -161,10 +162,6 @@ export default {
 </script>
 
 <style>
-.image-pre img:hover {
-    cursor: pointer;
-    opacity: 0.8;
-}
 pre {
      white-space: pre-wrap;
     white-space: -moz-pre-wrap;

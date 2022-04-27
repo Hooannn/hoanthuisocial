@@ -43,7 +43,7 @@
               ></ion-icon>
           </div>
           <div style='width:150px' class="drop-down">
-            <div style='display:flex;justifyContent:space-between'><span>Credit</span><span>${{credit[".value"]}}</span></div>
+            <div @click='$router.push({name:"credit",params:{key:$store.state.ukey}})' style='display:flex;justifyContent:space-between'><span>Credit</span><span>${{credit[".value"]}}</span></div>
             <div @click='viewMyProfile'><span>Profile</span></div>
             <div @click='$router.push({name:"images",params:{key:$store.state.ukey}})'><span>Albums</span></div>
             <div v-if='$store.state.type!="page"' @click='viewMyFriend'><span>Friends</span></div>

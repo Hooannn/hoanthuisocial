@@ -145,6 +145,11 @@ const routes = [
             component:() => import('../views/DashBoard/Profile/FriendsView.vue')
           },
           {
+            path:'/dashboard/profile/credit',
+            name:'credit',
+            component:() => import('../views/DashBoard/Profile/CreditView.vue')
+          },
+          {
             path:'/dashboard/profile/edit',
             name:'edit',
             component:() => import('../views/DashBoard/Profile/Edit/EditView.vue'),

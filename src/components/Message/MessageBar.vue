@@ -1,6 +1,6 @@
 <template>
   <div class="message-bar">
-      <message-user v-for='user in myFriendList' :ukey='user[".value"]' :key='user[".key"]' :class='user[".key"]'/>
+      <message-user v-for='(user,index) in users' :ukey='user[".key"]' :key='user[".key"]+index'/>
   </div>
 </template>
 
@@ -11,11 +11,11 @@ export default {
   components: { MessageUser },
     data() {
         return {
-            myFriendList:[]
+            users:[]
         }
     },
     mounted() {
-        this.$rtdbBind('myFriendList',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
+        this.$rtdbBind('users',db.ref('usersInformation'))
     }
 }
 </script>
@@ -24,6 +24,7 @@ export default {
 .message-bar {
     height: 95vh;
     max-height: 95vh;
+    overflow-y:auto;
     width: 0;
     opacity: 0;
     visibility: hidden;
@@ -37,7 +38,7 @@ export default {
     z-index: 10;
 }
 .message-bar.show {
-    width: 35px;
+    width: 60px;
     visibility: visible;
     opacity: 1;
 }

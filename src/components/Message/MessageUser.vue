@@ -1,7 +1,7 @@
 <template>
-  <div @click='showMessage' class="message-user">
+  <div v-if='messageKey!=""' @click='showMessage' class="message-user">
       <img style='width:100%;height:100%;objectFit:cover;borderRadius:15%' :src="user.avatarImg">
-      <span class='username'>{{user.username}}</span>
+      <!-- <span class='username'>{{user.username}}</span> -->
       <div v-if='unseenMsg>0' class='unseen-msg'>{{unseenMsg}}</div>
       <div :class='{online:user.status=="Online"}' class="status"></div>
   </div>
@@ -65,17 +65,16 @@ export default {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    transform: translateX(-25px);
     position: relative;
     margin:25px 0;
     transition: all .2s ease-in-out;
 }
 .message-user:hover {
     cursor: pointer;
-    width: 60px;
-    height: 60px;
-    transform: translateX(-40px);
+    width: 55px;
+    height: 55px;
 }
+/*
 .message-user .username{
     position: absolute;
     font-size: 14px;
@@ -104,6 +103,7 @@ export default {
     opacity: 1;
     transform: translate(-140%,-50%);
 }
+*/
 .message-user .status{
     width: 13px;
     height: 13px;
