@@ -1,6 +1,6 @@
 <template>
   <div @click="closeMoreInfo" class="dash-board">
-    <dashboard-nav />
+    <dashboard-nav :key='$route.name'/>
     <message-bar/>
     <div class="messages-m-container">
       <mini-message v-for='message in $store.state.messagesData' :key='message' :class='message' :messageKey='message'/>

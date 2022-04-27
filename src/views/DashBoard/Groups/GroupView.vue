@@ -14,7 +14,7 @@
                   </div>
               <div class="more-inf">
                   <button @click='$store.dispatch("sentGroupRequest",$route.params.key)' v-if='!members.find(user => user.key==$store.state.ukey) && !membersRequest.find(user => user[".value"]==$store.state.ukey)' class="btn btn-danger btn-sm">Join</button>
-                  <button @click='$store.dispatch("leaveGroup",$route.params.key)' v-if='members.find(user => user.key==$store.state.ukey)' class="btn btn-secondary btn-sm">Leave</button>
+                  <button @click='leaveGroup' v-if='members.find(user => user.key==$store.state.ukey)' class="btn btn-secondary btn-sm">Leave</button>
                   <button @click='$store.dispatch("cancleGroupRequest",$route.params.key)' v-if='membersRequest.find(user => user[".value"]==$store.state.ukey)' class="btn btn-secondary btn-sm">Cancle</button>
                   <div class="members">
                       <span>Members</span>
@@ -90,6 +90,33 @@ export default {
             members:[],
             rules:[],
             membersRequest:[],
+        }
+    },
+    methods:{
+        leaveGroup() {
+            this.$bvModal.msgBoxConfirm('Confirm that you want to leave this group ?',{
+              title: 'Confirm',
+              size: 'sm',
+              buttonSize: 'sm',
+              okVariant: 'danger',
+              okTitle: 'Leave',
+              cancelTitle: 'Cancle',
+              footerClass: 'p-2',
+              hideHeaderClose: false,
+              centered: true
+            }) 
+            .then(value => {
+              if (value==true) {
+                this.$store.dispatch("leaveGroup",this.$route.params.key).then(()=>{
+                    this.$router.push({name:"dhome"})
+                })
+              }
+            })
+            .catch(err => {
+             if (err==false) {
+               return
+             }
+            })
         }
     },
     mounted() {

@@ -29,6 +29,7 @@ export default {
     return {
       members:[],
       request:[],
+      postsData:[],
       posts:[],
       notifications:[],
       manages: [
@@ -41,12 +42,22 @@ export default {
       ],
     };
   },
+  watch: {
+    postsData() {
+      this.posts=[]
+      this.postsData.forEach(post => {
+        if (post.type=='group-post'&&post.groupKey==this.$route.params.key) {
+          this.posts.unshift(post)
+        }
+      });
+    }
+  },
   mounted() {
     this.$rtdbBind('members', db.ref('groups').child(this.$route.params.key).child('members')).then(()=> {
           if (this.members.find(user=>user.key==this.$store.state.ukey)) {
             this.$rtdbBind('request', db.ref('groups').child(this.$route.params.key).child('membersRequest'))
-            this.$rtdbBind('posts', db.ref('groups').child(this.$route.params.key).child('posts'))
             this.$rtdbBind('notifications', db.ref('groups').child(this.$route.params.key).child('notifications'))
+            this.$rtdbBind('postsData',db.ref("postsData"))
           }
           else {
             this.$router.push({name:'group'})

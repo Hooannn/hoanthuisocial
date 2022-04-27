@@ -5,13 +5,13 @@
           <div class="avatar"><img style='width:100%;height:100%;objectFit:cover' :src="author.avatarImg"></div>
           <div class="infor">
             <div style='fontSize:15px' class="username">{{author.username}}</div>
-            <div class="time">{{comment.date}}</div>
+            <div class="time">{{getTime}}</div>
           </div>
         </div>
         <div class="control">
             <i @click='showControl' class="grey fas fa-ellipsis-v"></i>
             <div class="drop-down">
-                <span @click='deleteComment' v-if='$store.state.ukey==authorCommentKey || $store.state.ukey==authorPostKey'>Delete</span>
+                <span @click='deleteComment' v-if='$store.state.ukey==authorCommentKey || $store.state.ukey==authorPostKey ||$route.name=="group-manage-post"'>Delete</span>
                 <span v-if='$store.state.ukey!=authorCommentKey'>Report</span>
             </div>
         </div>
@@ -38,6 +38,75 @@ export default {
             author:{},
             comment:{}
         }
+    },
+    computed: {
+      getTime() {
+        let time=(new Date().getTime()-(-this.comment.time))/1000
+        time = parseInt(time, 10);
+        let hours   = Math.floor(time / 3600);
+        let minutes = Math.floor((time - (hours * 3600)) / 60);
+        let seconds = time - (hours * 3600) - (minutes * 60);
+        let days=Math.floor(hours/24)
+        let weeks=Math.floor(days/7)
+        let months=Math.floor(weeks/4)
+        let years=Math.floor(months/12)
+        if (years!=0) {
+          if (years==1) {
+            return `A year ago.`
+          }
+          else  {
+            return `${years} years ago.`
+          }
+        }
+        if (minutes==0 && hours==0) {
+          if (seconds==1||seconds==0) {
+            return `A second ago.`
+          }
+          else {
+            return `${seconds} seconds ago.`
+          }
+        }
+        else if (hours==0 && minutes!=0) {
+          if (minutes==1) {
+            return `A minute ago.`
+          }
+          else {
+            return `${minutes} minutes ago.`
+          }
+        }
+        else if (days==0 && hours!=0) {
+          if (hours==1) {
+            return `A hour ago.`
+          }
+          else {
+            return `${hours} hours ago.`
+          }
+        }
+        else if (weeks==0 && days!=0) {
+          if (days==1) {
+            return `A day ago.`
+          }
+          else {
+            return `${days} days ago.`
+          }
+        }
+        else if (months==0 && weeks!=0) {
+          if (weeks==1) {
+            return `A week ago.`
+          }
+          else {
+            return `${weeks} weeks ago.`
+          }
+        }
+        else if (years==0 && months!=0) {
+          if (months==1) {
+            return `A month ago.`
+          }
+          else {
+            return `${months} months ago.`
+          }
+        }
+      }
     },
     methods: {
         showControl() {

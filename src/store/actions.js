@@ -623,7 +623,6 @@ const actions = {
     //return mutualFriendList.length;
   },
   */
-
   ///set state
   setUser({ commit }, user) {
     commit("SET_USER", user);

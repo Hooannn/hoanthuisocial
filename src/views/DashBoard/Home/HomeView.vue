@@ -186,8 +186,9 @@ export default {
     },
     loadPost() {
       let index
-      if (this.$store.state.postsData[this.$store.state.postsData.length-1].time!=null&&this.$store.state.postsData[this.$store.state.postsData.length-1].time!=undefined) {
-        index=this.$store.state.postsData[this.$store.state.postsData.length-1].time
+      let time=this.$store.state.postsData[this.$store.state.postsData.length-1].time
+      if (time!=null&&time!=undefined) {
+        index=time
       }
       this.$store.dispatch('loading')
       this.$rtdbBind('newPosts',db.ref('postsData').orderByChild('time').startAt(index+1).limitToFirst(10)).then(()=>{

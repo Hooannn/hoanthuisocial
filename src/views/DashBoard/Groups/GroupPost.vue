@@ -97,6 +97,7 @@ export default {
                         type:'group-new-blog',
                         ukey:this.$store.state.ukey,
                         postKey:res.key,
+                        groupKey:this.$route.params.key,
                     }
                     this.members.forEach(member => {
                         if (member.key!=this.$store.state.ukey) {

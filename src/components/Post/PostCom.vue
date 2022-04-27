@@ -13,7 +13,10 @@
           <div class="avatar"><img style='width:100%;height:100%;objectFit:cover' :src="author.avatarImg"></div>
           <div class="infor">
             <div class="username">{{author.username}}</div>
-            <div class="time">{{post.date}}</div>
+            <div style='display:flex; alignItems:center'>
+              <div class="time">{{getTime}} </div>
+              <span style='fontSize:14px;marginLeft:5px;color:black;fontWeight:bold' v-if='$route.name=="post-detail"||$route.name=="group-post-detail"' class="date"> At {{post.date}}</span>
+            </div>
           </div>
         </div>
         <div class="control">
@@ -23,7 +26,7 @@
             <span v-if='$route.name!="group-post-detail" && post.type=="group-post"' @click='viewGroupPost'>View</span>
             <span v-if='authorKey==$store.state.ukey'>Hide</span>
             <span v-if='authorKey==$store.state.ukey'>Edit</span>
-            <span @click='deletePost' v-if='authorKey==$store.state.ukey'>Delete</span>
+            <span @click='deletePost' v-if='authorKey==$store.state.ukey||$route.name=="group-manage-post"'>Delete</span>
             <span v-if='authorKey!=$store.state.ukey'>Report</span>
           </div>
         </div>
@@ -85,6 +88,75 @@ export default {
       isLiked:false,
       selectedImg:'',
       myGroups:[],
+    }
+  },
+  computed: {
+    getTime() {
+      let time=(new Date().getTime()-(-this.post.time))/1000
+      time = parseInt(time, 10);
+      let hours   = Math.floor(time / 3600);
+      let minutes = Math.floor((time - (hours * 3600)) / 60);
+      let seconds = time - (hours * 3600) - (minutes * 60);
+      let days=Math.floor(hours/24)
+      let weeks=Math.floor(days/7)
+      let months=Math.floor(weeks/4)
+      let years=Math.floor(months/12)
+      if (years!=0) {
+        if (years==1) {
+          return `A year ago.`
+        }
+        else  {
+          return `${years} years ago.`
+        }
+      }
+      if (minutes==0 && hours==0) {
+        if (seconds==1||seconds==0) {
+          return `A second ago.`
+        }
+        else {
+          return `${seconds} seconds ago.`
+        }
+      }
+      else if (hours==0 && minutes!=0) {
+        if (minutes==1) {
+          return `A minute ago.`
+        }
+        else {
+          return `${minutes} minutes ago.`
+        }
+      }
+      else if (days==0 && hours!=0) {
+        if (hours==1) {
+          return `A hour ago.`
+        }
+        else {
+          return `${hours} hours ago.`
+        }
+      }
+      else if (weeks==0 && days!=0) {
+        if (days==1) {
+          return `A day ago.`
+        }
+        else {
+          return `${days} days ago.`
+        }
+      }
+      else if (months==0 && weeks!=0) {
+        if (weeks==1) {
+          return `A week ago.`
+        }
+        else {
+          return `${weeks} weeks ago.`
+        }
+      }
+      else if (years==0 && months!=0) {
+        if (months==1) {
+          return `A month ago.`
+        }
+        else {
+          return `${months} months ago.`
+        }
+      }
     }
   },
   methods: {
@@ -224,12 +296,37 @@ export default {
       }
     },
     deletePost() {
-        db.ref('postsData').child(this.postKey).remove()
-        .then(()=> {
-          let post=document.querySelector(`div.post-com.${this.post.key}`)
-          post.remove()
+        this.$bvModal.msgBoxConfirm('You want to delete this post ?',{
+          title: 'Delete',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'danger',
+          okTitle: 'Confirm',
+          cancelTitle: 'Cancle',
+          footerClass: 'p-2',
+          hideHeaderClose: false,
+          centered: true
+        }) 
+        .then(value => {
+          if (value==true) {
+            this.$store.dispatch('loading')
+            db.ref('postsData').child(this.postKey).remove()
+            .then(()=> {
+              let post=document.querySelector(`div.post-com.${this.post.key}`)
+              post.remove()
+              this.$store.dispatch('unload')
+            })
+            .catch(err=> {
+              console.log(err)
+              this.$store.dispatch('unload')
+            })
+          }
         })
-        .catch(err=> console.log(err))
+        .catch(err => {
+          if (err==false) {
+            return
+          }
+        })
     },
     //
     /*
