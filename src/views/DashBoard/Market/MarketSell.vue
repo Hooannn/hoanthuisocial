@@ -155,7 +155,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-height: auto;
+    max-height: 100vh;
     overflow-y:auto;
 }
 .cover .market-sell>*:not(h5){
