@@ -42,7 +42,9 @@ export default {
                     this.messageKey=message[".key"]
                 }
             });
-            this.$rtdbBind('messagesData',db.ref('messagesData').child(this.messageKey).child('data'))
+            if (this.messageKey) {
+                this.$rtdbBind('messagesData',db.ref('messagesData').child(this.messageKey).child('data'))
+            }
         },
         messagesData() {
             this.unseenMsg=0

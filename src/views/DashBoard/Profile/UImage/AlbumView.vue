@@ -4,7 +4,7 @@
           <div class="image-review">
               <i v-if="$store.state.ukey==$route.params.key" @click='deleteImg' class="fas fa-trash-alt delete"></i>
               <i @click='stopPreview' class="fas fa-arrow-left back"></i>
-              <img style='width:90%;height:100%;objectFit:contain;position:absolute;left:50%;transform:translateX(-50%)' :src="selectedImg">
+              <img :key='selectedImg' :class='slide' style='width:100%;height:100%;objectFit:contain;position:absolute;margin:0 auto;' :src="selectedImg">
               <i @click='previousImage' class="fas fa-angle-left left"></i>
               <i @click='nextImage' class="fas fa-angle-right right"></i>
           </div>
@@ -34,10 +34,12 @@ export default {
             images:[],
             album:{},
             selectedImg:'',
+            slide:'',
         }
     },
     methods: {
         startPreview(img) {
+            this.slide=''
             this.selectedImg=img
             let imagePreview=document.querySelector('.cover .album-view .image-review')
             imagePreview.style.width='100%'
@@ -53,6 +55,7 @@ export default {
             imagePreview.style.visibility='hidden'
         },
         previousImage() {
+            this.slide='slide-left'
             let imagesPreview = [];
             this.images.forEach(image => imagesPreview.push(image[".value"]));
             let index = imagesPreview.indexOf(this.selectedImg) - 1;
@@ -63,6 +66,7 @@ export default {
             }
         },
         nextImage() {
+            this.slide='slide-right'
             let imagesPreview = [];
             this.images.forEach(image => imagesPreview.push(image[".value"]));
             let index = imagesPreview.indexOf(this.selectedImg) + 1;
@@ -82,7 +86,7 @@ export default {
                 cancelTitle: 'Cancle',
                 footerClass: 'p-2',
                 hideHeaderClose: false,
-                centered: true
+                centered: true,
             }) 
             .then(value => {
                 if (value==true) {
@@ -230,9 +234,9 @@ export default {
     color:orangered;
 }
 .cover .album-view .image-review .left{
-    border:1px solid black;
+    border:1px solid orangered;
     border-left:none;
-    color:black;
+    color:orangered;
     position:absolute;
     left:0;
     top:50%;
@@ -242,9 +246,9 @@ export default {
     cursor: pointer;
 }
 .cover .album-view .image-review .right {
-    border:1px solid black;
+    border:1px solid orangered;
     border-right:none;
-    color:black;
+    color:orangered;
     position:absolute;
     right:0;
     top:50%;
@@ -252,6 +256,12 @@ export default {
     font-size:20px;
     padding:5px;
     cursor: pointer;
+}
+#app > div.dash-board > div.profile-view > div.profile__content > div.container > div.images-view.router-view > div div > div.image-review > img.slide-left{
+    animation:slide-left .4s linear;
+}
+#app > div.dash-board > div.profile-view > div.profile__content > div.container > div.images-view.router-view > div div > div.image-review > img.slide-right{
+    animation:slide-right .4s linear;
 }
 .cover .album-view .image-review .left:hover,.cover .album-view .image-review .right:hover {
     background-color:rgba(0,0,0,0.1);
@@ -281,6 +291,22 @@ export default {
     margin: 10px;
     cursor: pointer;
     box-shadow: 0 0 1px rgba(0,0,0,0.4);
+}
+@keyframes slide-left {
+    0% {
+        transform:translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+@keyframes slide-right {
+    0% {
+        transform:translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
 .cover .album-view .images .image:hover{
     border:2px solid salmon;

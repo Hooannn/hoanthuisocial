@@ -58,7 +58,7 @@ export default {
                     name:this.albumName
                 }
                 db.ref('usersInformation').child(this.$store.state.ukey).child('albums').push(newAlbum).then(()=>{
-                    this.closeForm()
+                    this.closeForm_()
                     this.$store.dispatch('unload')
                     this.$bvToast.show('edit')
                 }).catch(()=>{
@@ -87,6 +87,12 @@ export default {
             }
             
         },
+        closeForm_() {
+            let form=document.querySelector('.images-view .create-album-form.cover')
+            form.classList.remove('show')
+            this.albumCoverImg=null
+            this.albumName=''
+        }
     },
     mounted() {
         this.$store.dispatch('loading')
@@ -188,7 +194,7 @@ export default {
 .images-view .create-album-form div.form .album-cover-img img{
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 /*  */
 @media only screen and (max-width: 768px) {

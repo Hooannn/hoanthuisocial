@@ -158,13 +158,6 @@ export default {
       return filterPosts.sort(() => Math.random() - 0.5)
     },
     search() {
-        if (this.$route.name=='filter') {
-          router.go(-1)
-          let input=this.searchInput
-          setTimeout(function() {
-            router.push({name:'filter',query:{q:input}})
-          },1)
-        }
         this.$router.push({name:'filter',query:{q:this.searchInput}})
         this.searchInput=''
     },
