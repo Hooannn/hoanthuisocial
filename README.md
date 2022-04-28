@@ -1,5 +1,5 @@
-# socialnetwork
+# Social Network
 
-### A socialnetwork built by VueJS and Firebase
+### A social network built by VueJS and Firebase.
 
-See [Page is live now](https://hoanthuisocial.netlify.app).
+See [hoanthui's Social](https://hoanthuisocial.netlify.app).
