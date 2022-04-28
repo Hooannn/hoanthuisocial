@@ -48,6 +48,12 @@
             <div style='backgroundColor:whitesmoke;color:black'>You haven't change anything or some information is missing.</div> 
         </div>
       </b-toast>
+      <b-toast id="report" static no-close-button auto-hide>
+        <div style='display:flex;flexDirection:column;boxShadow:1px 1px 3px rgba(0,0,0,0.4);padding:0;borderRadius:5px;overflow:hidden'>
+            <div style='backgroundColor:rgba(0, 128, 0, 0.795);color:white;fontSize:16px'><ion-icon style='marginRight:5px' name="create-outline"></ion-icon> Success</div>
+            <div style='backgroundColor:whitesmoke;color:black'>Your report has been sent. Thanks you.</div> 
+        </div>
+      </b-toast>
     </div>
 </template>
 

@@ -115,6 +115,10 @@ export default {
     overflow-y:auto;
 }
 @media only screen and (max-width: 768px) {
+    .group-about-view {
+        max-width: 100vw;
+        max-height: 100vh;
+    }
     #app > div.dash-board > div.group-view > div.group__content > div.container > div.group-about-view > div.staffs > div div.about-user{
         padding:10px;
     }

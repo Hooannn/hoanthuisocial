@@ -109,6 +109,11 @@ const routes = [
         children:[
           {
             path:'/dashboard/profile/:key/post-detail/:postKey',
+            name:'post-edit',
+            component:() => import('../views/DashBoard/Profile/PostEdit.vue')
+          },
+          {
+            path:'/dashboard/profile/:key/post-detail/:postKey',
             name:'post-detail',
             component:() => import('../views/DashBoard/Profile/PostDetail.vue')
           },

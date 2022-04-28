@@ -1,18 +1,20 @@
 <template>
   <div class="post-comment">
+      <post-report :type='"comment"' :postKey='postKey' :commentKey='commentKey'/>
       <div class="comment-header">
         <div class="author">
           <div class="avatar"><img style='width:100%;height:100%;objectFit:cover' :src="author.avatarImg"></div>
           <div class="infor">
             <div style='fontSize:15px' class="username">{{author.username}}</div>
-            <div class="time">{{getTime}}</div>
+            <div style='fontSize:13px;color:grey' v-if='comment.time==null||comment.time==undefined'>Loading...</div>
+            <div  class="time" v-if='comment.time!=null||comment.time!=undefined'>{{getTime}}</div>
           </div>
         </div>
         <div class="control">
             <i @click='showControl' class="grey fas fa-ellipsis-v"></i>
             <div class="drop-down">
                 <span @click='deleteComment' v-if='$store.state.ukey==authorCommentKey || $store.state.ukey==authorPostKey ||$route.name=="group-manage-post"'>Delete</span>
-                <span v-if='$store.state.ukey!=authorCommentKey'>Report</span>
+                <span @click='showReport' v-if='$store.state.ukey!=authorCommentKey'>Report</span>
             </div>
         </div>
       </div>
@@ -26,7 +28,9 @@
 
 <script>
 import db from '../../plugins/firebase'
+import PostReport from './PostReport.vue'
 export default {
+  components: { PostReport },
     props: {
         authorCommentKey:String,
         commentKey:String,
@@ -109,17 +113,44 @@ export default {
       }
     },
     methods: {
+        showReport() {
+            let comment=document.querySelector(`div.post-com.${this.postKey} > div.post-comments.show > div.${this.commentKey} > div.cover`)
+            comment.classList.add('show')
+        },
         showControl() {
             let dd=document.querySelector(`div.post-com.${this.postKey} > div.post-comments.show > div.post-comment.${this.commentKey} > div.comment-header > div.control > div`)
             dd.classList.toggle('show')
         },
         deleteComment() {
+          this.$bvModal.msgBoxConfirm('You want to delete this comment ?',{
+          title: 'Delete',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'danger',
+          okTitle: 'Confirm',
+          cancelTitle: 'Cancle',
+          footerClass: 'p-2',
+          hideHeaderClose: false,
+          centered: true
+        }) 
+        .then(value => {
+          if (value==true) {
+            this.$store.dispatch('loading')
             db.ref('postsData').child(this.postKey).child('comments').child(this.commentKey).remove()
               .then(()=> {
-                let comment=document.querySelector(`div.post-com.${this.postKey} > div.post-comments >div.post-comment.${this.commentKey}`)
-                comment.remove()
+                //let comment=document.querySelector(`div.post-com.${this.postKey} > div.post-comments >div.post-comment.${this.commentKey}`)
+                //comment.remove()
+                this.$store.dispatch('unload')
               })
               .catch(err=> console.log(err))
+          }
+        })
+        .catch(err => {
+          if (err==false) {
+            return
+          }
+        })
+            
         }
     },
     mounted() {

@@ -171,5 +171,12 @@ export default {
         width: 95%;
         margin:0 auto;
     }
+    .market-view {
+        max-width: 100vw;
+        max-height: 100vh;
+    }
+    .market-view .container {
+        padding-top: 50px;
+    }
 }
 </style>

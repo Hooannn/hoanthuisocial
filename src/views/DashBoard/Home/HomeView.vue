@@ -158,6 +158,9 @@ export default {
       return filterPosts.sort(() => Math.random() - 0.5)
     },
     search() {
+        if (this.searchInput=='') {
+          return
+        }
         this.$router.push({name:'filter',query:{q:this.searchInput}})
         this.searchInput=''
     },
@@ -428,6 +431,10 @@ export default {
 /** */
 /*  */
 @media only screen and (max-width: 768px) {
+    .home-view {
+      max-width: 100vw;
+      max-height: 100vh;
+    }
     .home-view .container .first-col,.home-view .container .second-col,.home-view .container .third-col {
         width: 95%;
         display: flex;

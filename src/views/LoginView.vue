@@ -283,7 +283,8 @@ a:hover {
     font-size: 14px;
   }
   .login-page {
-
+    max-width: 100vw;
+    max-height: 100vh;
   }
   .login-page form{
     padding:20px;

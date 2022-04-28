@@ -48,4 +48,10 @@ export default {
   justify-content: flex-end;
   z-index: 5;
 }
+@media only screen and (max-width: 768px) {
+  .dash-board {
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+}
 </style>

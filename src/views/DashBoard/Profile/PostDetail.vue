@@ -1,5 +1,5 @@
 <template>
-  <div style='width:90%;margin:25px auto;' class="post-detail">
+  <div style='margin:25px auto;' class="post-detail">
       <post-com :key='post.key' :class='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
   </div>
 </template>
@@ -32,5 +32,13 @@ export default {
 </script>
 
 <style>
-
+.post-detail {
+  width: 50%;
+}
+/*  */
+@media only screen and (max-width: 768px) {
+  .post-detail {
+    width: 95%;
+  }
+}
 </style>

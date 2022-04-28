@@ -296,5 +296,22 @@ export default {
     #app > div.dash-board > div.profile-view > div.profile__content > div.container > div.post-view.router-view > div.second-col > div.posts-list div {
         font-size: 12px;
     }
+    .profile__header .container .inf,.profile__header .container .more-inf {
+        width: auto;
+        justify-content: center;
+    }
+    .profile__header .container .inf .detail{
+        margin-left:0;
+    }
+}
+@media only screen and (max-width: 330px) {
+    .profile__header .container .inf .avatar{
+        position: relative;
+        left:0;
+    }
+    .profile__header .container .inf {
+        display: flex;
+        flex-direction: column;
+    }
 }
 </style>

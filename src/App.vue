@@ -152,7 +152,7 @@ body {
   user-select: none;
   background-color: rgba(229, 240, 248, 0.904);
 }
-.bar {
+body > div.nanobar .bar {
   background:orange;
 }
 .modal-backdrop {
@@ -167,5 +167,16 @@ body {
 a {
   text-decoration: none;
   color: unset;
+}
+/*  */
+@media only screen and (max-width: 768px) {
+  body {
+    max-width: 100vh;
+    max-height: 100vh;
+  }
+  #app {
+    max-width: 100vh;
+    max-height: 100vh;
+  }
 }
 </style>

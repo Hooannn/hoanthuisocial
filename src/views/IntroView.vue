@@ -99,7 +99,7 @@ import db from "../plugins/firebase";
 export default {
     components: {  FooterCom },
   firebase: {
-    users:db.ref('usersInformation').limitToFirst(7)
+    users:db.ref('usersInformation').orderByChild('Last Login').limitToLast(7)
   },
     data() {
         return {
@@ -115,7 +115,7 @@ export default {
         this.filterUsers=[]
         this.users.forEach(user => {
           if (user.type=='user') {
-            this.filterUsers.push(user)
+            this.filterUsers.unshift(user)
           }
         });
       }
@@ -451,5 +451,9 @@ export default {
       height: 35%;
       font-size: 10px;
     }
+    #app .intro-view {
+      max-width: 100vw;
+      max-height: 100vh;
+    } 
 }
 </style>

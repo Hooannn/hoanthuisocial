@@ -296,6 +296,10 @@ export default {
 }
 /* */
 @media only screen and (max-width: 768px) {
+    .page-view {
+        max-height: 100vh;
+        max-width: 100vw;
+    }
     #app > div.dash-board > div.page-view > div.page__content > div.container > div.first-col,
     #app > div.dash-board > div.page-view > div.page__content > div.container > div.second-col {
         width: 95%;

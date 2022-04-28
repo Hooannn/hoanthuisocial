@@ -1,5 +1,6 @@
 <template>
   <div class="post-com">
+      <post-report :type='"post"' :postKey='postKey'/>
       <div @click='closeImgPreview' style='display:flex;justifyContent:center;alignItems:center;top:0;left:0;position:fixed;width:100vw;height:100vh;maxWidth:100vw;maxHeight:100vh;backgroundColor:rgba(0,0,0,0.5);zIndex:10' class="images-preview">
         <i @click.prevent='closeImgPreview' @click='previous' style='position:absolute;fontSize:18px;border:1px solid white;padding:5px;top:50%;left:0;transform:translateY(-50%)' class="fas fa-chevron-left"></i>
         <div @click.prevent='closeImgPreview' style='width:70%;height:80%' class="image">
@@ -25,10 +26,9 @@
           <div class="drop-down">
             <span v-if='$route.name!="post-detail" && author.type!="page" && post.type=="user-post"' @click='viewUserPost'>View</span>
             <span v-if='$route.name!="group-post-detail" && post.type=="group-post"' @click='viewGroupPost'>View</span>
-            <span v-if='authorKey==$store.state.ukey'>Hide</span>
-            <span v-if='authorKey==$store.state.ukey'>Edit</span>
+            <span @click='$router.push({name:"post-edit",params:{key:$store.state.ukey,postKey:postKey}})' v-if='authorKey==$store.state.ukey'>Edit</span>
             <span @click='deletePost' v-if='authorKey==$store.state.ukey||$route.name=="group-manage-post"'>Delete</span>
-            <span v-if='authorKey!=$store.state.ukey'>Report</span>
+            <span @click='showReport' v-if='authorKey!=$store.state.ukey'>Report</span>
           </div>
         </div>
       </div>
@@ -71,8 +71,9 @@ import EventBus from '../../eventbus'
 import db from '../../plugins/firebase'
 import PostComment from '../Post/PostComment.vue'
 import GroupInfo from './GroupInfo.vue'
+import PostReport from './PostReport.vue'
 export default {
-  components: { PostComment, GroupInfo },
+  components: { PostComment, GroupInfo, PostReport },
   props:{
     postKey:String,
     authorKey:String,
@@ -161,8 +162,12 @@ export default {
     }
   },
   methods: {
+    //report methods
+    showReport() {
+      let report=document.querySelector(`div.post-com.${this.postKey} > div.cover`)
+      report.classList.add('show')
+    },
     //image preview
-    
     next() {
       let images = [];
       this.postImages.forEach(image => images.push(image));
@@ -313,8 +318,8 @@ export default {
             this.$store.dispatch('loading')
             db.ref('postsData').child(this.postKey).remove()
             .then(()=> {
-              let post=document.querySelector(`div.post-com.${this.post.key}`)
-              post.remove()
+              //let post=document.querySelector(`div.post-com.${this.post.key}`)
+              //post.remove()
               this.$store.dispatch('unload')
             })
             .catch(err=> {
@@ -511,8 +516,7 @@ pre {
 /*header */
 .post-com .post-header {
   width: 100%;
-  height: 50px;
-  padding:15px;
+  padding:10px;
   border-bottom: 1px solid gainsboro;
   display: flex;
   justify-content: space-between;
@@ -602,10 +606,12 @@ pre {
 }
 .post-com .post-content .images .image{
   margin:0;
+  max-height: 200px;
 }
 .post-com .post-content .images .image img{
   width: 100%;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
 }
 /*react */
 .post-com .post-react {
