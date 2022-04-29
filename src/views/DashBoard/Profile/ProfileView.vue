@@ -23,7 +23,7 @@
                       <span v-if='!userFriend.find((user)=>(user[".value"]==$route.params.key))'>Add Friend</span>
                       <span v-if='userFriend.find((user)=>(user[".value"]==$route.params.key))'>Friend</span>
                   </button>
-                  <button v-if='$store.state.ukey==profileKey' class="btn btn-danger btn-sm market">View Market</button>
+                  <button @click='$router.push({name:"market"})' v-if='$store.state.ukey==profileKey' class="btn btn-danger btn-sm market">View Market</button>
                   <button @click='$store.dispatch("follow",$route.params.key)' v-if='$store.state.ukey!=profileKey && !follows.find(user=> user[".value"]==$store.state.ukey)' class="btn btn-danger btn-sm market">
                       Follow
                   </button>

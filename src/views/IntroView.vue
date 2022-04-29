@@ -68,15 +68,15 @@
     </div>
     <div class="app__overview">
       <div class="header">
-        <h3 style="fontSize: 18px; marginLeft: 20px">Our Active Members</h3>
+        <h3 style="marginLeft: 20px">Our Active Members</h3>
         <h5
           style="fontSize: 15px; color: rgba(0, 0, 0, 0.5); marginRight: 20px"
         >
           View All...
         </h5>
       </div>
-      <ion-icon @click='previous' class='icon previous' name="chevron-back-outline"></ion-icon>
-      <ion-icon @click='next' class='icon next' name="chevron-forward-outline"></ion-icon>
+      <!-- <ion-icon @click='previous' class='icon previous' name="chevron-back-outline"></ion-icon>
+      <ion-icon @click='next' class='icon next' name="chevron-forward-outline"></ion-icon> -->
       <div class="users-overview">
         
         <div v-for='user in filterUsers' :key='user[".key"]' class="user">
@@ -99,7 +99,7 @@ import db from "../plugins/firebase";
 export default {
     components: {  FooterCom },
   firebase: {
-    users:db.ref('usersInformation').orderByChild('Last Login').limitToLast(7)
+    users:db.ref('usersInformation').orderByChild('Last Login').limitToLast(10)
   },
     data() {
         return {
@@ -122,6 +122,7 @@ export default {
     },
     mounted() {
     //carouse text introduce
+    
     let carouselItem=document.querySelectorAll('#app > div.intro-view > div.app__introduce > div.content > div div')
     setTimeout(()=>{
       carouselItem[2].classList.remove('active')
@@ -150,7 +151,7 @@ export default {
     },6000)
     },9000)
     ///
-    
+    /*
     ///
     let wrapper=document.querySelector('#app > div.intro-view > div.app__overview > div.users-overview')
     this.usersInterval=setInterval(()=>{
@@ -166,7 +167,9 @@ export default {
       },1000)
     },1500)
     },2000)
+    */
     },
+    
     methods: {
     next() {
       clearInterval(this.usersInterval)
@@ -198,6 +201,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 #app .intro-view .app__introduce {
   width: 100%;
@@ -332,6 +336,9 @@ export default {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
   position: relative;
 }
+.app__overview .header h3 {
+  font-size: 18px;
+}
 .app__overview .header {
   padding: 10px;
   width: 100%;
@@ -349,19 +356,17 @@ export default {
   transition:all 0.2s ease-in-out;
 }
 .app__overview .users-overview{
-  padding:0 20px;
-  white-space: nowrap;
+  padding:0 150px;
   user-select: none;
-  overflow-y: hidden;
-  overflow-x: scroll;
+  overflow-y: auto;
   width: 100%;
   max-width: 100%;
   max-height: 75%;
   height: 75%;
-  display: inline-flex;
+  display:flex;
+  flex-wrap: wrap;
   align-items: center;
   position: relative;
-  scroll-behavior: smooth;
 }
 .app__overview .icon{
   position: absolute;
@@ -384,8 +389,7 @@ export default {
   left:0;
 }
 .app__overview .users-overview .user{
-  margin:0 50px;
-  min-width: 15%;
+  width: 20%;
   height: 60%;
   display: flex;
   flex-direction: column;
@@ -445,15 +449,29 @@ export default {
      font-size: 13px;
      margin:auto 5px;
    }
+   .app__overview .users-overview {
+     padding:0 25px;
+   }
     .app__overview .users-overview .user {
-      margin:0 20px;
-      min-width: 15%;
       height: 35%;
       font-size: 10px;
     }
     #app .intro-view {
       max-width: 100vw;
       max-height: 100vh;
+    } 
+    .app__overview .header {
+      padding:5px;
+    }
+    .app__overview .header h3 {
+      font-size: 15px;
+    }
+}
+@media only screen and (max-width: 300px) {
+    .nav__control--login,
+    .nav__control--signup {
+      width: 70px;
+      margin:0;
     } 
 }
 </style>

@@ -46,7 +46,7 @@
         <label for="password">Date of Birth:</label>
         <input v-model="dob" type="date" id="dob" />
         <div class='gender-status'>
-          <div style='width:50%'>
+          <div >
             <label for="gender">Gender:</label>
             <select v-model="gender" id="gender" >
               <option selected value="Male">Male</option>
@@ -54,7 +54,7 @@
               <option value="Other">Other</option>
             </select>
           </div>
-          <div style='width:50%'>
+          <div >
             <label for="status">Status:</label>
             <select v-model="status" id="status" >
               <option value="Single">Single</option>
@@ -295,6 +295,9 @@ a:hover {
   width: 100%;
   overflow: hidden;
 }
+.signup-page form .information .gender-status div{
+  width: 50%;
+}
 .signup-page form * {
   margin: 5px 0;
 }
@@ -386,5 +389,13 @@ a:hover {
   .signup-page form .account{
     width: 100%;
   }
+  .signup-page form .information .gender-status {
+    flex-direction: column;
+  }
+  .signup-page form .information .gender-status div{
+    width: 100%;
+    font-size: 15px;
+  }
 }
+
 </style>
