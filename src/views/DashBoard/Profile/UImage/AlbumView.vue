@@ -194,8 +194,8 @@ export default {
     background-color:whitesmoke;
     box-shadow: 0 0 3px rgba(0,0,0,0.4);
     width: 850px;
-    height: 750px;
-    max-height: 750px;
+    height: 600px;
+    max-height: 600px;
     overflow-y:auto;
     position: relative;
 }
@@ -331,6 +331,13 @@ export default {
     }
 }
 @media only screen and (max-width: 768px) {
+    .cover .album-view {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+    }
+}
+@media only screen and (max-height: 600px) {
     .cover .album-view {
         width: 100vw;
         height: 100vh;

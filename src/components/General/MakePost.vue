@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="footer">
-          <button @click='postPost' style='color:white;width:25%' class="btn btn-danger">Post</button>
+          <button @click='postPost' style='color:white;width:50px' class="btn btn-danger btn-sm">Post</button>
         </div>
       </div>
   </div>
@@ -201,7 +201,7 @@ export default {
 }
 .cover .make-post .body .add-more i{
   height: 100%;
-  width: 10%;
+  width: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -234,6 +234,12 @@ export default {
 @media only screen and (max-width: 768px) {
   .cover .make-post {
     width: 95%;
+  }
+}
+@media only screen and (max-height: 500px) {
+  .cover .make-post {
+    height: 100vh;
+    width: 100vw;
   }
 }
 </style>

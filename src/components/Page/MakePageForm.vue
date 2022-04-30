@@ -16,7 +16,7 @@
               <ion-icon class='icon' v-if=' pageCoverImg==null || pageCoverImg==""' style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)' name="images-outline"></ion-icon>
               <img :src="pageCoverImg">
           </div>
-          <button @click='createPage' style='width:20%;margin:10px auto' class="btn btn-sm btn-danger">Create</button>
+          <button @click='createPage' style='width:100px;margin:10px auto' class="btn btn-sm btn-danger">Create</button>
       </div>
   </div>
 </template>
@@ -189,7 +189,7 @@ export default {
     border-color:orange;
 }
 .make-page-form div.form .page-avatar-img,.make-page-form div.form .page-cover-img{
-    width: 90%;
+    width: 300px;
     margin:10px auto;
     height: 200px;
     border:1px dotted black;
@@ -212,9 +212,14 @@ export default {
     .make-page-form div.form span{
         padding:3px;
     }
-    .make-page-form div.form .page-avatar-img,.make-page-form div.form .page-cover-img{
-        height: 100px;
-        width: 50%;
+}
+
+@media only screen and (max-height: 740px) {
+    .make-page-form div.form {
+        max-height: 100vh;
+        width: 100vw;
+        font-size: 14px;
+        position: absolute;
     }
 }
 </style>

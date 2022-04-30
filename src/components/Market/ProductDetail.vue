@@ -438,4 +438,11 @@ input::-webkit-inner-spin-button {
         width: 60%;
     }
 }
+@media only screen and (max-height: 800px) {
+    .product-intro .product-detail {
+        max-height: 100vh;
+        width: 100vw;
+        overflow-y:auto;
+    }
+}
 </style>

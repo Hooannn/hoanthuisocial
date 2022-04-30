@@ -159,4 +159,9 @@ export default {
     height: 100%;
     object-fit: contain;
 }
+@media only screen and (max-height: 600px) {
+    .make-group-form div.form {
+        height: 100vh;
+    }
+}
 </style>
