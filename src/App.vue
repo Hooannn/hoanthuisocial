@@ -134,9 +134,7 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@200&display=swap");
-::-webkit-scrollbar {
-  display: none;
-}
+
 .container {
   padding: 0;
 }
@@ -151,6 +149,7 @@ body {
   font-family: "Poppins", sans-serif;
   user-select: none;
   background-color: rgba(229, 240, 248, 0.904);
+  overflow-x:hidden;
 }
 body > div.nanobar .bar {
   background:orange;
