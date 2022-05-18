@@ -48,8 +48,11 @@
               <div class="second-col">
                   <div class='post'>
                       <h5 style='marginBottom:25px'>Post</h5>
-                      <div class="posts-list">
+                      <div v-if='posts.length>0' class="posts-list">
                         <post-com :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
+                      </div>
+                      <div v-if='posts.length==0'>
+                          This page hasn't post any post yet.
                       </div>
                   </div>
               </div>
@@ -310,6 +313,9 @@ export default {
     }
     #app > div.dash-board > div.page-view > div.page__content > div.page__header > div {
         flex-direction: column;
+    }
+    .page__header .container .inf,.page__header .container .more-inf {
+        width: 95%;
     }
     .container .first-col h5,.container .second-col h5{
         font-size: 14px;

@@ -442,6 +442,9 @@ export default {
         margin:0 auto;
         margin-bottom: 25px;
     }
+    .home-view .container .second-col {
+      order:99;
+    }
     .home-view .container .first-col h5,.home-view .container .second-col h5,.home-view .container .third-col h5{
         font-size: 14px;
         padding:10px;

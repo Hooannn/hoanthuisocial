@@ -19,8 +19,11 @@
               </div>
           </div>
           <h5>Posts</h5>
-          <div style='width:100%' class="posts-list">
+          <div v-if='posts.length>0' style='width:100%' class="posts-list">
               <post-com  :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
+          </div>
+          <div v-if='posts.length==0'>
+              This group doesn't have any post.
           </div>
       </div>
       <div class='second-col'>

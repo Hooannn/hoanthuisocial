@@ -2,9 +2,9 @@
     <div class="dbnav">
         <!-- window screen -->
       <div class="dbnav__content container">
-          <div class="dbnav__logo">
-          <img :src="logo">
-            </div>
+          <div style='cursor:pointer' @click='goHome' class="dbnav__logo">
+            <img :src="logo">
+          </div>
           <div class="dbnav__home">
               <span @click='$router.push({name:"dhome"}),selected="Home"' :class='{selected:selected=="Home"}'><span>Home</span></span>
           </div>
@@ -125,6 +125,13 @@ export default {
         }
     },
     methods: {
+        goHome() {
+            if (this.$route.name=="dhome") {
+                document.documentElement.scrollTop=0
+                return
+            }
+            this.$router.push({name:"dhome"})
+        },
         showMessageBar() {
             this.selected=""
             let messageSpan=document.querySelector('#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span > div')

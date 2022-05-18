@@ -1,5 +1,6 @@
 <template>
   <div @click="closeMoreInfo" class="dash-board">
+    <calling-modal/>
     <dashboard-nav :key='$route.name'/>
     <message-bar/>
     <div class="messages-m-container">
@@ -10,12 +11,13 @@
 </template>
 
 <script>
+import CallingModal from "../components/Modal/CallingModal.vue";
 import DashboardNav from "../components/DashBoard/DashboardNav.vue";
 import MessageBar from '../components/Message/MessageBar.vue';
 import MiniMessage from '../components/Message/MiniMessage.vue';
 import store from "./../store/store";
 export default {
-  components: { DashboardNav, MessageBar, MiniMessage },
+  components: { DashboardNav, MessageBar, MiniMessage, CallingModal},
   methods: {
       closeMoreInfo(e) {
           this.$store.dispatch('closeMoreInfo',e)
@@ -50,6 +52,7 @@ export default {
 }
 @media only screen and (max-width: 768px) {
   .dash-board {
+    width: 100vw;
     max-width: 100vw;
     max-height: 100vh;
   }

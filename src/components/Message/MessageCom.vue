@@ -6,8 +6,21 @@
           <ion-icon @click='nextImg' onMouseOut='this.style.fontSize="20px"' onMouseOver='this.style.fontSize="22px"' style='transition:.1s linear;position:absolute;top:50%;transform:translateY(-50%);right:0;padding:0;color:orangered;fontSize:20px;fontWeight:bolder;cursor:pointer' name="chevron-forward-outline"></ion-icon>
           <img :key='selectedImg' :class='slide' :src="images[selectedImg]['.value']">
       </div>
-      <div v-if='$store.state.ukey!=msg.author' class='avaImg'><img :src="author.avatarImg"></div>
+      
+      <div v-if='$store.state.ukey!=msg.author' class='avaImg'>
+          <img :src="author.avatarImg">
+      </div>
       <div :class='{owner:$store.state.ukey==msg.author}' class='msg-content'>
+          <div v-if='$store.state.ukey==msg.author' class="msg-status center">
+            <div v-if='msg.status=="Unseen"' class='msg-status--unseen center'>
+              <ion-icon style='backgroundColor:slategray;marginRight:3px;borderRadius:50%;color:white' name="checkmark-outline"></ion-icon>
+              <span >Sent</span>
+            </div>
+            <div v-if='msg.status=="Seen"' class='msg-status--seen center'>
+              <img :src="contactImg" style='marginRight:3px;width:15px;height:15px;borderRadius:15px' alt="Contact img">
+              <span >Seen</span>
+            </div>
+          </div>
           <ion-icon v-if='$store.state.ukey==msg.author' onMouseOut='this.style.color="black"' onMouseOver='this.style.color="orangered"' @click='showOptions' style='position:absolute;top:50%;transform:translateY(-50%);left:-15px;color:black;cursor:pointer' name="ellipsis-vertical-outline"></ion-icon>
           <div style='position:absolute;top:50%;transform:translateY(-50%);left:-68px;color:black;backgroundColor:whitesmoke;boxShadow:0 0 3px rgba(0,0,0,0.5)' class="options">
               <span @click='deleteMsg' onMouseOut='this.style.color="unset"' onMouseOver='this.style.color="orangered"' style='padding:5px;cursor:pointer'>Delete</span>
@@ -30,6 +43,7 @@ export default {
         msg:Object,
         msgKey:String,
         messageKey:String,
+        contactImg:String
     },
     data() {
         return {
@@ -177,6 +191,7 @@ export default {
 }
 .message-com.owner {
     flex-direction: row-reverse;
+    padding:15px 8px;
 }
 .message-com .avaImg{
     width: 27px;
@@ -211,5 +226,11 @@ export default {
 .message-com .msg-content.owner{
     background-color: rgb(255, 117, 85);
     text-align: end;
-}  
+}
+.message-com .msg-content .msg-status {
+    font-size: 12px;
+    color:black;
+    position: absolute;
+    top:100%;   
+}
 </style>

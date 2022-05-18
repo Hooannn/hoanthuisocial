@@ -457,6 +457,7 @@ export default {
       font-size: 10px;
     }
     #app .intro-view {
+      width: 100vw;
       max-width: 100vw;
       max-height: 100vh;
     } 

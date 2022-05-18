@@ -54,6 +54,18 @@
             <div style='backgroundColor:whitesmoke;color:black'>Your report has been sent. Thanks you.</div> 
         </div>
       </b-toast>
+      <b-toast id="msg-err" static no-close-button auto-hide>
+        <div style='display:flex;flexDirection:column;boxShadow:1px 1px 3px rgba(0,0,0,0.4);padding:0;borderRadius:5px;overflow:hidden'>
+            <div style='backgroundColor:orangered;color:white;fontSize:16px'><ion-icon style='marginRight:5px' name="alert-outline"></ion-icon> Alert</div>
+            <div style='backgroundColor:whitesmoke;color:black'>We have some problem, the message can't be sent. Please check your connection and relogin.</div> 
+        </div>
+      </b-toast>
+      <b-toast id="update-notice" static no-close-button auto-hide>
+        <div style='display:flex;flexDirection:column;boxShadow:1px 1px 3px rgba(0,0,0,0.4);padding:0;borderRadius:5px;overflow:hidden'>
+            <div style='backgroundColor:orange;color:white;fontSize:16px'><ion-icon style='marginRight:5px' name="information-outline"></ion-icon> Update</div>
+            <div style='backgroundColor:whitesmoke;color:black'>This feature is being update.</div> 
+        </div>
+      </b-toast>
     </div>
 </template>
 

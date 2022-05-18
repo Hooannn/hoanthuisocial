@@ -138,6 +138,23 @@ export default {
 .container {
   padding: 0;
 }
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+	width: 8px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+	background-color: #313131;
+}
 body {
   margin: 0;
   padding: 0;
@@ -162,6 +179,11 @@ body > div.nanobar .bar {
   min-height: 100vh;
   height: auto;
   position: relative;
+}
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 a {
   text-decoration: none;

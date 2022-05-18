@@ -31,8 +31,12 @@
                   <button @click='postPost' style='color:white;fontWeight:900;height:100%' class="btn btn-sm btn-warning">Post</button>
               </div>
           </div>
-          <div class="posts-list">
+          <div v-if='posts.length>0' class="posts-list">
               <post-com :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
+          </div>
+          <div>
+              <span v-if='$route.params.key!=$store.state.ukey'>This user hasn't post any post yet.</span>
+              <span v-if='$route.params.key==$store.state.ukey'>You haven't post any post yet.</span>
           </div>
       </div>
       <div class='third-col'>
@@ -41,7 +45,7 @@
               <div>Post your items to the market for free. Just add it through the simple form. Then wait for another users pay for it. Try out ours bidding system.</div>
               <button @click='$router.push({name:"sell"})' style='color:white;fontWeight:400' class="btn btn-warning ">Try it now</button>
           </div>
-          <div class="new-item-market">
+          <div v-if='myMarket.length>0' class="new-item-market">
               <h5>New Item on Market</h5>
               <new-item-market v-for='item in myMarket' :key='item[".key"]' :itemImages='item.images' :title='item.title' :currentPrice='item.currentprice'></new-item-market>
           </div>

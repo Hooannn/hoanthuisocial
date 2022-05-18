@@ -13,8 +13,10 @@ const state = {
   coverImg:null,
   location:null,
   unseenNoti:null,
+  currentContact:0,
   messagesData:[],
   postsData:[],
-  filterPosts:[]
+  filterPosts:[],
+  srcStream:null
 };
 export default state;

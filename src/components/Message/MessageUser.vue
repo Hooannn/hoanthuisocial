@@ -43,6 +43,7 @@ export default {
                 }
             });
             if (this.messageKey) {
+                this.$store.state.currentContact++
                 this.$rtdbBind('messagesData',db.ref('messagesData').child(this.messageKey).child('data'))
             }
         },
