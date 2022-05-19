@@ -63,5 +63,7 @@ export default {
 {
 	background-color: rgb(253, 184, 56);
 }
-
+.message-bar::-webkit-scrollbar-thumb:hover {
+    background-color:rgb(253, 184, 56,0.6);
+}
 </style>

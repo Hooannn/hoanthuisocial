@@ -17,6 +17,5 @@ const state = {
   messagesData:[],
   postsData:[],
   filterPosts:[],
-  srcStream:null
 };
 export default state;

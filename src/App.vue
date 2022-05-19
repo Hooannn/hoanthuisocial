@@ -155,6 +155,9 @@ export default {
 {
 	background-color: #313131;
 }
+::-webkit-scrollbar-thumb:hover {
+  background-color:rgb(49, 49, 49,0.8);
+}
 body {
   margin: 0;
   padding: 0;
