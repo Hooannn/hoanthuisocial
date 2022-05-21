@@ -1,7 +1,6 @@
 <template>
-  <div class="messages-view">
-      <side-bar/>
-      <router-view/>
+  <div class="messages-m-view">
+    <side-bar/>
   </div>
 </template>
 
@@ -14,10 +13,8 @@ export default {
 </script>
 
 <style>
-.messages-view {
+.messages-m-view {
     width: 100vw;
     height: 100vh;
-    display: flex;
-    overflow: hidden;
 }
 </style>

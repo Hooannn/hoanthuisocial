@@ -2,11 +2,11 @@
     <div class="dbnav">
         <!-- window screen -->
       <div class="dbnav__content container">
-          <div style='cursor:pointer' @click='goHome' class="dbnav__logo">
+          <div class="dbnav__logo">
             <img :src="logo">
           </div>
           <div class="dbnav__home">
-              <span @click='$router.push({name:"dhome"}),selected="Home"' :class='{selected:selected=="Home"}'><span>Home</span></span>
+              <span @click='goHome(),selected="Home"' :class='{selected:selected=="Home"}'><span>Home</span></span>
           </div>
           <div class="dbnav__messages">
               <span style='position:relative' @click='showMessageBar' :class='{selected:selected=="Messages"}'><div>Messages</div>
@@ -45,12 +45,13 @@
           <div style='width:150px' class="drop-down">
             <div @click='$router.push({name:"credit",params:{key:$store.state.ukey}})' style='display:flex;justifyContent:space-between'><span>Credit</span><span>${{credit[".value"]}}</span></div>
             <div @click='viewMyProfile'><span>Profile</span></div>
+            <div class='dd-messages-pc' @click='$router.push({name:"messages"})' >Messages</div>
+            <div class='dd-messages-mb' @click='$router.push({name:"messages_m"})' >Messages</div>
             <div @click='$router.push({name:"images",params:{key:$store.state.ukey}})'><span>Albums</span></div>
             <div v-if='$store.state.type!="page"' @click='viewMyFriend'><span>Friends</span></div>
             <div @click="$router.push({name:'communities',params:{key:$store.state.ukey}})"><span>Communities</span></div>
             <div @click='$router.push({name:"personal",params:{key:$store.state.ukey}})'><span>Edit</span></div>
             <div @click='logOut'><span>Logout</span></div>
-            <div @click='$router.push({name:"console"})' v-if='$store.state.role=="Admin"'>Console</div>
           </div>
         </div>
       </div>
@@ -212,6 +213,7 @@ export default {
     height: 100%;
     width: 100%;
     transform: scale(2.5);
+    pointer-events: none;
 }
 .dbnav__content {
     color:rgba(233, 224, 224, 0.74);
@@ -298,6 +300,9 @@ export default {
 .dbnav .dbnav__short-info .drop-down.show {
     visibility: visible;
 }
+.dbnav .dbnav__short-info .drop-down .dd-messages-mb {
+    display: none;
+}   
 .drop-down::before {
     content:'';
     position: absolute;
@@ -368,6 +373,12 @@ export default {
         font-size: 18px;
     }
     #app > div.dash-board > div.dbnav > div > div.dbnav__short-info > div.more-setting > span {
+        display: none;
+    }
+    .dbnav .dbnav__short-info .drop-down .dd-messages-mb {
+        display: unset;
+    }
+    .dbnav .dbnav__short-info .drop-down .dd-messages-pc {
         display: none;
     }
 }

@@ -25,10 +25,10 @@
           <div style='position:absolute;top:50%;transform:translateY(-50%);left:-68px;color:black;backgroundColor:whitesmoke;boxShadow:0 0 3px rgba(0,0,0,0.5)' class="options">
               <span @click='deleteMsg' onMouseOut='this.style.color="unset"' onMouseOver='this.style.color="orangered"' style='padding:5px;cursor:pointer'>Delete</span>
           </div>
-          <div style='fontSize:11px;opacity:0.8'>{{msg.date}}</div>
+          <div class='msgc-date' >{{msg.date}}</div>
           <div>{{msg.content}}</div>
-          <div style='backgroundColor:rgba(255,255,255,0.2);width:100%;display:flex;flexWrap:wrap'>
-              <div style='width:50%;padding:2.5px;maxHeight:80px;position:relative' v-for='(img,index) in images' :key='index' :class='"image"+index'>
+          <div class='msgc-images' style='backgroundColor:rgba(255,255,255,0.2);width:100%;display:flex;flexWrap:wrap'>
+              <div class='msgc-image' v-for='(img,index) in images' :key='index' :class='"image"+index'>
                   <img @click='reviewImg(index)' onMouseOver='this.style.opacity="0.8"' onMouseOut='this.style.opacity="1"' style='cursor:pointer;width:100%;height:100%;objectFit:contain' :src="img['.value']">
               </div>
           </div>
@@ -88,27 +88,27 @@ export default {
         },
         closeOptions(e) {
             let key=this.msg[".key"]
-            let options=document.querySelector(`#app > div.dash-board > div.messages-m-container > div > div.content > div.message-com.owner.${key} > div > div.options`)
-            let msgCom=document.querySelector(`#app > div.dash-board > div.messages-m-container > div > div.content > div.message-com.owner.${key}`)
+            let options=document.querySelector(`div.message-com.owner.${key} > div > div.options`)
+            let msgCom=document.querySelector(`div.message-com.owner.${key}`)
             if (e.target==msgCom) {
                 options.classList.remove('show')
             }
         },
         showOptions() {
             let key=this.msg[".key"]
-            let options=document.querySelector(`#app > div.dash-board > div.messages-m-container > div > div.content > div.message-com.owner.${key} > div > div.options`)
+            let options=document.querySelector(`div.message-com.owner.${key} > div > div.options`)
             options.classList.toggle('show')
         },
         reviewImg(index) {
             this.slide=''
             this.selectedImg=index
             let key=this.msg[".key"]
-            let imgReview=document.querySelector(`#app > div.dash-board > div.messages-m-container > div > div.content > div.message-com.${key} > div.image-review`)
+            let imgReview=document.querySelector(`div.message-com.${key} > div.image-review`)
             imgReview.classList.add('show')
         },
         back() {
             let key=this.msg[".key"]
-            let imgReview=document.querySelector(`#app > div.dash-board > div.messages-m-container > div > div.content > div.message-com.${key} > div.image-review`)
+            let imgReview=document.querySelector(`div.message-com.${key} > div.image-review`)
             imgReview.classList.remove('show')
         },
         previousImg() {
@@ -156,8 +156,8 @@ export default {
     transition:all .2s linear;
 }
 .message-com .image-review.show{
-    width: 280px;
-    height: 350px;
+    width: 100%;
+    height: 100%;
     opacity: 1;
     visibility: visible;
 }
@@ -232,5 +232,15 @@ export default {
     color:black;
     position: absolute;
     top:100%;   
+}
+.message-com .msg-content .msgc-date {
+    font-size:11px;
+    color:whitesmoke;
+}
+.message-com .msg-content .msgc-images .msgc-image {
+    width: 50%;
+    padding:2.5px;
+    max-height:80px;
+    position:relative;
 }
 </style>

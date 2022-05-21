@@ -230,8 +230,8 @@ export default {
     background-color:green;
 }
 .mini-message .header .target .avatar{
-    width: 33px;
-    height: 33px;
+    max-width: 33px;
+    max-height: 33px;
     border-radius: 50%;
     overflow: hidden;
     border:1.5px solid white;

@@ -22,6 +22,23 @@ const routes = [
         ]
       },
       {
+        path:'/dashboard/messages',
+        name:'messages',
+        component:() => import ('../views/DashBoard/Messages/MessagesView.vue'),
+        children:[
+          {
+            path:'/dashboard/messages/:id',
+            name:'message-detail',
+            component:() => import ('../components/Messages/PC/MessageBody.vue'),
+          }
+        ]
+      },
+      {
+        path:'/dashboard/messages_m',
+        name:'messages_m',
+        component:() => import ('../views/DashBoard/Messages/MessagesMView.vue'),
+      },
+      {
         path:'/dashboard/home',
         name:'dhome',
         component:() => import ('../views/DashBoard/Home/HomeView.vue'),
