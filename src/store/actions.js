@@ -701,13 +701,14 @@ const actions = {
       notiSpan.classList.remove("show");
     }
     //
-    let messageSpan=document.querySelector('#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span > div')
+    let mbControl=document.querySelector('#app > div.dash-board > div.message-bar-control.center')
+    let mbCIcon=document.querySelector('#app > div.dash-board > div.message-bar-control.center .icon')
     let mb=document.querySelector('#app > div.dash-board > div.message-bar')
     let usermessage=document.querySelectorAll('#app > div.dash-board > div.message-bar.show > div.message-user')
     usermessage.forEach(usermsg => {
-      if (e.target.parentElement != usermsg && e.target!=messageSpan && e.target!=mb) {
-        messageSpan.classList.remove('show')
+      if (e.target.parentElement != usermsg && e.target!=mbCIcon && e.target!=mbControl && e.target!=mb) {
         mb.classList.remove('show')
+        mbControl.classList.remove('move')
       }
     });
     //

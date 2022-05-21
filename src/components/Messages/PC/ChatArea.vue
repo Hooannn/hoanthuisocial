@@ -3,19 +3,20 @@
       <div v-if="load" class="message-load"></div>
       <div v-if="contact.avatarImg&&contact.status" class="ca-header">
           <div class="cah-info">
+              <div @click='$router.push({name:"messages_m"})' v-if='$route.name=="message_m-detail"' style='width:40px;height:100%;fontSize:24px;' class='center'><ion-icon name="arrow-back-outline"></ion-icon></div>
               <div class="cahi-avatar" style='position:relative'>
                   <img :src="contact.avatarImg" alt="Avatar image">
                   <div :class='{online:contact.status=="Online",offline:contact.status=="Offline"}' class="cahi-status"></div>
               </div>
               <div style='marginLeft:5px' class="cahi-sinfo">
                   <div @click='$router.push({name:"post",params:{key:contact[".key"]}})' onMouseOver='this.style.textDecoration="underline"' onMouseOut='this.style.textDecoration="unset"' style='fontWeight:bolder;cursor:pointer' class="cahis-username">{{contact.username}}</div>
-                  <div style='color:slategray;fontSize:15px' class="cahis-lastlogin">Online <span v-if='contact.status=="Offline"'>{{getTime.toLowerCase()}}</span></div>
+                  <div style='color:slategray;' class="cahis-lastlogin">Online <span v-if='contact.status=="Offline"'>{{getTime.toLowerCase()}}</span></div>
               </div>
           </div>
           <div class="cah-control">
-              <div onMouseOver='this.style.backgroundColor="rgb(24, 141, 131,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#188d83";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#188d83;borderRadius:3px;width:50px;height:30px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="video center"><i style=';fontSize:13px' class="fas fa-video"></i></div>
-              <div onMouseOver='this.style.backgroundColor="rgb(79, 148, 204,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#4f94cc";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#4f94cc;borderRadius:3px;width:50px;height:30px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="call center"><i style='fontSize:13px' class="fas fa-phone"></i></div>
-              <div onMouseOver='this.style.backgroundColor="rgb(192, 192, 192,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="silver";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:silver;borderRadius:3px;width:50px;height:30px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="delete center"><i style='fontSize:13px' class="fas fa-ellipsis-h"></i></div>
+              <div onMouseOver='this.style.backgroundColor="rgb(24, 141, 131,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#188d83";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#188d83;borderRadius:3px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="video center"><i class="fas fa-video icon"></i></div>
+              <div onMouseOver='this.style.backgroundColor="rgb(79, 148, 204,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#4f94cc";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#4f94cc;borderRadius:3px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="call center"><i class="fas fa-phone icon"></i></div>
+              <div @click='showInfo' onMouseOver='this.style.backgroundColor="rgb(192, 192, 192,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="silver";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:silver;borderRadius:3px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="delete center"><i class="fas fa-ellipsis-h icon"></i></div>
           </div>
       </div>
       <div v-if="!load" class="ca-messages">
@@ -112,13 +113,21 @@ export default {
             }
         },
         getLastestMsg() {
-            let msgContent=document.querySelector(`#app > div.dash-board > div.messages-view > div.message-body > div.chat-area > div.ca-messages`)
+            let msgContent=document.querySelector(`div.message-body > div.chat-area > div.ca-messages`)
             setTimeout(function(){
                 if (msgContent) {
                     msgContent.scrollTop=msgContent.scrollHeight
                 }
             },10) 
         },
+        /*  */
+        showInfo() {
+            //show info in message_mb
+            if (this.$route.name=="message_m-detail") {
+                document.querySelector('#app > div.dash-board > div.message-body > div.chat-area.chatarea-mb').classList.add('mobile-close')
+                document.querySelector('#app > div.dash-board > div.message-body > div.information-area.infoarea-mb').classList.add('mobile-show')
+            }
+        }
     },
     computed: {
         getTime() {
@@ -191,7 +200,7 @@ export default {
     },
     mounted() {
         setTimeout(function(){
-            let msgContent=document.querySelector(`#app > div.dash-board > div.messages-view > div.message-body > div.chat-area > div.ca-messages`)
+            let msgContent=document.querySelector(`div.message-body > div.chat-area > div.ca-messages`)
             msgContent.scrollTop=msgContent.scrollHeight
         },10) 
     }
@@ -210,6 +219,10 @@ export default {
     left:48.9%;
     animation: spin .4s linear infinite;
 }
+.chat-area.mobile-close {
+    width: 0;
+    opacity: 0;
+}
 .chat-area {
     max-width: 70%;
     width: 70%;
@@ -218,10 +231,10 @@ export default {
     max-height: 100%;
     overflow: hidden;
     position: relative;
+    transition:.2s linear;
 }
 .chat-area .ca-header {
     min-height: 60px;
-    height: 60px;
     box-shadow: 0 0 3px rgba(0,0,0,0.5);
     background-color:rgba(255,255,255,0.5);
     display: flex;
@@ -246,15 +259,14 @@ export default {
 .chat-area .ca-header .cah-control div {
     margin:0 5px;
     color:white;
+    width: 50px;
+    height: 30px;
 }
-.chat-area .ca-header .cah-info .cahi-status {
-    width: 14px;
-    height: 14px;
-    background-color:black;
-    border-radius: 50%;
-    position: absolute;
-    bottom:-1px;
-    right:-1px;
+.chat-area .ca-header .cah-info .cahi-sinfo .cahis-username{
+   
+}
+.chat-area .ca-header .cah-info .cahi-sinfo .cahis-lastlogin {
+    font-size: 15px;
 }
 .chat-area .ca-header .cah-info .cahi-status.online {
     background-color:green;
@@ -265,9 +277,19 @@ export default {
 .chat-area .ca-header .cah-info .cahi-avatar img{
     width: 45px;
     height: 45px;
+    max-width: 45px;
+    max-height: 45px;
     border-radius: 50%;
 }
-
+.chat-area .ca-header .cah-info .cahi-status {
+    width: 14px;
+    height: 14px;
+    background-color:black;
+    border-radius: 50%;
+    position: absolute;
+    bottom:-1px;
+    right:-1px;
+}
 /* input */
 .chat-area .ca-input {
     position: absolute;
@@ -387,4 +409,55 @@ export default {
     height:200px;
     position:relative;
 }
+/*  */
+@media only screen and (max-width: 768px) {
+    .chat-area .ca-header {
+        min-height: 40px;
+    }
+    .chat-area .ca-messages {
+        padding-bottom:90px;
+    }
+    .chat-area .ca-header .cah-info .cahi-status {
+        width: 10px;
+        height: 10px;
+    }
+    .chat-area .ca-header .cah-info .cahi-avatar img{
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        min-height: 30px;
+    }
+    .chat-area .ca-input {
+        min-height: 50px;
+        height: 50px;
+    }
+    .chat-area .ca-input input {
+        padding:8px 10px;
+        font-size: 14px;
+    }
+    .chat-area .ca-header .cah-control div {
+        width: 30px;
+        height: 20px;
+        font-size: 10px;
+    }
+    .chat-area .ca-header .cah-info .cahi-sinfo .cahis-username{
+        font-size: 14px;
+    }
+    .chat-area .ca-header .cah-info .cahi-sinfo .cahis-lastlogin {
+        font-size: 13px;
+    }
+    .chat-area .ca-input .icon {
+        min-width: 24px;
+        min-height: 24px;
+        margin:0 5px;
+    }
+    .chat-area .ca-input .cai-images {
+        justify-content: space-around;
+        width: 100%;
+    }
+    .chat-area .ca-header .cah-info {
+        padding:0;
+    }
+}
+/*  */
 </style>

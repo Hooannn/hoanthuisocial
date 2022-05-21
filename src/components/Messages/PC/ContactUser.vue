@@ -1,5 +1,5 @@
 <template>
-  <div  :class='{selected:(yourContact&&$route.params.id==contact[".key"])}' class="contact-user" @click='$router.push({name:"message-detail",params:{id:contact[".key"]}})'>
+  <div :class='{selected:(yourContact&&$route.params.id==contact[".key"])}' class="contact-user" @click='viewMessage'>
     <div v-if='!yourContact' class='center cu-load'></div>
     <div v-if='unseenMessage>0' class="cu-unseenmsg center">
         {{unseenMessage}}
@@ -107,7 +107,16 @@ export default {
             }
         }
     },
-    
+    methods:{
+        viewMessage() {
+            if (this.$route.name=="messages"||this.$route.name=="message-detail") {
+                this.$router.push({name:"message-detail",params:{id:this.contact[".key"]}})
+            }
+            else if (this.$route.name=="messages_m") {
+                this.$router.push({name:"message_m-detail",params:{id:this.contact[".key"]}})
+            }
+        }
+    },
     mounted() {
         if (this.contact.user1==this.$store.state.ukey) {
             this.$rtdbBind('yourContact',db.ref('usersInformation').child(this.contact.user2))
@@ -150,7 +159,7 @@ export default {
     right:5px;
     width: 18px;
     height: 18px;
-    background-color:red;
+    background-color:orangered;
     color:white;
     font-size: 13px;
     border-radius: 3px;

@@ -3,6 +3,7 @@
       <div v-if='load' class="message-load"></div>
       <div class='ia-inner' v-if='!load'>
           <div class="ia-header">
+              <div v-if='$route.name=="message_m-detail"' @click='closeInfo' class='center' style='width:50px;height:50px;position:absolute;left:15px;top:15px;fontSize:20px;'><ion-icon name="return-down-back-outline"></ion-icon></div>
               <div class="iah-avatar"><img style='width:100%;height:100%;objectFit:cover' :src="contact.avatarImg" alt="Avatar image"></div>
               <div style='fontWeight:bolder' class="iah-username">{{contact.username}}</div>
               <div style='fontSize:15px' class="iah-lastlogin">
@@ -96,6 +97,15 @@ export default {
             }
         }
     },
+    methods: {
+        closeInfo() {
+            /* close info in mobie only */
+            if (this.$route.name=="message_m-detail") {
+                document.querySelector('#app > div.dash-board > div.message-body > div.chat-area.chatarea-mb').classList.remove('mobile-close')
+                document.querySelector('#app > div.dash-board > div.message-body > div.information-area.infoarea-mb').classList.remove('mobile-show')
+            }
+        }
+    }
 }
 </script>
 
@@ -105,6 +115,10 @@ export default {
     max-width: 30%;
     width: 30%;
     position: relative;
+}
+.information-area.mobile-show {
+    opacity: 1;
+    display: block;
 }
 .information-area .ia-inner .ia-header {
     padding:15px 0;
@@ -139,4 +153,13 @@ export default {
 .information-area .ia-inner .ia-body .iab-item span {
     padding:0 15px;
 }
+/*  */
+@media only screen and (max-width: 768px) {
+    .information-area {
+        height: 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+}
+/*  */
 </style>

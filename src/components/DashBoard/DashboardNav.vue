@@ -6,12 +6,12 @@
             <img :src="logo">
           </div>
           <div class="dbnav__home">
-              <span @click='goHome(),selected="Home"' :class='{selected:selected=="Home"}'><span>Home</span></span>
+              <span @click='goHome()' :class='{selected:$route.name=="dhome"}'><span>Home</span></span>
           </div>
           <div class="dbnav__messages">
-              <span style='position:relative' @click='showMessageBar' :class='{selected:selected=="Messages"}'><div>Messages</div>
-                  <span v-if='!unseenMsg==0' style='pointerEvents:none;position:absolute;top:-5px;right:-10px;backgroundColor:red;borderRadius:3px;display:flex;justifyContent:center;alignItems:center;width:15px;height:15px;fontSize:8px;color:white'>
-                    {{ unseenMsg }}
+              <span style='position:relative' :class='{selected:($route.name=="messages"||$route.name=="message-detail"||$route.name=="messages_m"||$route.name=="message_m-detail")}'><div @click='showMessage' id='message_pc'>Messages</div><div @click='showMessage_' id='message_mb'>Messages</div>
+                  <span style='pointerEvents:none;position:absolute;top:-5px;right:-10px;backgroundColor:orangered;borderRadius:3px;display:flex;justifyContent:center;alignItems:center;width:15px;height:15px;fontSize:10px;color:white'>
+                    {{ $store.state.unseenMessage }}
                 </span>
               </span>
           </div>
@@ -45,8 +45,6 @@
           <div style='width:150px' class="drop-down">
             <div @click='$router.push({name:"credit",params:{key:$store.state.ukey}})' style='display:flex;justifyContent:space-between'><span>Credit</span><span>${{credit[".value"]}}</span></div>
             <div @click='viewMyProfile'><span>Profile</span></div>
-            <div class='dd-messages-pc' @click='$router.push({name:"messages"})' >Messages</div>
-            <div class='dd-messages-mb' @click='$router.push({name:"messages_m"})' >Messages</div>
             <div @click='$router.push({name:"images",params:{key:$store.state.ukey}})'><span>Albums</span></div>
             <div v-if='$store.state.type!="page"' @click='viewMyFriend'><span>Friends</span></div>
             <div @click="$router.push({name:'communities',params:{key:$store.state.ukey}})"><span>Communities</span></div>
@@ -79,15 +77,14 @@ export default {
     },
     data() {
         return {
+            selected:'',
             credit:{},
             logo:logo,
-            selected:'Home',
             notis:[],
             currentNoti:0,
             interval:null,
             //
             messages:[],
-            unseenMsg:0,
         }
     },
     computed: {
@@ -107,7 +104,7 @@ export default {
             this.currentNoti=unseenNoti
         },
         messages() {
-            this.unseenMsg=0
+            this.$store.state.unseenMessage=0
             this.messages.forEach(message => {
                 if (message.user1==this.$store.state.ukey || message.user2==this.$store.state.ukey) {
                     if (message.data != undefined && message.data !=null) {
@@ -115,7 +112,7 @@ export default {
                     messageData=Object.keys(messageData).map((key)=> ({key:key,author:messageData[key].author,status:messageData[key].status}))
                     messageData.forEach(data => {
                     if (data.author!=this.$store.state.ukey && data.status=="Unseen") {
-                        this.unseenMsg++
+                        this.$store.state.unseenMessage++
                         this.$bvToast.show('new-message')
                         newmessageSound.play()
                     }
@@ -133,15 +130,20 @@ export default {
             }
             this.$router.push({name:"dhome"})
         },
-        showMessageBar() {
-            this.selected=""
-            let messageSpan=document.querySelector('#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span > div')
-            let mb=document.querySelector('#app > div.dash-board > div.message-bar')
-            mb.classList.toggle('show')
-            messageSpan.classList.toggle('show')
+        showMessage() {
+            if (this.$route.name=="messages") {
+                return
+            }
+            this.$router.push({name:"messages"})
             //mb.style.width='35px'
             //mb.style.opacity='1'
             //mb.style.visibility='visible'
+        },
+        showMessage_() {
+            if (this.$route.name=="messages_m") {
+                return
+            }
+            this.$router.push({name:"messages_m"})
         },
         clearNoti() {
             db.ref('usersInformation').child(this.$store.state.ukey).child("notifications").remove()
@@ -198,6 +200,9 @@ export default {
 </script>
 
 <style>
+#message_mb {
+    display: none;
+}
 .dbnav {
     position: fixed;
     z-index:10;
@@ -240,7 +245,7 @@ export default {
     color:white;
     text-shadow: 2px 2px 3px rgba(255,255,255,0.3);
 }
-#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span >div.show {
+#app > div.dash-board > div.dbnav > div > div.dbnav__messages > span.selected {
     color:white;
     text-shadow: 2px 2px 3px rgba(255,255,255,0.3);
 }
@@ -299,10 +304,7 @@ export default {
 }
 .dbnav .dbnav__short-info .drop-down.show {
     visibility: visible;
-}
-.dbnav .dbnav__short-info .drop-down .dd-messages-mb {
-    display: none;
-}   
+} 
 .drop-down::before {
     content:'';
     position: absolute;
@@ -354,6 +356,12 @@ export default {
 }
 /* -------- */
 @media only screen and (max-width: 768px) {
+    #message_pc {
+        display: none;
+    }
+    #message_mb {
+        display: unset;
+    }
     .dbnav {
         height: 35px;
     }
@@ -373,12 +381,6 @@ export default {
         font-size: 18px;
     }
     #app > div.dash-board > div.dbnav > div > div.dbnav__short-info > div.more-setting > span {
-        display: none;
-    }
-    .dbnav .dbnav__short-info .drop-down .dd-messages-mb {
-        display: unset;
-    }
-    .dbnav .dbnav__short-info .drop-down .dd-messages-pc {
         display: none;
     }
 }

@@ -13,6 +13,7 @@ const state = {
   coverImg:null,
   location:null,
   unseenNoti:null,
+  unseenMessage:0,
   currentContact:0,
   messagesData:[],
   postsData:[],

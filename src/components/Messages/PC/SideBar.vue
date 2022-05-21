@@ -8,7 +8,8 @@
           </div>
       </div>
       <div class="sb-content">
-          <div class='loader center' v-if='myContacts.length==0'></div>
+          <div class='loader center' v-if='load'></div>
+          <div class='center' v-if='myContacts.length==0&&messages.length'>You don't have any contacts.</div>
           <contact-user v-for='(contact,index) in myContacts' :key='index' :contact='contact'/>
       </div>
   </div>
@@ -23,6 +24,7 @@ export default {
         return {
             messages:[],
             myContacts:[],
+            load:true
         }
     },
     watch: {
@@ -44,7 +46,9 @@ export default {
         }
     },
     mounted() {
-        this.$rtdbBind('messages',db.ref('messagesData'))
+        this.$rtdbBind('messages',db.ref('messagesData')).then(()=>{
+            this.load=false
+        })
     }
 }
 </script>

@@ -39,6 +39,11 @@ const routes = [
         component:() => import ('../views/DashBoard/Messages/MessagesMView.vue'),
       },
       {
+        path:'/dashboard/messages_m/:id',
+        name:'message_m-detail',
+        component:() => import ('../components/Messages/PC/MessageBody.vue'),
+      },
+      {
         path:'/dashboard/home',
         name:'dhome',
         component:() => import ('../views/DashBoard/Home/HomeView.vue'),

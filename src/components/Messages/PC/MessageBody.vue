@@ -1,7 +1,13 @@
 <template>
   <div class="message-body">
-      <chat-area :load='load' :contact='contact' :messages='messages'/>
-      <information-area :load='load' :contact='contact' :messages='messages'/>
+      <div v-if='$route.name=="message_m-detail"' class="mmv-notice-modal center">
+        <div class="mmvn-modal-inner">
+          It seem that you're using laptop or computer. Please go to messages view for computer.<br>
+          <button @click='$router.push({name:"message-detail",params:{id:$route.params.id}})' class="btn btn-sm btn-link">Go.</button>
+        </div>
+      </div>
+      <chat-area class='chatarea-mb' :load='load' :contact='contact' :messages='messages'/>
+      <information-area class='infoarea-mb' :load='load' :contact='contact' :messages='messages'/>
   </div>
 </template>
 
@@ -44,5 +50,25 @@ export default {
   padding-top:50px;
   width: 100%;
   display: flex;
+}
+@media only screen and (max-width: 768px) {
+  .message-body {
+    padding-top:35px;
+    width: 100vw;
+    height: 100vh;
+  }
+  .infoarea-mb {
+    display: none;
+  }
+  .chatarea-mb {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .mmv-notice-modal {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 </style>

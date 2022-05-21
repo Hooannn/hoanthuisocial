@@ -1,7 +1,7 @@
 <template>
   <div class="message-bar">
       <message-user v-show='$store.state.currentContact>0' v-for='(user,index) in users' :ukey='user[".key"]' :key='user[".key"]+index'/>
-      <div style='fontSize:14px;color:red;backgroundColor:white;borderRadius:10px;textAlign:center;boxShadow:0 0 3px rgba(0,0,0,0.3);fontWeight:bold' v-if='$store.state.currentContact==0'>
+      <div class='message-user' style='cursor:unset;width:auto;height:auto;fontSize:14px;color:red;borderRadius:10px;textAlign:center;fontWeight:bold' v-if='$store.state.currentContact==0'>
           You have no contact now.
       </div>
   </div>
@@ -46,6 +46,7 @@ export default {
     visibility: visible;
     opacity: 1;
 }
+/* scroll bar */
 .message-bar::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -65,5 +66,11 @@ export default {
 }
 .message-bar::-webkit-scrollbar-thumb:hover {
     background-color:rgb(253, 184, 56,0.6);
+}
+/*  */
+@media only screen and (max-width: 768px) {
+       .message-bar {
+           display: none;
+       }
 }
 </style>

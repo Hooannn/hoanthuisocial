@@ -77,14 +77,13 @@
       </div>
       <!-- <ion-icon @click='previous' class='icon previous' name="chevron-back-outline"></ion-icon>
       <ion-icon @click='next' class='icon next' name="chevron-forward-outline"></ion-icon> -->
-      <div class="users-overview">
-        
+      <div v-if='load' class="loader"></div>
+      <div v-if='filterUsers.length>0' class="users-overview">
         <div v-for='user in filterUsers' :key='user[".key"]' class="user">
           <div class="user__avatar"><img :src="user.avatarImg"><i :class='{online:user.status=="Online",offline:user.status=="Offline"}' style='position:absolute;bottom:-2px;right:-2px;fontSize:12px' class="fas fa-circle"></i></div>
           <div class="user__username"><strong>{{user.username}}</strong></div>
           <div class="user__role"><i>{{user.role}}</i></div>
         </div>
-        
       </div>
     </div>
     <footer-com/>
@@ -97,16 +96,14 @@ import store from '../store/store'
 import FooterCom from '../components/General/FooterCom.vue';
 import db from "../plugins/firebase";
 export default {
-    components: {  FooterCom },
-  firebase: {
-    users:db.ref('usersInformation').orderByChild('Last Login').limitToLast(10)
-  },
+  components: {  FooterCom },
     data() {
         return {
         users: [],
         filterUsers:[],
         slideInterval:null,
         usersInterval:null,
+        load:true
       }
     },
     watch: {
@@ -122,7 +119,9 @@ export default {
     },
     mounted() {
     //carouse text introduce
-    
+    this.$rtdbBind('users',db.ref('usersInformation').orderByChild('Last Login').limitToLast(10)).then(()=>{
+      this.load=false
+    })
     let carouselItem=document.querySelectorAll('#app > div.intro-view > div.app__introduce > div.content > div div')
     setTimeout(()=>{
       carouselItem[2].classList.remove('active')
@@ -170,7 +169,7 @@ export default {
     */
     },
     
-    methods: {
+  methods: {
     next() {
       clearInterval(this.usersInterval)
       let wrapper=document.querySelector('#app > div.intro-view > div.app__overview > div.users-overview')
@@ -325,6 +324,15 @@ export default {
 .nav__contact--contact:hover {
   font-weight: bolder;
   cursor: pointer;
+}
+#app .intro-view .app__overview .loader {
+  width: 40px;
+  height: 40px;
+  border:10px solid rgb(230, 227, 227);
+  border-top-color:var(--cyan);
+  border-radius: 50%;
+  animation: spin .5s linear infinite;
+  margin:0 auto;
 }
 #app .intro-view .app__overview {
   margin-top: 20px;
