@@ -131,7 +131,7 @@ export default {
             this.$router.push({name:"dhome"})
         },
         showMessage() {
-            if (this.$route.name=="messages") {
+            if (this.$route.name=="messages"||this.$route.name=="message-detail") {
                 return
             }
             this.$router.push({name:"messages"})

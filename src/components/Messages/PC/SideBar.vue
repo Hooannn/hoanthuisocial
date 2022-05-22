@@ -12,10 +12,27 @@
           <div class='center' v-if='myContacts.length==0&&messages.length'>You don't have any contacts.</div>
           <contact-user v-for='(contact,index) in myContacts' :key='index' :contact='contact'/>
       </div>
+      <div v-if='myContacts.length==0&&messages.length' id='waiting-picture'>
+          <div id="cat">
+              <img :src="cat" alt="Cat moving">
+              <br>
+              <div id="spinner-grow">
+                <div v-for="i in 5" :key='i'></div>
+              </div>
+              <div style='margin: 20px auto'>
+                  Waiting...
+              </div>
+          </div>
+          <div id="sun">
+              <img :src="sun" alt="Sun rising">
+          </div>
+      </div>
   </div>
 </template>
 
 <script>
+import cat from '@/assets/gifs/cat.gif'
+import sun from '@/assets/gifs/sun.gif'
 import db from '@/plugins/firebase'
 import ContactUser from './ContactUser.vue'
 export default {
@@ -24,7 +41,10 @@ export default {
         return {
             messages:[],
             myContacts:[],
-            load:true
+            load:true,
+            defaultMessage:0,
+            cat:cat,
+            sun:sun,
         }
     },
     watch: {
@@ -48,12 +68,58 @@ export default {
     mounted() {
         this.$rtdbBind('messages',db.ref('messagesData')).then(()=>{
             this.load=false
+            if (this.myContacts.length>0&&this.$route.name=="messages") {
+                this.$router.push({name:"message-detail",params:{id:this.myContacts[this.defaultMessage][".key"]}})
+            }
         })
     }
 }
 </script>
 
 <style>
+#waiting-picture {
+    pointer-events: none;
+    position: absolute;
+    top:0;
+    left:0;
+    width: 100vw;
+    height: 100vh;
+}
+#sun {
+    position:absolute;
+    right:0;
+}
+#cat {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    display: flex;
+    flex-direction: column;
+}
+#spinner-grow {
+    margin:0 auto;
+    width: 50%;
+    display: inline-flex;
+    justify-content: space-around;
+}
+#spinner-grow div {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color:var(--secondary);
+    opacity: 0;
+    animation: load 1.5s linear infinite;
+}
+@keyframes load {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: none;
+    }
+}
 .side-bar {
     padding-top:50px;
     min-width: 400px;

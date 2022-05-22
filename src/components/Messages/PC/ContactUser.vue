@@ -19,7 +19,7 @@
 import db from '@/plugins/firebase'
 export default {
     props:{
-        contact:Object
+        contact:Object,
     },
     data() {
         return {
@@ -36,7 +36,7 @@ export default {
                     this.unseenMessage++
                 }
             })
-        }
+        },
     },
     computed: {
         getTime() {
