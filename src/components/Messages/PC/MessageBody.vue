@@ -39,7 +39,15 @@ export default {
   mounted() {
     this.$rtdbBind('conversation',db.ref('messagesData').child(this.$route.params.id)).then(()=>{
       this.$rtdbBind('messages',db.ref('messagesData').child(this.$route.params.id).child('data'))
-      this.load=false
+      db.ref('messagesData').child(this.$route.params.id).child('theme').get().then(res=>{
+        if (res.val()!=null) {
+          this.$store.state.messagetheme=res.val()
+        }
+        else if (res.val()==null) {
+          this.$store.state.messagetheme={}
+        }
+        this.load=false
+      })
     })
   }
 }
@@ -51,6 +59,36 @@ export default {
   width: 100%;
   display: flex;
 }
+/* */
+.message-body .mmv-notice-modal {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top:0;
+  left:0;
+  z-index:100;
+  background-color:rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.message-body .mmv-notice-modal .mmvn-modal-inner {
+  width: 200px;
+  padding:10px;
+  background-color:white;
+  border-radius: 5px;
+  box-shadow: 0 0 3px rgba(0,0,0,0.5);
+  animation:slide-up .3s linear;
+}
+@keyframes slide-up {
+  0% {
+    transform:translateY(200%);
+  }
+  100% {
+    transform:translateY(0);
+  }
+}
+/* */
 @media only screen and (max-width: 768px) {
   .message-body {
     padding-top:35px;
@@ -66,9 +104,8 @@ export default {
   }
 }
 @media only screen and (min-width: 769px) {
-  .mmv-notice-modal {
-    visibility: visible;
-    opacity: 1;
+  .message-body .mmv-notice-modal {
+    display: flex;
   }
 }
 </style>

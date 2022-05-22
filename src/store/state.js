@@ -15,6 +15,11 @@ const state = {
   unseenNoti:null,
   unseenMessage:0,
   currentContact:0,
+  messagetheme:{
+    name:"",
+    color:'',
+    bgColor:''
+  },
   messagesData:[],
   postsData:[],
   filterPosts:[],

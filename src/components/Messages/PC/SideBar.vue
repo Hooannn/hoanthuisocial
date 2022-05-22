@@ -1,5 +1,5 @@
 <template>
-  <div class="side-bar">
+  <div class="side-bar" :style={backgroundColor:$store.state.messagetheme.bgColor,color:$store.state.messagetheme.color}>
       <div class="sb-header ">
           <div class="sbh-title center">Messages</div>
           <div class="sbh-search center">
@@ -12,7 +12,7 @@
           <div class='center' v-if='myContacts.length==0&&messages.length'>You don't have any contacts.</div>
           <contact-user v-for='(contact,index) in myContacts' :key='index' :contact='contact'/>
       </div>
-      <div v-if='myContacts.length==0&&messages.length' id='waiting-picture'>
+      <div v-if='myContacts.length==0&&messages.length&&$route.name=="messages"' id='waiting-picture'>
           <div id="cat">
               <img :src="cat" alt="Cat moving">
               <br>
@@ -124,6 +124,7 @@ export default {
     padding-top:50px;
     min-width: 400px;
     width: 400px;
+    transition:.2s linear;
     border-right: 1px solid silver;
 }
 .side-bar .sb-header {
@@ -196,6 +197,12 @@ export default {
   .side-bar {
       min-width: 300px;
       width: 300px;
+  }
+  #cat {
+      transform:translate(-50%,-50%) scale(0.7);
+  }
+  #sun {
+      transform: scale(0.5);
   }
 }
 @media only screen and (max-width: 920px) {

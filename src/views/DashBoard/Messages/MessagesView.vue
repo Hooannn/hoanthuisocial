@@ -1,6 +1,6 @@
 <template>
-  <div class="messages-view">
-      <div class="mv-notice-modal center">
+  <div @click='closeEmojis' class="messages-view" >
+      <div class="mv-notice-modal">
         <div class="mvn-modal-inner">
           It seem that you're using mobile or tablet. Please go to messages view for mobile.<br>
           <button class='btn btn-sm btn-link' @click='goToMobileView'>Go.</button>
@@ -23,6 +23,20 @@ export default {
       else if (this.$route.name=='message-detail') {
         this.$router.push({name:'message_m-detail',params:{id:this.$route.params.id}})
       }
+    },
+    closeEmojis(e) {
+      let emoji=document.querySelectorAll('#emojis div.emoji')
+      for (let index = 0; index < emoji.length; index++) {
+        if (e.target==emoji[index]) {
+          return
+        }
+      }
+      if (e.target==document.querySelector('#emojis')||e.target==document.querySelector('#app > div.dash-board > div.messages-view > div.message-body > div.chat-area.chatarea-mb > div.ca-input > ion-icon:nth-child(4)')) {
+        return
+      }
+      if (document.querySelector('#emojis')) {
+        document.querySelector('#emojis').classList.remove('show')
+      }
     }
   }
 }
@@ -35,7 +49,7 @@ export default {
     display: flex;
     overflow: hidden;
 }
-.mv-notice-modal,.mmv-notice-modal {
+.messages-view .mv-notice-modal {
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -43,10 +57,11 @@ export default {
   left:0;
   z-index:100;
   background-color:rgba(0,0,0,0.5);
-  visibility: hidden;
-  opacity: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
 }
-.mv-notice-modal .mvn-modal-inner,.mmv-notice-modal .mmvn-modal-inner {
+.messages-view .mv-notice-modal .mvn-modal-inner {
   width: 200px;
   padding:10px;
   background-color:white;
@@ -63,15 +78,8 @@ export default {
   }
 }
 @media only screen and (max-width: 768px) {
-  .mv-notice-modal {
-    visibility: visible;
-    opacity: 1;
-  }
-}
-@media only screen and (min-width: 769px) {
-  .mmv-notice-modal {
-    visibility: visible;
-    opacity: 1;
+  .messages-view .mv-notice-modal {
+    display: flex;
   }
 }
 </style>

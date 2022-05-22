@@ -1,5 +1,5 @@
 <template>
-  <div class="information-area">
+  <div class="information-area" :style={backgroundColor:$store.state.messagetheme.bgColor,color:$store.state.messagetheme.color}>
       <div v-if='load' class="message-load"></div>
       <div class='ia-inner' v-if='!load'>
           <div class="ia-header">
@@ -14,19 +14,54 @@
               <button @click='$router.push({name:"post",params:{key:contact[".key"]}})' class="btn btn-sm btn-link">View Profile</button>
           </div>
           <div class="ia-body">
-              <div class='iab-item'><span>Customize</span><span><ion-icon name="chevron-down-outline"></ion-icon></span></div>
-              <div class='iab-item'><span>File, images</span><span><ion-icon name="chevron-down-outline"></ion-icon></span></div>
+              <div class='iab-item'>
+                  <div @click='showTheme' class="iabi-title">
+                    <span>Theme</span><span><ion-icon :name="'chevron-'+icon_th+'-outline'"></ion-icon></span>
+                  </div>
+              </div>
+              <div class="iab-theme">
+                  <div @click='changeTheme(t)' :class='{selected:t.name==$store.state.messagetheme.name}' v-for='(t,index) in themes' :style={color:t.bgColor,borderColor:t.bgColor} :key='"msgtheme"+index' class='iabt-item center'>
+                      {{t.name}}
+                  </div>
+              </div>
+              <div class='iab-item'>
+                  <div @click='showImageSent' class="iabi-title">
+                      <span>File, images <span v-if='images.length>0' style='fontSize:14px'><ion-icon style='fontSize:9px;color:slategrey' name="ellipse"></ion-icon> {{images.length}}</span></span><span><ion-icon :name="'chevron-'+icon_img+'-outline'"></ion-icon></span>
+                  </div>
+                  <div class="iabi-images">
+                      <div v-if='images.length==0'>This conversation hasn't had any images yet.</div>
+                      <img @click='reviewImage(img)' v-for='(img,index) in images' :key='"imagemsg"+index' :src="img" alt="Message image">
+                  </div>
+              </div>
           </div>
       </div>
   </div>
 </template>
 
 <script>
+import db from '@/plugins/firebase'
 export default {
     props:{
         messages:Array,
         contact:Object,
         load:Boolean
+    },
+    data() {
+        return {
+            themes:[
+                {name:"Rose",bgColor:'rgb(218, 155, 155)',color:"white"},
+                {name:"Aqua",bgColor:'cadetblue',color:'white'},
+                {name:"Lava",bgColor:'rgb(240, 193, 166)',color:'black'},
+                {name:"Sand",bgColor:'rgb(139, 135, 127)',color:'black'},
+            ],
+            images:[
+
+            ],
+            themeShow:false,
+            icon_th:'down',
+            imageShow:false,
+            icon_img:'down'
+        }
     },
     computed: {
         getTime() {
@@ -97,6 +132,18 @@ export default {
             }
         }
     },
+    
+    watch: {
+        messages() {
+            this.images=[]
+            this.messages.forEach(m => {
+                if (m.images) {
+                    this.images=[...this.images,...m.images]
+                }
+            });
+        }
+    },
+    
     methods: {
         closeInfo() {
             /* close info in mobie only */
@@ -104,8 +151,39 @@ export default {
                 document.querySelector('#app > div.dash-board > div.message-body > div.chat-area.chatarea-mb').classList.remove('mobile-close')
                 document.querySelector('#app > div.dash-board > div.message-body > div.information-area.infoarea-mb').classList.remove('mobile-show')
             }
+        },
+        reviewImage(img) {
+            let imageReviewModal=document.querySelector('#app div.image-review-modal')
+            let image=document.querySelector('#app div.image-review-modal div.irm-image img')
+            imageReviewModal.classList.add('show')
+            image.src=img
+        },
+        showImageSent() {
+            document.querySelector('.information-area .ia-inner .ia-body .iab-item .iabi-images').classList.toggle('show')
+            this.imageShow=!this.imageShow
+            if (this.imageShow) {
+                this.icon_img='up'
+            }
+            else if (!this.imageShow) {
+                this.icon_img='down'
+            }
+        },
+        showTheme() {
+            document.querySelector('.information-area .ia-inner .ia-body .iab-theme').classList.toggle('show')
+            this.themeShow=!this.themeShow
+            if (this.themeShow) {
+                this.icon_th='up'
+            }
+            else if (!this.themeShow) {
+                this.icon_th='down'
+            }
+        },
+        changeTheme(theme) {
+            this.$store.state.messagetheme=theme
+            db.ref("messagesData").child(this.$route.params.id).child('theme').set(theme)
         }
-    }
+    },
+    
 }
 </script>
 
@@ -114,6 +192,7 @@ export default {
     height: 100%;
     max-width: 30%;
     width: 30%;
+    transition:.2s linear;
     position: relative;
 }
 .information-area.mobile-show {
@@ -143,15 +222,72 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding:10px 0;
-    cursor: pointer;
     transition:.15s linear;
+    position: relative;
 }
-.information-area .ia-inner .ia-body .iab-item:hover {
-    background-color: whitesmoke;
+.information-area .ia-inner .ia-body .iab-theme {
+    height: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    transition:.3s linear;
+    overflow: hidden;
+    align-items: center;
 }
-.information-area .ia-inner .ia-body .iab-item span {
-    padding:0 15px;
+.information-area .ia-inner .ia-body .iab-theme.show {
+    height: 100px;
+}
+.information-area .ia-inner .ia-body .iab-theme .iabt-item {
+    width: 80px;
+    height: 30px;
+    padding:5px;
+    border:1px solid;
+    border-radius: 50px;
+    background:white;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition:.2s linear;
+}
+.information-area .ia-inner .ia-body .iab-theme .iabt-item.selected {
+    transform: scale(1.05);
+    font-weight: bold;
+    border-width: 3px;
+}
+.information-area .ia-inner .ia-body .iab-theme .iabt-item:hover {
+    transform: scale(1.05);
+}
+.information-area .ia-inner .ia-body .iab-item .iabi-title {
+    padding:10px 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    transition:.15s linear;
+    width: 100%;
+}
+.information-area .ia-inner .ia-body .iab-item .iabi-title:hover {
+    background-color:whitesmoke;
+}
+.information-area .ia-inner .ia-body .iab-item .iabi-images {
+    position: absolute;
+    top:100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    overflow-y:auto;
+    max-height:0;
+    transition:.3s linear;
+}
+.information-area .ia-inner .ia-body .iab-item .iabi-images.show {
+    max-height: 500px;
+}
+.information-area .ia-inner .ia-body .iab-item .iabi-images img {
+    height: 100px;
+    margin:5px 0;
+    cursor:pointer;
+}
+.information-area .ia-inner .ia-body .iab-item .iabi-images img:hover {
+    border:1px solid orange;
 }
 /*  */
 @media only screen and (max-width: 768px) {

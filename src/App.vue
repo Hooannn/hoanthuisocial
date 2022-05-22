@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <image-review/>
     <loading-view/>
     <toastes-container/>
     <!--
@@ -99,9 +100,10 @@
 
 <script>
 import ToastesContainer from './components/General/ToastesContainer.vue';
+import ImageReview from './components/Modal/ImageReview.vue';
 import LoadingView from './views/LoadingView.vue';
 export default {
-  components: { ToastesContainer, LoadingView },
+  components: { ToastesContainer, LoadingView, ImageReview },
   mounted() {
     let account = JSON.parse(sessionStorage.getItem("account"));
     let role = sessionStorage.getItem("role");

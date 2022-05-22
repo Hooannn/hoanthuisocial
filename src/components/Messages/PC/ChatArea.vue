@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-area">
+  <div class="chat-area" :style={backgroundColor:$store.state.messagetheme.bgColor,color:$store.state.messagetheme.color}>
       <div v-if="load" class="message-load"></div>
       <div v-if="contact.avatarImg&&contact.status" class="ca-header">
           <div class="cah-info">
@@ -35,8 +35,11 @@
           <ion-icon @click='uploadImages' style='color:var(--dark)' class='icon' name="images"></ion-icon>
           <input @focus='getLastestMsg()' @keypress.enter="sendMessage" v-model='text' placeholder="Message..." type="text">
           <ion-icon @click='sendMessage' style='color:var(--dark)' class='icon' name="send"></ion-icon>
-          <ion-icon style='color:var(--cyan)' class='icon' name="happy"></ion-icon>
-          <ion-icon style='color:var(--danger)' class='icon' name="heart"></ion-icon>
+          <ion-icon @click='showEmojis' style='color:var(--cyan)' class='icon' name="happy"></ion-icon>
+          <ion-icon @click='sendHeart' style='color:var(--danger)' class='icon' name="heart"></ion-icon>
+          <div id="emojis">
+              <div @click='text+=e' v-for='(e,index) in emojis' :key='index' class="emoji">{{e}}</div>
+          </div>
       </div>
   </div>
 </template>
@@ -55,7 +58,13 @@ export default {
     data() {
         return {
             images:[],
-            text:''
+            text:'',
+            emojis:[
+                '😷','🤕','🤢','🤮','🤧',
+                '🥵','🥶','🥴','😵','🤯',
+                '🤬','😈','💀','💩','🤡',
+                '👻','👽','👾','🤖','💋'
+            ]
         }
     },
     watch: {
@@ -88,7 +97,7 @@ export default {
             };
             client.picker(options).open();
         },
-        sendMessage() {
+        sendMessage(text) {
             let msg = {
                 time:new Date().getTime(),
                 date:new Date().toLocaleString(),
@@ -112,6 +121,18 @@ export default {
                 return
             }
         },
+        sendHeart() {
+            db.ref('messagesData').child(this.$route.params.id).child('data').push({
+                time:new Date().getTime(),
+                date:new Date().toLocaleString(),
+                content:'❤️',
+                author:this.$store.state.ukey,
+                status:'Unseen',
+                images:this.images
+            }).then(res=>{}).catch(err=>{
+                this.$bvToast.show('msg-err')
+            })
+        },
         getLastestMsg() {
             let msgContent=document.querySelector(`div.message-body > div.chat-area > div.ca-messages`)
             setTimeout(function(){
@@ -127,6 +148,9 @@ export default {
                 document.querySelector('#app > div.dash-board > div.message-body > div.chat-area.chatarea-mb').classList.add('mobile-close')
                 document.querySelector('#app > div.dash-board > div.message-body > div.information-area.infoarea-mb').classList.add('mobile-show')
             }
+        },
+        showEmojis() {
+            document.querySelector('#emojis').classList.toggle('show')
         }
     },
     computed: {
@@ -208,6 +232,32 @@ export default {
 </script>
 
 <style>
+#emojis.show {
+    height: 200px;
+}
+#emojis {
+    position:absolute;
+    right:10px;
+    border:10px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.4);
+    background-color:white;
+    bottom:100%;
+    width: 150px;
+    height: 0;
+    justify-content: space-around;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 20px;
+    overflow: hidden;
+    transition:.4s linear ;
+}
+#emojis .emoji {
+    cursor: pointer;
+    margin:5px;
+}
+#emojis .emoji:hover {
+    transform: scale(1.1);
+}
 .message-load {
     width: 50px;
     height: 50px;
@@ -261,9 +311,6 @@ export default {
     color:white;
     width: 50px;
     height: 30px;
-}
-.chat-area .ca-header .cah-info .cahi-sinfo .cahis-username{
-   
 }
 .chat-area .ca-header .cah-info .cahi-sinfo .cahis-lastlogin {
     font-size: 15px;

@@ -1,6 +1,6 @@
 <template>
   <div @click="closeMoreInfo" class="dash-board">
-    <dashboard-nav :key='$route.name'/>
+    <dashboard-nav />
     <message-bar/>
     <div @click='showMessageBar' :class='{hide:($route.name=="messages"||$route.name=="message-detail")}' class='message-bar-control center'>
       <ion-icon class='icon' name="chatbox-ellipses"></ion-icon>
