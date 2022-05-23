@@ -53,7 +53,6 @@ export default {
     height: 600px;
     max-width: 90vw;
     object-fit: contain;
-    box-shadow: 0 0 2px rgba(0,0,0,0.3);
 }
 .image-review-modal .irm-image .irmi-close {
     position:absolute;

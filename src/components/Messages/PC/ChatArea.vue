@@ -1,6 +1,6 @@
 <template>
-  <div class="chat-area" :style={backgroundColor:$store.state.messagetheme.bgColor,color:$store.state.messagetheme.color}>
-      <div v-if="load" class="message-load"></div>
+  <div @click='closeEmojis' class="chat-area" :style={backgroundColor:$store.state.messagetheme.bgColor,color:$store.state.messagetheme.color}>
+      <div style='transform:translate(-50%,-50%)' v-if="load" class="message-load"></div>
       <div v-if="contact.avatarImg&&contact.status" class="ca-header">
           <div class="cah-info">
               <div @click='$router.push({name:"messages_m"})' v-if='$route.name=="message_m-detail"' style='width:40px;height:100%;fontSize:24px;' class='center'><ion-icon name="arrow-back-outline"></ion-icon></div>
@@ -78,6 +78,23 @@ export default {
         }
     },
     methods:{
+        closeEmojis(e) {
+            if (this.$route.name=='message_m-detail') {
+                let emoji=document.querySelectorAll('#emojis div.emoji')
+                for (let index = 0; index < emoji.length; index++) {
+                if (e.target==emoji[index]) {
+                        return
+                    }
+                }
+                if (e.target==document.querySelector('#emojis')||e.target==document.querySelector('#app > div.dash-board > div.message-body > div.chat-area.chatarea-mb > div.ca-input > ion-icon:nth-child(4)')) {
+                    return
+                }
+                if (document.querySelector('#emojis')) {
+                    document.querySelector('#emojis').classList.remove('show')
+                }
+            }
+            return
+        },
         removeImg(img) {
             this.images.splice(this.images.indexOf(img),1)
         },
@@ -221,17 +238,19 @@ export default {
                 }
             }
         }
-    },
-    mounted() {
-        setTimeout(function(){
-            let msgContent=document.querySelector(`div.message-body > div.chat-area > div.ca-messages`)
-            msgContent.scrollTop=msgContent.scrollHeight
-        },10) 
     }
 }
 </script>
 
 <style>
+@keyframes spin {
+    0% {
+        transform:translate(-50%,-50%) rotate(0);
+    }
+    100% {
+        transform:translate(-50%,-50%) rotate(360deg);
+    }
+}
 #emojis.show {
     height: 200px;
 }
@@ -265,8 +284,8 @@ export default {
     border:10px solid white;
     border-top-color:var(--blue);
     position: absolute;
-    top:40%;
-    left:48.9%;
+    top:50%;
+    left:50%;
     animation: spin .4s linear infinite;
 }
 .chat-area.mobile-close {

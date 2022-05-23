@@ -181,14 +181,14 @@ export default {
     border-radius: 50%;
     border:10px solid white;
     border-top-color: var(--blue);
-    animation: spin .5s linear infinite;
+    animation: spin1 .5s linear infinite;
 }
-@keyframes spin {
+@keyframes spin1 {
     0% {
-        transform: rotate(0);
+        transform:rotate(0);
     }
     100% {
-        transform: rotate(360deg);
+        transform:rotate(360deg);
     }
 }
 
@@ -221,6 +221,7 @@ export default {
   .side-bar {
       min-width: 100%;
       width: 100%;
+      min-height: 100%;
   }
 }
 /*  */

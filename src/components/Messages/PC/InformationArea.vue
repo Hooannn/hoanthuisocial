@@ -1,6 +1,6 @@
 <template>
   <div class="information-area" :style={backgroundColor:$store.state.messagetheme.bgColor,color:$store.state.messagetheme.color}>
-      <div v-if='load' class="message-load"></div>
+      <div style='transform:translate(-50%,-50%)' v-if='load' class="message-load"></div>
       <div class='ia-inner' v-if='!load'>
           <div class="ia-header">
               <div v-if='$route.name=="message_m-detail"' @click='closeInfo' class='center' style='width:50px;height:50px;position:absolute;left:15px;top:15px;fontSize:20px;'><ion-icon name="return-down-back-outline"></ion-icon></div>
@@ -188,6 +188,14 @@ export default {
 </script>
 
 <style>
+@keyframes spin {
+    0% {
+        transform:translate(-50%,-50%) rotate(0);
+    }
+    100% {
+        transform:translate(-50%,-50%) rotate(360deg);
+    }
+}
 .information-area {
     height: 100%;
     max-width: 30%;

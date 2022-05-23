@@ -17,13 +17,15 @@
                   </div>
               </div>
               <div class="more-inf">
-                  <button @click="contactUser" v-if='$store.state.ukey!=$route.params.key' class="btn btn-sm btn-success">Contact</button>
+                  <button @click="contactUser" v-if='$store.state.ukey!=$route.params.key' class="mi-contact-pc btn btn-sm btn-success">Contact</button>
+                  <button @click="contactUser_m" v-if='$store.state.ukey!=$route.params.key' class="mi-contact-mb btn btn-sm btn-success">Contact</button>
                   <button v-if='$store.state.ukey==profileKey' @click='$router.push({name:"personal",params:{key:$store.state.ukey}}),isSelect="Edit"' class='btn btn-dark btn-sm edit'>Edit Profile</button>
                   <button :disabled='userFriend.find((user)=>(user[".value"]==$route.params.key))||userFriendRequesting.find((user)=>(user[".value"]==$route.params.key))||userFriendRequested.find((user)=>(user[".value"]==$route.params.key))' @click='$store.dispatch("sentFriendRequest",$route.params.key),$store.dispatch("follow",$route.params.key)' v-if='$store.state.type!="page"&&$store.state.ukey!=profileKey' class='btn btn-dark btn-sm edit'>
                       <span v-if='!userFriend.find((user)=>(user[".value"]==$route.params.key))'>Add Friend</span>
                       <span v-if='userFriend.find((user)=>(user[".value"]==$route.params.key))'>Friend</span>
                   </button>
-                  <button @click='$router.push({name:"market"})' v-if='$store.state.ukey==profileKey' class="btn btn-danger btn-sm market">View Market</button>
+                  <button @click='$router.push({name:"messages"})' v-if='$store.state.ukey==profileKey' class="mi-message-pc btn btn-info btn-sm market">Message</button>
+                  <button @click='$router.push({name:"messages_m"})' v-if='$store.state.ukey==profileKey' class="mi-message-mb btn btn-info btn-sm market">Message</button>
                   <button @click='$store.dispatch("follow",$route.params.key)' v-if='$store.state.ukey!=profileKey && !follows.find(user=> user[".value"]==$store.state.ukey)' class="btn btn-danger btn-sm market">
                       Follow
                   </button>
@@ -49,7 +51,7 @@
                   <div v-if='$store.state.ukey!=$route.params.key' @click='$router.push({name:"friends",params:{key:profileKey}})' class="friends-list" :class="{active:$route.name=='friends'}">Friends ({{friends.length+follows.length+following.length}})</div>
                   <div @click='$router.push({name:"images",params:{key:profileKey}})' class="images" :class="{active:$route.name=='images'}">Albums</div>
                   <div v-if='$store.state.ukey==$route.params.key' @click='$router.push({name:"communities",params:{key:profileKey}})' class="communities" :class="{active:$route.name=='communities'}">Coms</div>
-                  <div @click='$router.push({name:"credit",params:{key:profileKey}})' v-if='$store.state.ukey==$route.params.key' class="credit" :class="{active:$route.name=='credit'}">Credit</div>
+                  <!-- <div @click='$router.push({name:"credit",params:{key:profileKey}})' v-if='$store.state.ukey==$route.params.key' class="credit" :class="{active:$route.name=='credit'}">Credit</div> -->
               </div>
               <router-view :key='$route.fullPath' class='router-view'></router-view>
           </div>
@@ -112,7 +114,8 @@ export default {
                     user2:this.$route.params.key,
                 }
                 db.ref('messagesData').push(newConversation).then((res)=>{
-                    this.$store.dispatch('addMsgData', res.key)
+                    // this.$store.dispatch('addMsgData', res.key)
+                    this.$router.push({name:"message-detail",params:{id:res.key}})
                     this.$store.dispatch('unload')
                 }).catch((err)=>{
                     alert(err)
@@ -120,7 +123,30 @@ export default {
                 })
             }
             else {
-                this.$store.dispatch('addMsgData', this.messageKey)
+                //this.$store.dispatch('addMsgData', this.messageKey)
+                this.$router.push({name:"message-detail",params:{id:this.messageKey}})
+            }
+        },
+        contactUser_m() {
+            if (this.messageKey==null) {
+                //create new conversation
+                this.$store.dispatch('loading')
+                let newConversation= {
+                    user1:this.$store.state.ukey,
+                    user2:this.$route.params.key,
+                }
+                db.ref('messagesData').push(newConversation).then((res)=>{
+                    // this.$store.dispatch('addMsgData', res.key)
+                    this.$router.push({name:"message_m-detail",params:{id:res.key}})
+                    this.$store.dispatch('unload')
+                }).catch((err)=>{
+                    alert(err)
+                    this.$store.dispatch('unload')
+                })
+            }
+            else {
+                //this.$store.dispatch('addMsgData', this.messageKey)
+                this.$router.push({name:"message_m-detail",params:{id:this.messageKey}})
             }
         }
     },
@@ -217,6 +243,10 @@ export default {
     display: flex;
     justify-content: space-between;
 }
+.profile__header .container .more-inf button.mi-message-mb,
+.profile__header .container .more-inf button.mi-contact-mb{
+    display: none;
+}
 .profile__header .container .more-inf div{
     display: flex;
     flex-direction: column;
@@ -303,6 +333,14 @@ export default {
     .profile__header .container .inf .detail{
         margin-left:0;
     }
+    .profile__header .container .more-inf button.mi-message-mb,
+    .profile__header .container .more-inf button.mi-contact-mb{
+        display: unset;
+    }  
+    .profile__header .container .more-inf button.mi-message-pc,
+    .profile__header .container .more-inf button.mi-contact-pc{
+        display: none;
+    }  
 }
 @media only screen and (max-width: 330px) {
     .profile__header .container .inf .avatar{

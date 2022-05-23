@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import db from '@/plugins/firebase'
 import DashboardNav from "../components/DashBoard/DashboardNav.vue";
 import MessageBar from '../components/MessageMini/MessageBar.vue';
 import MiniMessage from '../components/MessageMini/MiniMessage.vue';
@@ -31,6 +32,13 @@ export default {
         let mb=document.querySelector('#app > div.dash-board > div.message-bar')
         mb.classList.toggle('show')
       }
+  },
+  mounted() {
+    db.ref('usersInformation').child(this.$store.state.ukey).child('apptheme').get().then(res=>{
+      if (res.val()!=null) {
+        this.$store.state.apptheme=res.val()
+      }
+    })
   },
   beforeRouteEnter(to, from, next) {
     if (store.state.user != null) {

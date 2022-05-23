@@ -1,5 +1,6 @@
 <template>
-  <div id="app">
+  <div id="app" :style='{background:$store.state.apptheme.bgColor,color:$store.state.apptheme.color}'>
+    <theme-modal />
     <image-review/>
     <loading-view/>
     <toastes-container/>
@@ -101,9 +102,10 @@
 <script>
 import ToastesContainer from './components/General/ToastesContainer.vue';
 import ImageReview from './components/Modal/ImageReview.vue';
+import ThemeModal from './components/Modal/ThemeModal.vue';
 import LoadingView from './views/LoadingView.vue';
 export default {
-  components: { ToastesContainer, LoadingView, ImageReview },
+  components: { ToastesContainer, LoadingView, ImageReview, ThemeModal },
   mounted() {
     let account = JSON.parse(sessionStorage.getItem("account"));
     let role = sessionStorage.getItem("role");
@@ -170,7 +172,6 @@ body {
   position: relative;
   font-family: "Poppins", sans-serif;
   user-select: none;
-  background-color: rgba(229, 240, 248, 0.904);
   overflow-x:hidden;
 }
 body > div.nanobar .bar {
@@ -184,6 +185,7 @@ body > div.nanobar .bar {
   min-height: 100vh;
   height: auto;
   position: relative;
+  transition:all .2s linear;
 }
 .center {
   display: flex;
@@ -197,12 +199,12 @@ a {
 /*  */
 @media only screen and (max-width: 768px) {
   body {
-    max-width: 100vh;
-    max-height: 100vh;
+    max-width: 100vw;
+    height: auto;
   }
   #app {
-    max-width: 100vh;
-    max-height: 100vh;
+    max-width: 100vw;
+    height: auto;
   }
 }
 </style>

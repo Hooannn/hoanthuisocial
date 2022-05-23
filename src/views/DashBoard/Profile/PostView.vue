@@ -34,20 +34,16 @@
           <div v-if='posts.length>0' class="posts-list">
               <post-com :class='post.key' v-for='post in posts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
           </div>
-          <div>
+          <div v-if='posts.length==0'>
               <span v-if='$route.params.key!=$store.state.ukey'>This user hasn't post any post yet.</span>
               <span v-if='$route.params.key==$store.state.ukey'>You haven't post any post yet.</span>
           </div>
       </div>
       <div class='third-col'>
           <div class="market-introduce">
-              <h5 style='fontWeight:bolder'>Want to Sell your items</h5>
-              <div>Post your items to the market for free. Just add it through the simple form. Then wait for another users pay for it. Try out ours bidding system.</div>
-              <button @click='$router.push({name:"sell"})' style='color:white;fontWeight:400' class="btn btn-warning ">Try it now</button>
-          </div>
-          <div v-if='myMarket.length>0' class="new-item-market">
-              <h5>New Item on Market</h5>
-              <new-item-market v-for='item in myMarket' :key='item[".key"]' :itemImages='item.images' :title='item.title' :currentPrice='item.currentprice'></new-item-market>
+              <h5 style='fontWeight:bolder'>Want to connect more ?</h5>
+              <div>Explore the world. Connect to every one. Join group, make a page. Discover several posts by other users in your new feed.</div>
+              <button @click='$router.push({name:"dhome"})' style='color:white;fontWeight:400' class="btn btn-info ">Newfeed</button>
           </div>
       </div>
   </div>
@@ -73,8 +69,6 @@ export default {
             imagesUpload:[],
             user:{},
             myfollowers:[],
-            market:[],
-            myMarket:[],
         }
     },
     methods: {
@@ -139,14 +133,6 @@ export default {
         }
     },
     watch: {
-        market() {
-            this.myMarket=[]
-            this.market.forEach(item => {
-                if (item.author==this.$route.params.key) {
-                    this.myMarket.unshift(item)
-                }
-            });
-        },
         postsData() {
             this.posts=[]
             this.postsData.forEach(post => {
@@ -256,8 +242,9 @@ pre {
     padding:30px;
     color:white;
     font-weight: 700;
-    background:url('https://imgkub.com/images/2022/04/06/image.png');
-    background-position:bottom;
+    background:url('https://wallpaperaccess.com/full/1308869.jpg');
+    background-position:center;
+    background-size: cover;
     display: flex;
     flex-direction: column;
     align-items: center;

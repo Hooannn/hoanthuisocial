@@ -20,6 +20,11 @@ const state = {
     color:'',
     bgColor:''
   },
+  apptheme:{
+    name:"Sea",
+    bgColor:"rgba(229, 240, 248, 0.904)",
+    color:"black"
+  },
   messagesData:[],
   postsData:[],
   filterPosts:[],

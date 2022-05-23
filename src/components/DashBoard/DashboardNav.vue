@@ -29,8 +29,8 @@
                   <noti-com :class='noti[".key"]' v-for='noti in notis' :key='noti[".key"]' :notiKey="noti['.key']"/>
               </div>
           </div>
-          <button @click='$router.push({name:"market"})' style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-wd'>Market</button>
-          <button @click='$router.push({name:"market"})' style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-mb'><ion-icon name="cart"></ion-icon></button>
+          <button @click='logOut' style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-wd'>Logout</button>
+          <button @click='logOut' style='borderColor:#ff7555;background-color:#ff7555;color:rgba(233,224,224);fontWeight:bolder' class='dbnav__market btn btn-danger btn-sm btn-mb'><ion-icon name="log-out-outline"></ion-icon></button>
         <div class="dbnav__short-info">
           <div @click='showMoreInfo' class="more-setting">
               <div class="user-avatar">
@@ -43,13 +43,13 @@
               ></ion-icon>
           </div>
           <div style='width:150px' class="drop-down">
-            <div @click='$router.push({name:"credit",params:{key:$store.state.ukey}})' style='display:flex;justifyContent:space-between'><span>Credit</span><span>${{credit[".value"]}}</span></div>
+            <!--<div @click='$router.push({name:"credit",params:{key:$store.state.ukey}})' style='display:flex;justifyContent:space-between'><span>Credit</span><span>${{credit[".value"]}}</span></div>-->
             <div @click='viewMyProfile'><span>Profile</span></div>
             <div @click='$router.push({name:"images",params:{key:$store.state.ukey}})'><span>Albums</span></div>
             <div v-if='$store.state.type!="page"' @click='viewMyFriend'><span>Friends</span></div>
             <div @click="$router.push({name:'communities',params:{key:$store.state.ukey}})"><span>Communities</span></div>
             <div @click='$router.push({name:"personal",params:{key:$store.state.ukey}})'><span>Edit</span></div>
-            <div @click='logOut'><span>Logout</span></div>
+            <div @click='showTheme'><span>Theme</span></div>
           </div>
         </div>
       </div>
@@ -155,12 +155,12 @@ export default {
             shortInfo.classList.toggle('show')
         },
         logOut() {
-        setTimeout(function () {
-        store.dispatch("logOut");
-        }, 500);
-        setTimeout(function () {
-        router.push("/home");
-        }, 1000);
+            setTimeout(function () {
+                store.dispatch("logOut");
+            }, 500);
+            setTimeout(function () {
+                router.push("/home");
+            }, 1000);
         },
         viewMyProfile() {
             //router.push({name:'/'})
@@ -180,6 +180,9 @@ export default {
             let dropDown=document.querySelector('#app > div > div.dbnav > div > div.dbnav__notifications > div.drop-down')
             dropDown.classList.toggle('show')
             notiSpan.classList.toggle('show')
+        },
+        showTheme() {
+            document.querySelector('#app div.theme-modal').classList.add('show')
         }
     },
     mounted() {
@@ -382,6 +385,10 @@ export default {
     }
     #app > div.dash-board > div.dbnav > div > div.dbnav__short-info > div.more-setting > span {
         display: none;
+    }
+    .dbnav .dbnav__short-info .drop-down {
+        right:-20px;
+        top:100%;
     }
 }
 </style>

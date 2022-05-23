@@ -9,18 +9,18 @@ const routes = [
     name: 'dashboard',
     component: () => import('../views/DashBoard.vue'),
     children: [
-      {
-        path:'/dashboard/market',
-        name:'market',
-        component:() => import ('../views/DashBoard/Market/MarketView.vue'),
-        children:[
-          {
-            path:'/dashboard/market/sell',
-            name:'sell',
-            component:() => import ('../views/DashBoard/Market/MarketSell.vue'),
-          }
-        ]
-      },
+      // {
+      //   path:'/dashboard/market',
+      //   name:'market',
+      //   component:() => import ('../views/DashBoard/Market/MarketView.vue'),
+      //   children:[
+      //     {
+      //       path:'/dashboard/market/sell',
+      //       name:'sell',
+      //       component:() => import ('../views/DashBoard/Market/MarketSell.vue'),
+      //     }
+      //   ]
+      // },
       {
         path:'/dashboard/messages',
         name:'messages',
@@ -171,11 +171,11 @@ const routes = [
             name:'friends',
             component:() => import('../views/DashBoard/Profile/FriendsView.vue')
           },
-          {
-            path:'/dashboard/profile/credit',
-            name:'credit',
-            component:() => import('../views/DashBoard/Profile/CreditView.vue')
-          },
+          // {
+          //   path:'/dashboard/profile/credit',
+          //   name:'credit',
+          //   component:() => import('../views/DashBoard/Profile/CreditView.vue')
+          // },
           {
             path:'/dashboard/profile/edit',
             name:'edit',

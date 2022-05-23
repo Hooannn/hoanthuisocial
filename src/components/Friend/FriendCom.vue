@@ -9,7 +9,7 @@
         <div v-if='ukey!=$store.state.ukey && user.type=="user"' style='fontSize:13px;color:grey'>Mutual {{mutualFriend.length}}</div>
       </div>
       </div>
-      <div class='option'>
+      <div style='position:relative' class='option'>
         <span><i @click='showOption' class="fas fa-ellipsis-h"></i></span>
         <div class="drop-down">
           <span v-if='user.type=="user"' @click='viewProfile'>View Profile</span>
@@ -223,6 +223,9 @@ export default {
   justify-content: center;
   position: absolute;
   visibility: hidden;
+  left:50%;
+  transform: translateX(-50%);
+  z-index: 10;
 }
 .friend-com .option .drop-down.show{
   visibility: visible;

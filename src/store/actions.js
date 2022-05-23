@@ -18,7 +18,7 @@ const objectToArray = (obj) =>
       coverImg: obj[key].coverImg,
       location: obj[key].location,
       type:obj[key].type,
-      credit:obj[key].credit
+      credit:obj[key].credit,
     }));
 const usersInf = db.ref("usersInformation");
 

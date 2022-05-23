@@ -47,6 +47,10 @@ export default {
           this.$store.state.messagetheme={}
         }
         this.load=false
+        setTimeout(function(){
+            let msgContent=document.querySelector(`div.message-body > div.chat-area > div.ca-messages`)
+            msgContent.scrollTop=msgContent.scrollHeight
+        },10) 
       })
     })
   }
