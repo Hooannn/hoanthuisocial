@@ -22,6 +22,11 @@ const routes = [
       //   ]
       // },
       {
+        path:'video-call/:id',
+        name:'video-call',
+        component:() => import ('../components/Modal/VideoCall.vue'),
+      },
+      {
         path:'/dashboard/messages',
         name:'messages',
         component:() => import ('../views/DashBoard/Messages/MessagesView.vue'),

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :style='{background:$store.state.apptheme.bgColor,color:$store.state.apptheme.color}'>
+  <div id="app" >
     <theme-modal />
     <image-review/>
     <loading-view/>
@@ -106,6 +106,12 @@ import ThemeModal from './components/Modal/ThemeModal.vue';
 import LoadingView from './views/LoadingView.vue';
 export default {
   components: { ToastesContainer, LoadingView, ImageReview, ThemeModal },
+  watch: {
+    '$store.state.apptheme'() {
+      document.body.style.background=this.$store.state.apptheme.bgColor
+      document.body.style.color=this.$store.state.apptheme.color
+    }
+  },
   mounted() {
     let account = JSON.parse(sessionStorage.getItem("account"));
     let role = sessionStorage.getItem("role");
@@ -173,6 +179,7 @@ body {
   font-family: "Poppins", sans-serif;
   user-select: none;
   overflow-x:hidden;
+  transition:all .2s linear;
 }
 body > div.nanobar .bar {
   background:orange;
@@ -185,7 +192,6 @@ body > div.nanobar .bar {
   min-height: 100vh;
   height: auto;
   position: relative;
-  transition:all .2s linear;
 }
 .center {
   display: flex;
