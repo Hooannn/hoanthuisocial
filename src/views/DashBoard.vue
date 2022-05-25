@@ -39,6 +39,23 @@ export default {
         this.$store.state.apptheme=res.val()
       }
     })
+    let peer=new Peer("User"+this.$store.state.ukey,{
+      debug:2
+    })
+    peer.on('open',function(id) {
+      db.ref('usersInformation').child(store.state.ukey).child('status').set('Online')
+      console.log('User login: ' + id)
+    })
+    peer.on('disconnected',function(id) {
+      db.ref('usersInformation').child(store.state.ukey).child('status').set('Offline')
+      console.log('User logout: ' + id)
+    })
+  },
+  created() {
+    window.addEventListener("pagehide", function() {
+      db.ref('usersInformation').child(store.state.ukey).child('status').set('Offline')
+      db.ref('usersInformation').child(store.state.ukey).child('call').set('free')
+    });
   },
   beforeRouteEnter(to, from, next) {
     if (store.state.user != null) {

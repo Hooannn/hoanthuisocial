@@ -14,8 +14,8 @@
               </div>
           </div>
           <div class="cah-control">
-              <div onMouseOver='this.style.backgroundColor="rgb(24, 141, 131,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#188d83";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#188d83;borderRadius:3px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="video center"><i class="fas fa-video icon"></i></div>
-              <div onMouseOver='this.style.backgroundColor="rgb(79, 148, 204,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#4f94cc";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#4f94cc;borderRadius:3px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="call center"><i class="fas fa-phone icon"></i></div>
+              <div @click='makeACall' onMouseOver='this.style.backgroundColor="rgb(24, 141, 131,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#188d83";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#188d83;borderRadius:3px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="video center"><i class="fas fa-video icon"></i></div>
+              <div @click='makeACall' onMouseOver='this.style.backgroundColor="rgb(79, 148, 204,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#4f94cc";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#4f94cc;borderRadius:3px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="call center"><i class="fas fa-phone icon"></i></div>
               <div @click='showInfo' onMouseOver='this.style.backgroundColor="rgb(192, 192, 192,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="silver";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:silver;borderRadius:3px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%);cursor:pointer' class="delete center"><i class="fas fa-ellipsis-h icon"></i></div>
           </div>
       </div>
@@ -168,6 +168,22 @@ export default {
         },
         showEmojis() {
             document.querySelector('#emojis').classList.toggle('show')
+        },
+        makeACall() {
+            if (this.contact.call=="oncall" || this.contact.status=='Offline') {
+                this.$bvToast.show('busy-call')
+                return
+            }
+            let newCall={
+                call:{
+                    key:this.$store.state.ukey,
+                    image:this.$store.state.avatarImg,
+                    name:this.$store.state.username
+                },
+                contact:this.contact[".key"],
+                status:'Waiting'
+            }
+            this.$store.dispatch('makeACall',newCall)
         }
     },
     computed: {

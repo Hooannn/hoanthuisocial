@@ -66,6 +66,12 @@
             <div style='backgroundColor:whitesmoke;color:black'>This feature is being update.</div> 
         </div>
       </b-toast>
+      <b-toast id="busy-call" static no-close-button auto-hide>
+        <div style='display:flex;flexDirection:column;boxShadow:1px 1px 3px rgba(0,0,0,0.4);padding:0;borderRadius:5px;overflow:hidden'>
+            <div style='backgroundColor:orange;color:white;fontSize:16px'><ion-icon style='marginRight:5px' name="information-outline"></ion-icon> Busy Call</div>
+            <div style='backgroundColor:whitesmoke;color:black'>This user is offline or is in the other call.</div> 
+        </div>
+      </b-toast>
     </div>
 </template>
 

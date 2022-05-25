@@ -127,10 +127,12 @@ const actions = {
             commit("SET_LOCATION", user[0].location);
             store.state.type=user[0].type
             store.state.credit=user[0].credit
+            /*
             db.ref("usersInformation")
               .child(user[0].key)
               .child("status")
               .set("Online");
+            */
             db.ref("usersInformation")
               .child(user[0].key)
               .child("Last Login")
@@ -581,6 +583,19 @@ const actions = {
     loader.classList.remove('show')
   },
   //
+  /* Calling handle */
+  makeACall(context, newCall) {
+    store.dispatch('loading')
+    db.ref('call').push(newCall).then(res=>{
+      db.ref('usersInformation').child(store.state.ukey).child('call').set('oncall').then(()=>{
+        router.push({name:"video-call",query:{type:'call'},params:{id:res.key}})
+        store.dispatch('unload')
+      })
+    }).catch(err=>{
+      store.dispatch('unload')
+    })
+  },
+  /* */
   /*
   getMutualFriend({ state }, targetKey) {
     let myKey = state.ukey;

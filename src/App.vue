@@ -1,5 +1,6 @@
 <template>
   <div id="app" >
+    <coming-call/>
     <theme-modal />
     <image-review/>
     <loading-view/>
@@ -100,13 +101,35 @@
 </template>
 
 <script>
+import db from '@/plugins/firebase'
 import ToastesContainer from './components/General/ToastesContainer.vue';
+import ComingCall from './components/Modal/ComingCall.vue';
 import ImageReview from './components/Modal/ImageReview.vue';
 import ThemeModal from './components/Modal/ThemeModal.vue';
 import LoadingView from './views/LoadingView.vue';
 export default {
-  components: { ToastesContainer, LoadingView, ImageReview, ThemeModal },
+  components: { ToastesContainer, LoadingView, ImageReview, ThemeModal, ComingCall },
+  firebase:{
+    call:db.ref('call')
+  },
+  data() {
+    return {
+      call:[],
+    }
+  },
   watch: {
+    call() {
+      this.call.forEach(c => {
+        if (c.contact==this.$store.state.ukey) {
+          console.log('Some one is calling')
+          this.$store.state.callComing=c
+          db.ref('usersInformation').child(this.$store.state.ukey).child('call').set('oncall')
+          setTimeout(function() {
+            document.querySelector('#app div.coming-call-modal').classList.add('show')
+          },100)
+        }
+      });
+    },
     '$store.state.apptheme'() {
       document.body.style.background=this.$store.state.apptheme.bgColor
       document.body.style.color=this.$store.state.apptheme.color

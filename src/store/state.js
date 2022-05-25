@@ -28,5 +28,6 @@ const state = {
   messagesData:[],
   postsData:[],
   filterPosts:[],
+  callComing:{},
 };
 export default state;

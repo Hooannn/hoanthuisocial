@@ -16,8 +16,8 @@
             </div>
           </div>
           <div class="control"> 
-              <div @click='videoCall' @click.prevent='minimize' onMouseOver='this.style.backgroundColor="rgb(24, 141, 131,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#188d83";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#188d83;borderRadius:3px;width:30px;height:20px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%)' class="video center"><i style='cursor:pointer;fontSize:12px' class="fas fa-video"></i></div>
-              <div @click='videoCall' @click.prevent='minimize' onMouseOver='this.style.backgroundColor="rgb(79, 148, 204,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#4f94cc";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#4f94cc;borderRadius:3px;width:30px;height:20px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%)' class="call center"><i style='cursor:pointer;fontSize:12px' class="fas fa-phone"></i></div>
+              <div @click='makeACall' @click.prevent='minimize' onMouseOver='this.style.backgroundColor="rgb(24, 141, 131,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#188d83";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#188d83;borderRadius:3px;width:30px;height:20px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%)' class="video center"><i style='cursor:pointer;fontSize:12px' class="fas fa-video"></i></div>
+              <div @click='makeACall' @click.prevent='minimize' onMouseOver='this.style.backgroundColor="rgb(79, 148, 204,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="#4f94cc";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:#4f94cc;borderRadius:3px;width:30px;height:20px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%)' class="call center"><i style='cursor:pointer;fontSize:12px' class="fas fa-phone"></i></div>
               <div onMouseOver='this.style.backgroundColor="rgb(255, 0, 0,0.7)";this.style.boxShadow="none"' onMouseOut='this.style.backgroundColor="red";this.style.boxShadow="1px 1px 2px rgb(0 0 0 / 30%)"' style='backgroundColor:red;borderRadius:3px;width:30px;height:20px;boxShadow:1px 1px 2px rgb(0 0 0 / 30%)' @click.prevent='minimize' @click='close' class="delete center"><i style='cursor:pointer;fontSize:15px' class="fas fa-times"></i></div>
           </div>
       </div>
@@ -137,23 +137,23 @@ export default {
             this.$store.dispatch('removeMsgData',this.messageKey)        
         },
         /*  */
-        videoCall() {
-            // const constraints = {
-            //     'video': true,
-            //     'audio': true
-            // }
-            // navigator.mediaDevices.getUserMedia(constraints)
-            //     .then(stream => {
-            //         document.querySelector('#app > div.dash-board > div.calling-modal.center').classList.add('show')
-            //         document.querySelector('#app > div.dash-board > div.calling-modal.center.show > div video.video1').srcObject=stream
-            //         document.querySelector('#app > div.dash-board > div.calling-modal.center.show > div video.video2').srcObject=stream
-            //     })
-            //     .catch(error => {
-            //         console.error('Error accessing media devices.', error);
-            //     });
-            this.$bvToast.show('update-notice')
+        makeACall() {
+            if (this.contactUser.call=="oncall" || this.contactUser.status=='Offline') {
+                this.$bvToast.show('busy-call')
+                return
             }
-        /*  */
+            this.close()
+            let newCall={
+                call:{
+                    key:this.$store.state.ukey,
+                    image:this.$store.state.avatarImg,
+                    name:this.$store.state.username
+                },
+                contact:this.contactUser[".key"],
+                status:'Waiting'
+            }
+            this.$store.dispatch('makeACall',newCall)
+        }
     },
     watch: {
         messageData() {

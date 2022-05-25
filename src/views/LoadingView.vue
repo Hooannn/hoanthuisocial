@@ -44,9 +44,9 @@ export default {
   border: 3px solid rgba(255,255,255,0.1);
   border-radius: 50%;
   border-top: 3px solid orange;
-  animation: spin 0.7s infinite;
+  animation: spin3 0.7s infinite;
 }
-@keyframes spin {
+@keyframes spin3 {
   0% {
     transform: rotate(0);
   }
