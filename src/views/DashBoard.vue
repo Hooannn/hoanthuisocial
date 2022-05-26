@@ -2,7 +2,7 @@
   <div @click="closeMoreInfo" class="dash-board">
     <dashboard-nav />
     <message-bar/>
-    <div @click='showMessageBar' :class='{hide:($route.name=="messages"||$route.name=="message-detail")}' class='message-bar-control center'>
+    <div @click='showMessageBar' :class='{hide:($route.name=="messages"||$route.name=="message-detail"||$route.name=="video-call")}' class='message-bar-control center'>
       <ion-icon class='icon' name="chatbox-ellipses"></ion-icon>
       <div class="mbc-unseenmsg center">
         {{$store.state.unseenMessage}}

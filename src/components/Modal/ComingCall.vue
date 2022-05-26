@@ -3,7 +3,10 @@
       <div class="ccm-inner">
           <div class="ccmi-shadow"></div>
           <div @click='close' class='ccmi-close center'><ion-icon name="close-circle-outline"></ion-icon></div>
-          <img v-if='$store.state.callComing.call' class='ccmi-image' :src="$store.state.callComing.call.image" alt="Avatar img">
+          <div class='ccmi-image center'>
+              <div style='animationDuration:1.5s' class="ccmi-shadow"></div>
+              <img style='width:100%;height:100%;objectFit:cover;border-radius: 10px;' v-if='$store.state.callComing.call' :src="$store.state.callComing.call.image" alt="Avatar img">
+          </div>
           <div v-if='$store.state.callComing.call' class="ccmi-content">
               {{$store.state.callComing.call.name}} is calling you...
           </div>
@@ -49,7 +52,7 @@ export default {
             }).catch(err=>{
                 console.log(err)
             })
-            this.$router.push({name:"video-call",query:{type:'answer'},params:{id:this.$store.state.callComing.peerid}})
+            this.$router.push({name:"video-call",query:{type:'answer',n:this.$store.state.callComing.call.name,i:this.$store.state.callComing.call.image},params:{id:this.$store.state.callComing.peerid}})
         }
     }
 }
@@ -117,6 +120,7 @@ export default {
     border:7px solid rgb(192, 192, 192,0.1);
     box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     border-radius: 15px;
+    position: relative;
 }
 .coming-call-modal .ccm-inner .ccmi-control button {
     margin:10px;
@@ -157,5 +161,14 @@ export default {
     opacity: 1;
     transform: none;
   }
+}
+/* responsive */
+@media only screen and (max-width: 425px) {
+    .coming-call-modal .ccm-inner {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        overflow: hidden;
+    }
 }
 </style>

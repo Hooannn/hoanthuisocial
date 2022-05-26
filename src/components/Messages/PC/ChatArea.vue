@@ -180,6 +180,8 @@ export default {
                     image:this.$store.state.avatarImg,
                     name:this.$store.state.username
                 },
+                ctname:this.contact.username,
+                ctimg:this.contact.avatarImg,
                 contact:this.contact[".key"],
                 status:'Waiting'
             }

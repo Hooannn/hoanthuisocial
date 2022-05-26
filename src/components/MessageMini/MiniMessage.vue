@@ -149,6 +149,8 @@ export default {
                     image:this.$store.state.avatarImg,
                     name:this.$store.state.username
                 },
+                ctname:this.contactUser.username,
+                ctimg:this.contactUser.avatarImg,
                 contact:this.contactUser[".key"],
                 status:'Waiting'
             }

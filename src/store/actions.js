@@ -588,7 +588,7 @@ const actions = {
     store.dispatch('loading')
     db.ref('call').push(newCall).then(res=>{
       db.ref('usersInformation').child(store.state.ukey).child('call').set('oncall').then(()=>{
-        router.push({name:"video-call",query:{type:'call'},params:{id:res.key}})
+        router.push({name:"video-call",query:{type:'call',n:newCall.ctname,i:newCall.ctimg},params:{id:res.key}})
         store.dispatch('unload')
       })
     }).catch(err=>{

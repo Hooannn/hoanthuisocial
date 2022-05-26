@@ -29,5 +29,9 @@ const state = {
   postsData:[],
   filterPosts:[],
   callComing:{},
+  getMyVideo:false,
+  getContactVideo:false,
+  myVideo:{},
+  contactVideo:{}
 };
 export default state;
