@@ -331,7 +331,7 @@ export default {
   border:10px solid rgb(230, 227, 227);
   border-top-color:var(--cyan);
   border-radius: 50%;
-  animation: spin .5s linear infinite;
+  animation: spin3 .5s linear infinite;
   margin:0 auto;
 }
 #app .intro-view .app__overview {
