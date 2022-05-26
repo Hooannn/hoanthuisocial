@@ -24,21 +24,21 @@
         <div style='height:100%;position:relative;flexDirection:column' class="container center">
             <video v-show='$store.state.getContactVideo' id='contactVideo' autoplay></video>
             <img style='width:320px;height:320px;borderRadius:50%' v-show='!$store.state.getContactVideo' :src="$route.query.i||'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'" alt="Contact avatar">
-            <div v-if='!$store.state.getContactVideo'>Waiting...</div>
+            <div v-if='!$store.state.connection'>Waiting...</div>
             <div :class='{hide:hide}' class="vcb-m-video center">
                 <div :class='{show:hide}' class="vcbv-control">
                     <button @click='hide=!hide' class="center btn btn-sm btn-light"><i :class='{"fa-compress-alt":!hide,"fa-compress":hide}' class="fas"></i></button>
-                    <button @click='myMuted=!myMuted,muteMyMic()' :class='{"btn-info":myMuted,"btn-light":!myMuted}' class="center btn btn-sm"><i :class='{"fa-microphone":myMuted,"fa-microphone-slash":!myMuted}' class="fas"></i></button>
-                    <button @click='myCamera=!myCamera,hideMyCamera()' :class='{"btn-info":myCamera,"btn-light":!myCamera}' class="center btn btn-sm"><i :class='{"fa-video":myCamera,"fa-video-slash":!myCamera}' class="fas"></i></button>
+                    <button @click='muteMyMic' :class='{"btn-info":myMuted,"btn-light":!myMuted}' class="center btn btn-sm"><i :class='{"fa-microphone":myMuted,"fa-microphone-slash":!myMuted}' class="fas"></i></button>
+                    <button @click='hideMyCamera' :class='{"btn-info":myCamera,"btn-light":!myCamera}' class="center btn btn-sm"><i :class='{"fa-video":myCamera,"fa-video-slash":!myCamera}' class="fas"></i></button>
                 </div>
-                <video v-show='$store.state.getMyVideo' autoplay id="myVideo"></video>
+                <video v-show='$store.state.getMyVideo' autoplay id="myVideo" muted="muted"></video>
                 <img style='width:150px;' v-show='!$store.state.getMyVideo' :src="$store.state.avatarImg" alt="My avatar">
             </div>
         </div>
     </div>
     <div class="vc-bottom-bar center">
         <button @click='endCall' class="btn btn-sm btn-danger center"><i style='transform:rotate(-135deg);' class="fas fa-phone"></i></button>
-        <button @click='contactMuted=!contactMuted' :class='{"btn-dark":!contactMuted,"btn-success":contactMuted}' class="btn btn-sm center"><i :class="{fas:true,'fa-volume-mute':!contactMuted,'fa-volume-up':contactMuted}"></i></button>
+        <button @click='muteContact' :class='{"btn-dark":!contactMuted,"btn-success":contactMuted}' class="btn btn-sm center"><i :class="{fas:true,'fa-volume-mute':!contactMuted,'fa-volume-up':contactMuted}"></i></button>
     </div>
   </div>
 </template>
@@ -53,7 +53,7 @@ export default {
         return {
             timeInterval:null,
             time:0,
-            contactMuted:true,
+            contactMuted:false,
             myMuted:true,
             myCamera:true,
             hide:false,
@@ -77,26 +77,67 @@ export default {
             this.vpeer.destroy()
             this.$store.state.getMyVideo=false
             this.$store.state.getContactVideo=false
-            if (this.$route.query.type=="call") {
-                db.ref('call').child(this.$route.params.id).remove().then(()=>{
-                    this.goBack()
-                }).catch(err=>{
-                    console.log(err)
-                })
+            if (store.state.connection==false) {
+                db.ref('call').child(this.$route.params.id).remove()
+                document.querySelector('#app > div.dash-board > div.video-call > div.vc-endcall-modal').classList.add('show')
             }
         },
         goBack() {
+            store.state.connection=false
             router.push({name:"dhome"})
             setTimeout(function(){
                 location.reload()
-            },10)
+            },100)
+        },
+        muteContact() {
+            if (!this.contactMuted) {
+                document.querySelector('#contactVideo').muted=true
+                document.querySelector('#contactVideo').load()
+                this.contactMuted=true
+                return
+            }
+            else if (this.contactMuted) {
+                document.querySelector('#contactVideo').muted=false
+                document.querySelector('#contactVideo').load()
+                this.contactMuted=false
+                return
+            }
         },
         muteMyMic() {
-            console.log("muted")
+            if (this.myMuted) {
+
+                store.state.connection.send("mutemic")
+                this.myMuted=false
+                return
+            }
+            else if (!this.myMuted) {
+
+                store.state.connection.send("unmutemic")
+                this.myMuted=true
+                return
+            }
         },
         hideMyCamera() {
-            console.log("hided")
-
+            if (this.myCamera) {
+                let tracks=document.querySelector('#myVideo').srcObject.getTracks()
+                tracks.forEach(function(track) {
+                    track.enabled=false
+                });
+                store.state.getMyVideo=false
+                store.state.connection.send("hidecam")
+                this.myCamera=false
+                return
+            }
+            else if (!this.myCamera) {
+                let tracks=document.querySelector('#myVideo').srcObject.getTracks()
+                tracks.forEach(function(track) {
+                    track.enabled=true
+                });
+                store.state.getMyVideo=true
+                store.state.connection.send("unhidecam")
+                this.myCamera=true
+                return
+            }
         },
         createPeer(id) {
             let callid=this.$route.params.id
@@ -128,6 +169,44 @@ export default {
             // connection start when contact connected
             peer.on('connection', function(conn) {
                 console.log('Someone is connecting...')
+                store.state.connection=conn
+                //receive msg
+                conn.on('data',function(msg) {
+                    console.log(msg)
+                    if (msg=="mutemic") {
+                        // document.querySelector('#contactVideo').muted=true
+                        // document.querySelector('#contactVideo').load()
+                    }
+                    if (msg=="unmutemic") {
+                        // document.querySelector('#contactVideo').muted=false
+                        // document.querySelector('#contactVideo').load()
+                    }
+                    if (msg=="hidecam") {
+                        let tracks=document.querySelector('#contactVideo').srcObject.getTracks()
+                        tracks.forEach(function(track) {
+                            track.enabled=false
+                        });
+                        store.state.getContactVideo=false
+                        /*
+                        document.querySelector('#contactVideo').srcObject=null
+                        store.state.getContactVideo=false
+                        */
+                    }
+                    if (msg=="unhidecam") {
+                        /*
+                        let newStream=new MediaStream(store.state.contactVideo)
+                        setTimeout(function() {
+                            document.querySelector('#contactVideo').srcObject=newStream
+                            store.state.getContactVideo=true
+                        },200)
+                        */
+                       let tracks=document.querySelector('#contactVideo').srcObject.getTracks()
+                        tracks.forEach(function(track) {
+                            track.enabled=true
+                        });
+                        store.state.getContactVideo=true
+                    }
+                })
                 // handle connection lost
                 conn.on('close',function() {
                     document.querySelector('#app > div.dash-board > div.video-call > div.vc-endcall-modal').classList.add('show')
@@ -171,6 +250,7 @@ export default {
                 console.log('Your peer Id:', id)
                 // connect to the caller
                 let conn=peer.connect(callid)
+                store.state.connection=conn
                 // connection start
                 conn.on('open', function() {
                     // get my source stream
@@ -183,6 +263,39 @@ export default {
                         console.log("Can't not get your own source stream")
                         console.log(err)
                     })
+                })
+                //receive msg
+                conn.on('data',function(msg) {
+                    console.log(msg)
+                    if (msg=="mutemic") {
+                        // document.querySelector('#contactVideo').muted=true
+                        // document.querySelector('#contactVideo').load()
+                    }
+                    if (msg=="unmutemic") {
+                        // document.querySelector('#contactVideo').muted=false
+                        // document.querySelector('#contactVideo').load()
+                    }
+                    if (msg=="hidecam") {
+                        let tracks=document.querySelector('#contactVideo').srcObject.getTracks()
+                        tracks.forEach(function(track) {
+                            track.enabled=false
+                        });
+                        store.state.getContactVideo=false
+                    }
+                    if (msg=="unhidecam") {
+                        let tracks=document.querySelector('#contactVideo').srcObject.getTracks()
+                        tracks.forEach(function(track) {
+                            track.enabled=true
+                        });
+                        store.state.getContactVideo=true
+                        /*
+                        let newStream=new MediaStream(store.state.contactVideo)
+                        setTimeout(function() {
+                            document.querySelector('#contactVideo').srcObject=newStream
+                            store.state.getContactVideo=true
+                        },200)
+                        */
+                    }
                 })
                 // handle connection lost
                 conn.on('close',function() {
@@ -235,6 +348,7 @@ export default {
         clearInterval(this.timeInterval)
     },
     beforeRouteLeave(to,from,next) {
+        store.state.connection=false
         db.ref('usersInformation').child(store.state.ukey).child('call').set('free')
         next()
     }

@@ -56,6 +56,10 @@ export default {
       db.ref('usersInformation').child(store.state.ukey).child('status').set('Offline')
       db.ref('usersInformation').child(store.state.ukey).child('call').set('free')
     });
+    window.onunload = () => {
+      db.ref('usersInformation').child(store.state.ukey).child('status').set('Offline')
+      db.ref('usersInformation').child(store.state.ukey).child('call').set('free')
+    };
   },
   beforeRouteEnter(to, from, next) {
     if (store.state.user != null) {

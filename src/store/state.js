@@ -32,6 +32,7 @@ const state = {
   getMyVideo:false,
   getContactVideo:false,
   myVideo:{},
-  contactVideo:{}
+  contactVideo:{},
+  connection:false
 };
 export default state;

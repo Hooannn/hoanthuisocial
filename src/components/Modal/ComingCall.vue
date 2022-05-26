@@ -1,5 +1,5 @@
 <template>
-  <div class="coming-call-modal">
+  <div v-if='$route.name!="video-call"' class="coming-call-modal">
       <div class="ccm-inner">
           <div class="ccmi-shadow"></div>
           <div @click='close' class='ccmi-close center'><ion-icon name="close-circle-outline"></ion-icon></div>

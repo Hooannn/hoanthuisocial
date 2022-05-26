@@ -119,16 +119,19 @@ export default {
   },
   watch: {
     call() {
+      this.$store.state.callComing={}
       this.call.forEach(c => {
         if (c.contact==this.$store.state.ukey) {
           console.log('Some one is calling')
           this.$store.state.callComing=c
           db.ref('usersInformation').child(this.$store.state.ukey).child('call').set('oncall')
-          setTimeout(function() {
-            document.querySelector('#app div.coming-call-modal').classList.add('show')
-          },100)
         }
       });
+    },
+    '$store.state.callComing.peerid'() {
+      if (this.$store.state.callComing.peerid!=null&&this.$store.state.callComing.peerid!=undefined&&this.$store.state.callComing.peerid!='') {
+        document.querySelector('#app div.coming-call-modal').classList.add('show')
+      }
     },
     '$store.state.apptheme'() {
       document.body.style.background=this.$store.state.apptheme.bgColor
