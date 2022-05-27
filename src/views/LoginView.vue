@@ -70,7 +70,6 @@ export default {
       firebase.auth().signInWithPopup(provider)
       .then((result) => {
       /** @type {firebase.auth.OAuthCredential} */
-          console.log(result)
         // check if this email is exist
           let isExist=false
           this.users.forEach(user => {
@@ -212,6 +211,19 @@ export default {
           this.errmsgs.push(error.message)
           this.$store.dispatch('unload')
       });
+    },
+    loginwGG_() {
+      let provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithRedirect(provider);
+      firebase.auth().getRedirectResult()
+        .then((result) => {
+          if (result.credential) {
+      /**   @type {firebase.auth.OAuthCredential} */
+          }
+            console.log(result)
+          }).catch((error) => {
+            console.log(error)
+          });
     },
     resetErrMsgs() {
       this.errmsgs = [];

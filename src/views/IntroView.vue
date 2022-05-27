@@ -2,8 +2,8 @@
 <div class='intro-view'>
   <div class="app__introduce">
       <div class="content">
-        <h1 style="fontSize: 50px; fontWeight: bolder">Join Us</h1>
-          <div class="carousel">
+        <h1 style="fontSize: 50px; fontWeight: bolder; ">Join Us</h1>
+          <div style='fontStyle:italic' class="carousel">
             <div class='active'>
               <h4 style="fontSize: 20px; color: rgba(0, 0, 0, 0.7)">
                 Fast and easy
@@ -78,12 +78,12 @@
       <!-- <ion-icon @click='previous' class='icon previous' name="chevron-back-outline"></ion-icon>
       <ion-icon @click='next' class='icon next' name="chevron-forward-outline"></ion-icon> -->
       <div v-if='load' class="loader"></div>
-      <div v-if='filterUsers.length>0' class="users-overview">
-        <div v-for='user in filterUsers' :key='user[".key"]' class="user">
-          <div class="user__avatar"><img :src="user.avatarImg"><i :class='{online:user.status=="Online",offline:user.status=="Offline"}' style='position:absolute;bottom:-2px;right:-2px;fontSize:12px' class="fas fa-circle"></i></div>
-          <div class="user__username"><strong>{{user.username}}</strong></div>
-          <div class="user__role"><i>{{user.role}}</i></div>
-        </div>
+      <div v-if='users.length>0' class="users-overview">
+          <div v-for='user in users' :key='user[".key"]' class="user">
+            <div class="user__avatar"><img :src="user.avatarImg"><i :class='{online:user.status=="Online",offline:user.status=="Offline"}' style='position:absolute;bottom:-2px;right:-2px;fontSize:12px' class="fas fa-circle"></i></div>
+            <div class="user__username"><strong>{{user.username}}</strong></div>
+            <div class="user__role"><i>{{user.role}}</i></div>
+          </div>
       </div>
     </div>
     <footer-com/>
@@ -92,29 +92,18 @@
 </template>
 
 <script>
+import carousel from 'vue-owl-carousel'
 import store from '../store/store'
 import FooterCom from '../components/General/FooterCom.vue';
 import db from "../plugins/firebase";
 export default {
-  components: {  FooterCom },
+  components: {  FooterCom, carousel },
     data() {
         return {
         users: [],
-        filterUsers:[],
         slideInterval:null,
         usersInterval:null,
         load:true
-      }
-    },
-    watch: {
-      users() {
-        //filter active member handle soon
-        this.filterUsers=[]
-        this.users.forEach(user => {
-          if (user.type=='user') {
-            this.filterUsers.unshift(user)
-          }
-        });
       }
     },
     mounted() {
@@ -366,13 +355,14 @@ export default {
 .app__overview .users-overview{
   padding:0 150px;
   user-select: none;
-  overflow-y: auto;
+  overflow:hidden;
   width: 100%;
   max-width: 100%;
   max-height: 75%;
   height: 75%;
   display:flex;
   flex-wrap: wrap;
+  overflow-y:auto ;
   align-items: center;
   position: relative;
 }
