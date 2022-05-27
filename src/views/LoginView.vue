@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <form>
-      <span @click='$router.push("/home")' style='display:flex;alignsItem:center;cursor:pointer'><ion-icon style='marginRight:5px' name="return-down-back-outline"></ion-icon> Back to Home</span>
+      <span onMouseOver='this.style.color="orange"' onMouseOut='this.style.color="unset"' class='center' @click='$router.push("/home")' style='transition:.2s linear;width:150px;cursor:pointer'><ion-icon style='marginRight:5px' name="return-down-back-outline"></ion-icon> Back to Home</span>
       <h2><strong style='fontSize:25px'>Sign In</strong></h2>
       <div class="result" :class="{ success: getStatus }" v-if="getMessage">
         {{ getMessage }}<i @click="setMessage(null)" class="fas fa-times"></i>
@@ -13,20 +13,20 @@
         <i @click="resetErrMsgs" class="fas fa-times"></i>
       </ul>
       <label for="email">Email address:</label>
-      <input v-model="email" type="email" id="email" />
+      <input placeholder="Enter your email" v-model="email" type="email" id="email" />
       <label for="password">Password:</label>
-      <input v-model="password" type="password" id="password" />
+      <input placeholder="Enter your password" v-model="password" type="password" id="password" />
       <button id="login" @click.prevent="validateLogin" type="submit">
         Login <i class="fas fa-angle-double-right"></i>
       </button>
-      <a @click="forgotPassword">Forgot password ?</a>
+      <a class='center' style='cursor:pointer;color:var(--cyan);width:150px' onMouseOver='this.style.fontWeight="bold"' onMouseOut='this.style.fontWeight="unset"' @click="$router.push({name:'forgot-password'})">Forgot password ?</a>
       <div id="more-authencation">
-        <div @click="loginwFB" id="loginwFB">
+        <div @click="loginwGG" id="loginwFB">
           <img
             src="https://imgkub.com/images/2022/04/06/google-removebg-preview.png"
           />Sign in with Google
         </div>
-        <div @click="loginwGG" id="loginwGG">
+        <div @click="loginwFB" id="loginwGG">
           <img
             src="https://image.similarpng.com/very-thumbnail/2021/01/Facebook-icon-with-flat-design-on-transparent-background-PNG.png"
           />Sign in with Facebook
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
 import store from "./../store/store";
 import db from "./../plugins/firebase";
 import logo from "./../assets/images/logo.png"
@@ -52,9 +53,8 @@ export default {
       email: "",
       password: "",
       errmsgs: [],
-      usersOnline: [],
-      isLogin: false,
-      logo:logo
+      logo:logo,
+      users:[],
     };
   },
   computed: {
@@ -62,30 +62,103 @@ export default {
   },
   methods: {
     ...mapActions(["login", "setMessage"]),
-    forgotPassword() {
-      //forgot password handling
-    },
     loginwFB() {
       //authencation with fb
+      this.resetErrMsgs()
+      this.$store.dispatch('loading')
+      let provider = new firebase.auth.FacebookAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+      /** @type {firebase.auth.OAuthCredential} */
+        console.log(result)      
+        this.$store.dispatch('unload')
+      }).catch((error) => {
+        this.errmsgs.push(error.message)
+        console.log(error)
+        this.$store.dispatch('unload')
+      });
     },
     loginwGG() {
       //authencation with gg
+      this.resetErrMsgs()
+      this.$store.dispatch('loading')
+      let provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+        /** @type {firebase.auth.OAuthCredential} */
+          console.log(result)
+          // check if this email is exist
+          let isExist=false
+          this.users.forEach(user => {
+            if (user.email==result.user.email) {
+              this.$store.commit("SET_USER", result.user);
+              this.$store.commit("SET_ROLE", user.role);
+              this.$store.commit("SET_UKEY", user[".key"]);
+              this.$store.commit("SET_AVATAR", user.avatarImg);
+              this.$store.commit("SET_USERNAME", user.username);
+              this.$store.commit("SET_DOB", user.dob);
+              this.$store.commit("SET_USERSTATUS", user.status);
+              this.$store.commit("SET_COVER", user.coverImg);
+              this.$store.commit("SET_LOCATION", user.location);
+              this.$store.state.type=user.type
+              this.$store.state.credit=user.credit
+              isExist=true
+            }
+          });
+          if (isExist) {
+            setTimeout(function(){
+              router.push({name:'dhome'})
+            },100)
+          }
+          else if (!isExist) {
+            // if this email not exist => make a new account
+            let newAccount={
+              "Last Login":new Date().getTime(),
+              avatarImg:result.user.photoURL,
+              call:"free",
+              coverImg:'https://wallpaperaccess.com/full/99810.jpg',
+              credit:0,
+              description:`Hi I'm ${result.user.displayName}`,
+              email:result.user.email,
+              gender:"Other",
+              phone:result.user.phoneNumber,
+              registerDate:new Date().toLocaleDateString(),
+              role:"Member",
+              status:"Offline",
+              statusrel:"Single",
+              type:"user",
+              username:result.user.displayName
+            }
+            db.ref('usersInformation').push(newAccount).then(res=>{
+              this.$store.commit("SET_USER", result.user);
+              this.$store.commit("SET_ROLE", newAccount.role);
+              this.$store.commit("SET_UKEY", res.key);
+              this.$store.commit("SET_AVATAR", newAccount.avatarImg);
+              this.$store.commit("SET_USERNAME", newAccount.username);
+              this.$store.commit("SET_COVER", newAccount.coverImg);
+              this.$store.commit("SET_USERSTATUS", newAccount.status);
+              this.$store.state.type=newAccount.type
+              this.$store.state.credit=newAccount.credit
+              this.$store.dispatch('unload')
+              setTimeout(function(){
+                router.push({name:'dhome'})
+              },100)
+            }).catch(err=>{
+              console.log(err)
+              this.$store.dispatch('unload')
+            })
+          }
+        }).catch((error) => {
+          this.errmsgs.push(error.message)
+          this.$store.dispatch('unload')
+      });
     },
     resetErrMsgs() {
       this.errmsgs = [];
     },
-    checkIsLogin() {
-      this.isLogin = false;
-      this.usersOnline.forEach((user) => {
-        if (user.email == this.email) {
-          this.isLogin = true;
-        }
-      });
-    },
     validateLogin() {
       this.resetErrMsgs();
-      this.checkIsLogin();
-      if (this.isLogin) {
+      if (1===5) {
         this.errmsgs.push("This account has been logined already !");
       } else {
         if (!this.email) {
@@ -117,20 +190,17 @@ export default {
       }
     },
   },
-  /*
+  
   mounted() {
-    db.ref("usersOnline")
-      .get()
-      .then((res) => {
-        let resVal = res.val();
-        this.usersOnline = Object.keys(resVal).map((key) => ({
-          key: key,
-          email: resVal[key].email,
-        }));
-      })
-      .catch((err) => console.log(err));
+    this.$store.dispatch('loading')
+    this.$rtdbBind('users',db.ref('usersInformation')).then(()=>{
+      this.$store.dispatch('unload')
+    }).catch(err=>{
+      alert(err)
+      this.$store.dispatch('unload')
+    })
   },
-  */
+  
   beforeRouteEnter(to, from, next) {
     if (store.state.user != null) {
       next({ name: "dhome" });
@@ -140,10 +210,6 @@ export default {
 </script>
 
 <style>
-a:hover {
-  font-weight: 900;
-  cursor: pointer;
-}
 .login-page {
   display: flex;
   flex-direction: column;
@@ -196,6 +262,9 @@ a:hover {
   border-bottom: 1px solid black;
   font-size: 17px;
   padding: 10px;
+}
+.login-page form input:focus {
+  border-color: orange;
 }
 .login-page form #login {
   outline: none;

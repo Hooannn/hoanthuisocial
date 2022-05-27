@@ -21,9 +21,9 @@
               </h5>
             </div>
              <div>
-               <h4 style="fontSize: 20px; color: rgba(0, 0, 0, 0.7)">Market</h4>
+               <h4 style="fontSize: 20px; color: rgba(0, 0, 0, 0.7)">Message</h4>
               <h5 style="fontSize: 15px; color: rgba(0, 0, 0, 0.7)">
-                Sell and buy anything with our real-time bidding...
+                Chat, make a call with your friends and family...
               </h5>
                </div> 
           </div>

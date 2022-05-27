@@ -30,6 +30,7 @@ const actions = {
       .auth()
       .createUserWithEmailAndPassword(newAccount.email, newAccount.password)
       .then((response) => {
+        firebase.auth().currentUser.sendEmailVerification()
         loader.classList.remove('show')
         let account = response.user;
         sessionStorage.setItem("account", JSON.stringify(account));
