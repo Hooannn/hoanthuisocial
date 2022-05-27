@@ -70,7 +70,68 @@ export default {
       firebase.auth().signInWithPopup(provider)
       .then((result) => {
       /** @type {firebase.auth.OAuthCredential} */
-        console.log(result)      
+          console.log(result)
+        // check if this email is exist
+          let isExist=false
+          this.users.forEach(user => {
+            if (user.email==result.user.email) {
+              this.$store.commit("SET_USER", result.user);
+              this.$store.commit("SET_ROLE", user.role);
+              this.$store.commit("SET_UKEY", user[".key"]);
+              this.$store.commit("SET_AVATAR", user.avatarImg);
+              this.$store.commit("SET_USERNAME", user.username);
+              this.$store.commit("SET_DOB", user.dob);
+              this.$store.commit("SET_USERSTATUS", user.status);
+              this.$store.commit("SET_COVER", user.coverImg);
+              this.$store.commit("SET_LOCATION", user.location);
+              this.$store.state.type=user.type
+              this.$store.state.credit=user.credit
+              isExist=true
+            }
+          });
+          if (isExist) {
+            setTimeout(function(){
+              router.push({name:'dhome'})
+            },100)
+          }
+          else if (!isExist) {
+            // if this email not exist => make a new account
+            let newAccount={
+              "Last Login":new Date().getTime(),
+              avatarImg:result.user.photoURL,
+              call:"free",
+              coverImg:'https://wallpaperaccess.com/full/99810.jpg',
+              credit:0,
+              description:`Hi I'm ${result.user.displayName}`,
+              email:result.user.email,
+              gender:"Other",
+              phone:result.user.phoneNumber,
+              registerDate:new Date().toLocaleDateString(),
+              role:"Member",
+              status:"Offline",
+              statusrel:"Single",
+              type:"user",
+              username:result.user.displayName
+            }
+            db.ref('usersInformation').push(newAccount).then(res=>{
+              this.$store.commit("SET_USER", result.user);
+              this.$store.commit("SET_ROLE", newAccount.role);
+              this.$store.commit("SET_UKEY", res.key);
+              this.$store.commit("SET_AVATAR", newAccount.avatarImg);
+              this.$store.commit("SET_USERNAME", newAccount.username);
+              this.$store.commit("SET_COVER", newAccount.coverImg);
+              this.$store.commit("SET_USERSTATUS", newAccount.status);
+              this.$store.state.type=newAccount.type
+              this.$store.state.credit=newAccount.credit
+              this.$store.dispatch('unload')
+              setTimeout(function(){
+                router.push({name:'dhome'})
+              },100)
+            }).catch(err=>{
+              console.log(err)
+              this.$store.dispatch('unload')
+            })
+          }      
         this.$store.dispatch('unload')
       }).catch((error) => {
         this.errmsgs.push(error.message)
@@ -86,7 +147,6 @@ export default {
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
         /** @type {firebase.auth.OAuthCredential} */
-          console.log(result)
           // check if this email is exist
           let isExist=false
           this.users.forEach(user => {
