@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="nav__contact">
-          <div class="nav__contact--about" to="#">
+          <div class="nav__contact--about" @click='$router.push({name:"pre-home"})'>
             <span
               ><ion-icon
                 style="marginRight: 5px"

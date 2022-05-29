@@ -20,11 +20,11 @@ export default {
     data() {
         return {
             themes:[
-                {name:"Sea",bgColor:"rgba(229, 240, 248, 0.904)",color:"black"},
-                {name:"Banana",bgColor:"#F6F6EB",color:"black"},
+                {name:"Sea",bgColor:"linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%)",color:"black"},
+                {name:"Banana",bgColor:"linear-gradient(315deg, #f1dfd1 0%, #f6f0ea 74%)",color:"black"},
                 {name:"Newspaper",bgColor:"url('https://wallpaperaccess.com/full/4413581.jpg')",color:"black"},
-                {name:"Summer",bgColor:"#D7ECD9",color:"black"},
-                {name:"Sweet Pink",bgColor:"#F5D5CB",color:"black"},
+                {name:"Lego Brick",bgColor:"linear-gradient(315deg, #deebdd 0%, #bbdbbe 74%)",color:"black"},
+                {name:"History Book",bgColor:"linear-gradient(315deg, #d9e4f5 0%, #f5e3e6 74%)",color:"black"},
             ]
         }
     },

@@ -228,6 +228,11 @@ const routes = [
     component: () => import('../views/IntroView.vue'),
   },
   {
+    path: '/prehome',
+    name: 'pre-home',
+    component: () => import('../views/PreHome.vue'),
+  },
+  {
     path: '/console',
     name: 'console',
     component: () => import('../views/Admin/ConsoleView.vue'),

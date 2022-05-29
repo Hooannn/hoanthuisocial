@@ -170,7 +170,7 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@200&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600&display=swap');
 .container {
   padding: 0;
 }

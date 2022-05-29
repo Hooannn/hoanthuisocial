@@ -22,7 +22,7 @@ const state = {
   },
   apptheme:{
     name:"Sea",
-    bgColor:"rgba(229, 240, 248, 0.904)",
+    bgColor:"linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%)",
     color:"black"
   },
   messagesData:[],
