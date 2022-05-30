@@ -5,7 +5,7 @@
         <!--  <div style='position:absolute;width:250px;height:250px;top:-60px;right:80px;' class="logo"><img style='width:100%;height:100%;objectFit:cover' :src="logo"></div> -->
         <span
           onMouseOver='this.style.color="orange"' onMouseOut='this.style.color="unset"' class='center'
-          @click="$router.push('/home')"
+          @click="$router.push('/prehome')"
           style="cursor: pointer;transition:.2s linear;width:150px"
           ><ion-icon
             style="marginRight: 5px"

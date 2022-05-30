@@ -1,6 +1,6 @@
 <template>
   <div class="prehome-view">
-      <div class="pv-scroll-icon center">
+      <div class="pv-scroll-icon center" style='zIndex:10'>
           <ion-icon name="chevron-down-outline"></ion-icon>
           <ion-icon style='marginTop:-40px' name="chevron-down-outline"></ion-icon>
       </div>
@@ -8,6 +8,9 @@
           <div class="container">
               <div class="pvn-logo">
                   <img @click='$router.push({name:"pre-home"})' style='height:100%;objectFit:contain;cursor:pointer' :src="logo" alt="Text logo">
+              </div>
+              <div class="pvn-navmobile center">
+                  <ion-icon name="menu-outline"></ion-icon>
               </div>
               <div class="pvn-items">
                   <div v-for='i in item' :key='i' class="pvn-item">
@@ -23,7 +26,7 @@
               <div style='animationDelay:1.7s'>Fast and easy.</div>
               <div style='animationDelay:2.4s'>Connect to the whole world...</div>
               <div style='animationDelay:3.1s;fontSize:16px;justifyContent:end;marginTop:10px' class='center'>
-                  <button @click='$router.push({name:"login"})' style='borderColor:pink;color:pink' class="pvn-button">GET START</button>
+                  <button @click='$router.push({name:"login"})' style='borderColor:lightcoral;color:lightcoral' class="pvn-button">GET START</button>
               </div>
           </div>
           <div class="pvs-image">
@@ -278,11 +281,9 @@ export default {
             console.log(document.documentElement.scrollTop)
             if (document.documentElement.scrollTop<=50) {
                 document.querySelector('#app > div.prehome-view > div.pv-sec.sec-2.center').classList.remove('active')
-                document.querySelector('#app > div.prehome-view > div.pv-scroll-icon').style.zIndex="1"
             }
             if (document.documentElement.scrollTop>50) {
                 document.querySelector('#app > div.prehome-view > div.pv-sec.sec-2.center').classList.add('active')
-                document.querySelector('#app > div.prehome-view > div.pv-scroll-icon').style.zIndex="unset"
             }
             if (document.documentElement.scrollTop<=870) {
                 document.querySelector('#app > div.prehome-view > div.pv-sec.sec-3.center').classList.remove('active')
@@ -292,9 +293,11 @@ export default {
             }
             if (document.documentElement.scrollTop<=1400) {
                 document.querySelector('#app > div.prehome-view > div.pv-pages-info').classList.remove('active')
+                document.querySelector('#app > div.prehome-view > div.pv-scroll-icon').classList.remove('hide')
             }
             if (document.documentElement.scrollTop>1400) {
                 document.querySelector('#app > div.prehome-view > div.pv-pages-info').classList.add('active')
+                document.querySelector('#app > div.prehome-view > div.pv-scroll-icon').classList.add('hide')
             }
         }
     },
@@ -331,9 +334,10 @@ export default {
     background-color: #ffffff;
     font-family: 'Raleway', sans-serif;
     background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+    overflow-x:hidden;
 }
 .prehome-view .pv-scroll-icon {
-    z-index:1;
+    z-index:10;
     position: fixed;
     bottom:100px;
     left:50%;
@@ -342,6 +346,9 @@ export default {
     animation:scroll-appear 1.5s ease-in-out infinite;
     flex-direction: column;
     color:var(--secondary);
+}
+.prehome-view .pv-scroll-icon.hide {
+    display: none;
 }
 .prehome-view .pv-navbar {
     height: 70px;
@@ -368,6 +375,9 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.prehome-view .pv-navbar .container .pvn-navmobile {
+    display: none;
 }
 .pvn-button {
     border-radius: 70px;
@@ -509,10 +519,10 @@ export default {
 }
 .prehome-view .pv-top-rates .pvtr-item {
     padding:15px;
-    border:3px solid lightsalmon;
     margin:15px 0;
     box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
     background-color:white;
+    border-radius: 10px;
 }
 .prehome-view .pv-top-rates .pvtr-item .pvtri-title{
     font-size: 20px;
@@ -585,8 +595,11 @@ export default {
         opacity: 0;
         transform: translateX(-50%) translateY(-20px);
     }
-    100% {
+    50% {
         opacity: 1;
+    }
+    100% {
+        opacity: 0;
         transform: translateX(-50%) translateY(0);
     }
 }
@@ -607,11 +620,18 @@ export default {
     }
 }
 @media only screen and (max-width: 768px) {
+    .prehome-view {
+        padding-top:55px;
+    }
     .prehome-view .pv-sec .pvs-image {
-        width: 50%;
+        width: 100%;
     }
     .prehome-view .pv-sec .pvs-content {
-        width: 50%;
+        width: 100%;
+        font-size: 16px;
+    }
+    .prehome-view > .pv-sec > .pvs-content > div:nth-child(1) {
+        width: 200px;
     }
     .prehome-view .pv-pages-info .container {
         flex-direction: column;
@@ -619,9 +639,43 @@ export default {
     .prehome-view .pv-top-rates .pvtr-item .pvtri-container {
         flex-direction: column;
     }
-    .prehome-view .pv-top-rates .pvtr-item .pvtri-container div:nth-child(1),
-    .prehome-view .pv-top-rates .pvtr-item .pvtri-container div:nth-child(2) {
+    .prehome-view .pv-top-rates .pvtr-item .pvtri-container .pvtri-detail,
+    .prehome-view .pv-top-rates .pvtr-item .pvtri-container .pvtri-des {
         margin:10px 0;
+    }
+    .prehome-view .pv-navbar {
+        height: 55px;
+    }
+    .prehome-view .pv-navbar .container {
+        justify-content: space-between;
+        width: 95%;
+    }
+    .prehome-view .pv-navbar .container .pvn-logo {
+        display: none;
+    }
+    .prehome-view .pv-navbar .container .pvn-items div {
+        display: none;
+    }
+    .prehome-view .pv-navbar .container .pvn-items {
+        width: auto;
+    }
+    .prehome-view .pv-navbar .container .pvn-navmobile {
+       display: flex;
+       font-size: 30px;
+       height: 100%;
+    }
+    .prehome-view .pv-sec {
+        flex-direction: column;
+    }
+    #app > div.prehome-view > div.pv-sec.sec-2.center.active > div.pvs-image {
+        order: 2;
+    }
+}
+@media only screen and (max-width: 575px) {
+    #app > div.prehome-view > div.pv-top-rates > div > div.pvtr-item {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 /*  */

@@ -162,7 +162,7 @@ export default {
     this.$store.state.type=type
     this.$store.state.credit=credit
     if (this.$store.state.user == null) {
-      this.$router.push("/home");
+      this.$router.push("/prehome");
     }
   },
 };

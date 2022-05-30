@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <form>
-      <span onMouseOver='this.style.color="orange"' onMouseOut='this.style.color="unset"' class='center' @click='$router.push("/home")' style='transition:.2s linear;width:150px;cursor:pointer'><ion-icon style='marginRight:5px' name="return-down-back-outline"></ion-icon> Back to Home</span>
+      <span onMouseOver='this.style.color="orange"' onMouseOut='this.style.color="unset"' class='center' @click='$router.push("/prehome")' style='transition:.2s linear;width:150px;cursor:pointer'><ion-icon style='marginRight:5px' name="return-down-back-outline"></ion-icon> Back to Home</span>
       <h2><strong style='fontSize:25px'>Sign In</strong></h2>
       <div class="result" :class="{ success: getStatus }" v-if="getMessage">
         {{ getMessage }}<i @click="setMessage(null)" class="fas fa-times"></i>

@@ -99,4 +99,16 @@ export default {
     margin:5 0;
     width: 45px;
 }
+@media only screen and (max-width: 768px) {
+    .digital-clock .card-date {
+        margin:10px;
+        font-size: 20px;
+        width: 60px;
+        height: 80px;
+    }
+    .digital-clock .card-date.second,.digital-clock .card-date.time-type {
+        height: 35px;
+        width: 30px;
+    }
+}
 </style>
