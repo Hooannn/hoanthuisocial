@@ -83,4 +83,9 @@ export default {
 .mobile-nav-bar .mnb-inner.show {
     width: 320px;
 }
+@media only screen and (max-width: 320px) {
+    .mobile-nav-bar.show .mnb-inner.show {
+        width: 100%;
+    }
+}
 </style>
