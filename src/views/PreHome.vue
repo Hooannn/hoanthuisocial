@@ -1,5 +1,6 @@
 <template>
   <div class="prehome-view">
+      <mobile-nav-bar/>
       <div class="pv-scroll-icon center" style='zIndex:10'>
           <ion-icon name="chevron-down-outline"></ion-icon>
           <ion-icon style='marginTop:-40px' name="chevron-down-outline"></ion-icon>
@@ -9,12 +10,12 @@
               <div class="pvn-logo">
                   <img @click='$router.push({name:"pre-home"})' style='height:100%;objectFit:contain;cursor:pointer' :src="logo" alt="Text logo">
               </div>
-              <div class="pvn-navmobile center">
+              <div @click='showMobileNB' class="pvn-navmobile center">
                   <ion-icon name="menu-outline"></ion-icon>
               </div>
               <div class="pvn-items">
-                  <div v-for='i in item' :key='i' class="pvn-item">
-                      {{i}}
+                  <div :class='{selected:$route.name==i.route}' v-for='i in item' :key='i.name+"pv"' class="pvn-item">
+                      {{i.name}}
                   </div>
                   <button @click='$router.push({name:"login"})' class='pvn-button'>JOIN</button>
               </div>
@@ -150,6 +151,7 @@
 </template>
 
 <script>
+import MobileNavBar from '@/components/General/MobileNavBar.vue'
 import DigitalClock from '@/components/General/DigitalClock.vue'
 import FooterBar from '@/components/General/FooterBar.vue'
 import db from '@/plugins/firebase'
@@ -166,7 +168,7 @@ import h3 from '@/assets/images/h3.png'
 import textlogo from '@/assets/images/textlogo.png'
 import carousel from 'vue-owl-carousel'
 export default {
-    components:{carousel,VueEllipseProgress,DigitalClock,FooterBar},
+    components:{carousel,VueEllipseProgress,DigitalClock,FooterBar,MobileNavBar},
     data() {
         return {
             images:[
@@ -179,7 +181,10 @@ export default {
                 h3
             ],
             item:[
-                "ABOUT","FEATURE","CONTACT","HELP"
+                {name:"ABOUT",route:'pre-home'},
+                {name:"FEATURE",route:'n'},
+                {name:"CONTACT",route:'n'},
+                {name:"HELP",route:'n'},
             ],
             users:[],
             groups:[]
@@ -244,7 +249,6 @@ export default {
                         famousUser=u
                     }
                 }
-                else console.log('no follow')
             });
             return famousUser
         },
@@ -258,7 +262,6 @@ export default {
                         famousPage=u
                     }
                 }
-                else console.log('no follow')
             });
             return famousPage
         },
@@ -278,7 +281,6 @@ export default {
     },
     methods:{
         onScroll(e) {
-            console.log(document.documentElement.scrollTop)
             if (document.documentElement.scrollTop<=50) {
                 document.querySelector('#app > div.prehome-view > div.pv-sec.sec-2.center').classList.remove('active')
             }
@@ -299,6 +301,10 @@ export default {
                 document.querySelector('#app > div.prehome-view > div.pv-pages-info').classList.add('active')
                 document.querySelector('#app > div.prehome-view > div.pv-scroll-icon').classList.add('hide')
             }
+        },
+        showMobileNB() {
+            document.querySelector('#app > div.prehome-view > div.mobile-nav-bar').classList.add('show')
+            document.querySelector('#app > div.prehome-view > div.mobile-nav-bar> div.mnb-inner').classList.add('show')
         }
     },
     mounted() {
@@ -378,6 +384,10 @@ export default {
 }
 .prehome-view .pv-navbar .container .pvn-navmobile {
     display: none;
+    transition:.2s linear;
+}
+.prehome-view .pv-navbar .container .pvn-navmobile:hover {
+    color:orange;
 }
 .pvn-button {
     border-radius: 70px;
@@ -407,7 +417,8 @@ export default {
     transition: .2s linear;
     cursor: pointer;
 }
-.prehome-view .pv-navbar .container .pvn-items .pvn-item:hover {
+.prehome-view .pv-navbar .container .pvn-items .pvn-item:hover,
+.prehome-view .pv-navbar .container .pvn-items .pvn-item.selected {
     color:orangered;
 }
 .prehome-view .pv-sec {

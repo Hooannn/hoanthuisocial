@@ -1,17 +1,17 @@
 <template>
   <div class="digital-clock">
       <div class="dc-date center">
-          <div class="card-date day">{{day}}</div>
-          <div class="card-date date">{{date}}</div>
-          <div class="card-date month">{{month}}</div>
-          <div class="card-date year">{{year}}</div>
+          <div :key='day' class="card-date day">{{day}}</div>
+          <div :key='date' class="card-date date">{{date}}</div>
+          <div :key='month' class="card-date month">{{month}}</div>
+          <div :key='year' class="card-date year">{{year}}</div>
       </div>
       <div class="dc-time center">
-          <div class="card-date hour">{{hour}}</div>
-          <div class="card-date minute">{{minute}}</div>
+          <div :key='hour' class="card-date hour">{{hour}}</div>
+          <div :key='minute' class="card-date minute">{{minute}}</div>
           <div >
-              <div class="card-date second">{{second}}</div>
-              <div class="card-date time-type">{{getTimeType}}</div>
+              <div style='animation:none' :key='second' class="card-date second">{{second}}</div>
+              <div :key='getTimeType' class="card-date time-type">{{getTimeType}}</div>
           </div>
       </div>
   </div>
@@ -93,11 +93,23 @@ export default {
     margin:10px 20px;
     font-size: 30px;
     box-shadow: 0 0 3px 2px rgba(0,0,0,0.3);
+    animation:flip 1s linear;
 }
 .digital-clock .card-date.second,.digital-clock .card-date.time-type {
     height: 45px;
     margin:5 0;
     width: 45px;
+}
+@keyframes flip {
+    0% {
+        transform: rotateX(0);
+    }
+    50% {
+        transform: rotateX(90deg);
+    }
+    100% {
+        transform: rotateX(0);
+    }
 }
 @media only screen and (max-width: 768px) {
     .digital-clock .card-date {
