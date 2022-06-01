@@ -17,7 +17,7 @@
                   <div :class='{selected:$route.name==i.route}' v-for='i in item' :key='i.name+"pv"' class="pvn-item">
                       {{i.name}}
                   </div>
-                  <button @click='$router.push({name:"login"})' class='pvn-button'>JOIN</button>
+                  <button @click='$router.push({name:"login"})' class='pvn-button'>LOGIN</button>
               </div>
           </div>
       </div>

@@ -69,7 +69,7 @@
               <router-view></router-view>
           </div>
           -->
-          <footer-com/>
+          <footer-bar/>
       </div>
   </div>
 </template>
@@ -77,11 +77,13 @@
 <script>
 import db from '../../../plugins/firebase'
 import FooterCom from '../../../components/General/FooterCom.vue'
+import FooterBar from '../../../components/General/FooterBar.vue'
 import AboutUser from '../../../components/Groups/AboutUser.vue'
 export default {
     components: {
         FooterCom,
         AboutUser,
+        FooterBar
     },
     data() {
         return {

@@ -55,16 +55,17 @@
               </div>
               <router-view :key='$route.fullPath' class='router-view'></router-view>
           </div>
-          <footer-com/>
+          <footer-bar/>
       </div>
   </div>
 </template>
 
 <script>
 import FooterCom from '../../../components/General/FooterCom.vue'
+import FooterBar from '../../../components/General/FooterBar.vue'
 import db from './../../../plugins/firebase'
 export default {
-  components: { FooterCom },
+  components: { FooterCom,FooterBar },
     data() {
         return {
             user: {

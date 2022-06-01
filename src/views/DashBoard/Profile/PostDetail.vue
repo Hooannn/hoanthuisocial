@@ -1,6 +1,7 @@
 <template>
   <div style='margin:25px auto;' class="post-detail">
-      <post-com :key='post.key' :class='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
+      <post-com v-if='post!=""' :key='post.key' :class='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
+      <div v-if='post==""'>This post has been deleted.</div>
   </div>
 </template>
 

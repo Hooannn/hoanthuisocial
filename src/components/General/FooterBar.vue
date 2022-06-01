@@ -43,8 +43,8 @@
                   </div>
                   <div style='width:100px;display:flex;justifyContent:space-between;alignItems:center' class="bf-supported">
                     <span class='center' style='color:orange;fontSize:24px'><ion-icon name="logo-firebase"></ion-icon></span>
-                    <span class='center' style='color:#5a96ff;fontSize:24px'><ion-icon name="logo-ionic"></ion-icon></span>
                     <span class='center' style='color:rgb(66, 184, 131);fontSize:24px'><ion-icon name="logo-vue"></ion-icon></span>
+                    <span><img style='width:24px;height:24px' src="https://www.npmjs.com/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9mZjEwYzJhMzFjYWU2NDBhYmE1Nzg3M2NiOThiZTMxZD9zaXplPTQ5NiZkZWZhdWx0PXJldHJvIn0.4q7HIQsk0OSzLwJ4X9d6yqz-bXevqJV8IhZGRQT0j7U"></span>
                   </div>
               </div>
           </div>
@@ -88,11 +88,7 @@ export default {
             }
         },
         goHome() {
-            if (this.$route.name=="pre-home") {
-                document.documentElement.scrollTop=0
-                return
-            }
-            this.$router.push({name:"pre-home"})
+            document.documentElement.scrollTop=0
         }
     }
 }

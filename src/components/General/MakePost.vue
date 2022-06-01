@@ -4,7 +4,7 @@
         <div style='color:orangered' class="header">Make a post<i @click='close' class="fas fa-times"></i></div>
         <div class="body">
           <div class="short-inf">
-            <img style='borderRadius:50%;width:40px;maxHeight:80%;marginLeft:10px' :src="$store.state.avatarImg">
+            <img style='borderRadius:50%;maxWidth:40px;maxHeight:80%;marginLeft:10px' :src="$store.state.avatarImg">
             <h6 style='marginLeft:10px;fontWeight:bold'>{{$store.state.username}}</h6>
           </div>
           <textarea style='width:98%;maxHeight:50%;height:50%;minHeight:50%' v-model='postContent' class='content' :placeholder="phd"></textarea>
@@ -14,9 +14,13 @@
                 <img style='width:100%;height:100%;objectFit:contain' :src="img">
               </div>
           </div>
+          <div v-if='video' style='maxWidth:150px;maxHeight:130px;overflow:hidden;position:relative'>
+            <ion-icon @click='video=null' style='cursor:pointer;position:absolute;top:0;right:0;color:orangered;zIndex:10' onMouseOver='this.style.transform="scale(1.1)"' onMouseOut='this.style.transform="scale(1)"' name="close-circle-outline"></ion-icon>
+            <video style='width:100%;height:100%;objectFit:contain' :src="video" controls></video>
+          </div>
           <div class="add-more">
             <i @click='uploadImgs' class="fas fa-images"></i>
-            <i class="fas fa-video"></i>
+            <i @click='uploadVideo' class="fas fa-video"></i>
             <i class="fas fa-grin"></i>
           </div>
         </div>
@@ -28,6 +32,7 @@
 </template>
 
 <script>
+// https://cdn.filestackcontent.com/5r1XzXxQuGmXYS3YOSRw
 import db from '../../plugins/firebase'
 import client from '../../plugins/filestack'
 export default {
@@ -36,12 +41,13 @@ export default {
       phd:`What are you thinking ${this.$store.state.username} ?`,
       postContent:'',
       imgsUpload:[],
-      myfollowers:[],    
+      myfollowers:[],
+      video:null,  
     }
   },
   methods: {
     postPost() {
-            if ((this.postContent==null || this.postContent.trim()=='') && (this.imgsUpload.length==0)) {
+            if ((this.postContent==null || this.postContent.trim()=='') && (this.imgsUpload.length==0) && (this.video==null)) {
                 this.$bvToast.show('alert-empty-blog')
             }
             else {
@@ -51,6 +57,7 @@ export default {
                     time: -(new Date().getTime()),
                     content:this.postContent,
                     images:this.imgsUpload,
+                    video:this.video,
                     type:'user-post'
                 }
                 this.$store.dispatch('loading')
@@ -72,19 +79,23 @@ export default {
                     });
                 })
                 .catch(()=>this.$store.dispatch('unload'))
-                this.postContent=''
-                this.imgsUpload=[]
                 this.close()
             }
     },
     close(e) {
       let makePost=document.querySelector('#app > div.dash-board > div.home-view > div.cover')
       makePost.classList.remove('show')
+      this.postContent=''
+      this.imgsUpload=[]
+      this.video=null
     },
     close_(e) {
       if (e.target==document.querySelector(`#home-view > div.cover.show`)) {
         let makePost=document.querySelector('#app > div.dash-board > div.home-view > div.cover')
         makePost.classList.remove('show')
+        this.postContent=''
+        this.imgsUpload=[]
+        this.video=null
       }
     },
     removeImg(img) {
@@ -92,6 +103,9 @@ export default {
             this.imgsUpload.splice(index,1)
     },
     uploadImgs() {
+      if (this.video!=null) {
+        return
+      }
       const options = {
             accept: ["image/*"],
             maxFiles: 20,
@@ -103,6 +117,21 @@ export default {
             } else if (images.length > 1 ) {
                 this.imgsUpload = [...this.imgsUpload, ...images];
             }
+          },
+        };
+      client.picker(options).open();
+    },
+    uploadVideo() {
+      if (this.imgsUpload.length!=0) {
+        return
+      }
+      const options = {
+          accept: ["video/*"],
+          videoResolution:"640x480",
+          maxFiles: 1,
+          uploadInBackground: false,
+          onUploadDone: (res) => {
+            this.video=res.filesUploaded[0].url
           },
         };
       client.picker(options).open();

@@ -69,7 +69,26 @@
       <!-- -->
     </div>
     <div class="second-col">
-      <h5 style='color:grey;margin:0 0 25px 0;borderBottom:3px solid orange;position:relative'>New Feed <i style='position:absolute;right:10px;cursor:pointer' onMouseOver="this.style.color='orange'" onMouseOut="this.style.color='unset'" class="fas fa-filter"></i></h5>
+      <div class="whatsnew">
+        <div style='width:95%;margin:0 auto;paddingBottom:10px;borderBottom:1px solid silver' class='wn-f-row center'>
+          <div @click='$router.push({name:"post",params:{key:$store.state.ukey}})' onMouseOut='this.style.opacity="1"' onMouseOver='this.style.opacity="0.8"' style='cursor:pointer;maxWidth:40px;maxHeight:40px;borderRadius:50%;overflow:hidden'><img style='width:100%;height:100%;objectFit:cover' :src="$store.state.avatarImg" alt="Ava image"></div>
+          <div @click='showMakePost' onMouseOut='this.style.opacity="1"' onMouseOver='this.style.opacity="0.8"' style='cursor:pointer;width:100%;padding:0 10px;height:40px;'><input disabled style='cursor:pointer;width:100%;height:100%;outline:none;border:none;backgroundColor:white;borderRadius:50px;border:1px solid silver;padding:0 10px;' :placeholder='"What is new "+$store.state.username+" ?"' type="text"></div>
+        </div>
+        <div style='width:95%;margin:0 auto;paddingTop:10px' class='wn-s-row center'>
+          <button @click='showMakePost' style='color:white;width:33%' class="btn btn-sm btn-warning">
+            <i class="fas fa-images"></i>
+          </button>
+          <button @click='showMakePost' style='color:white;width:33%' class="btn btn-sm btn-success">
+            <i class="fas fa-video"></i>
+          </button>
+          <button @click='showMakePost' style='color:white;width:33%' class="btn btn-sm btn-danger">
+            <i class="fas fa-grin"></i>
+          </button>
+        </div>
+      </div>
+      <!--
+      <h5 style='color:grey;margin:0 0 25px 0;borderBottom:3px solid orange;position:relative'>Posts <i style='position:absolute;right:10px;cursor:pointer' onMouseOver="this.style.color='orange'" onMouseOut="this.style.color='unset'" class="fas fa-filter"></i></h5>
+      -->
       <div class="posts-list">
         <post-com :class='post.key' v-for='post in $store.state.filterPosts' :key='post.key' :postKey='post.key' :authorKey='post.author' :postImages="post.images"/>
         <div style='fontSize:14px;padding:0 0 25px 0' v-if='$store.state.filterPosts.length==0'>You have no post in current. Press see more to load more posts. You can add more friend, follow page, join some group to get new post from them.</div>
@@ -98,13 +117,14 @@
       <!-- -->
     </div>
     </div>
-    <footer-com/>
+    <footer-bar/>
   </div>
 </template>
 
 <script>
 import router from '../../../router/router'
 import FooterCom from '../../../components/General/FooterCom.vue'
+import FooterBar from '../../../components/General/FooterBar.vue'
 import MakePost from '../../../components/General/MakePost.vue'
 import RecommendGroup from '../../../components/General/RecommendGroup.vue'
 import RecommendPerson from '../../../components/General/RecommendPerson.vue'
@@ -113,7 +133,7 @@ import MakeGroupForm from '../../../components/Groups/MakeGroupForm.vue'
 import db from './../../../plugins/firebase'
 import MakePageForm from '@/components/Page/MakePageForm.vue'
 export default {
-  components: { FooterCom, PostCom, RecommendPerson, MakePost, RecommendGroup, MakeGroupForm, MakePageForm },
+  components: { FooterCom, PostCom, RecommendPerson, MakePost, RecommendGroup, MakeGroupForm, MakePageForm, FooterBar },
   data() {
     return {
       searchInput:'',
@@ -382,7 +402,16 @@ export default {
 }
 /*2 colum */
   /* posts-list */
-
+.home-view .second-col .whatsnew {
+  background-color:white;
+  border-radius: 3px;
+  box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.2);
+  padding:15px 0;
+  margin-bottom: 25px;
+}
+.home-view .second-col .whatsnew input::placeholder {
+  font-size: 14px;
+}
 /*3 cloum */
   /* post introduce */
 .home-view .third-col .post-introduce {

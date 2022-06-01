@@ -21,13 +21,18 @@
                   </div>
                   <div style='display:flex;flexWrap:wrap;width:100%;justifyContent:space-around;backgroundColor:whitesmoke;boxShadow:0 0 2px rgba(0,0,0,0.5)' class="images-pre">
                       <div v-for='(img,index) in imagesUpload' :key='index' style='width:30%;padding:10px;maxHeight:100px;position:relative' class="image-pre">
-                          <ion-icon @click='removeImg(img)' style='cursor:pointer;position:absolute;top:0;right:0;color:orangered;' onMouseOver='this.style.transform="scale(1.1)"' onMouseOut='this.style.transform="scale(1)"' name="close-circle-outline"></ion-icon>
-                          <img style='width:100%;height:100%;objectFit:contain;' :src="img" >
+                          <ion-icon @click='removeImg(img)' style='cursor:pointer;position:absolute;top:0;right:0;color:orangered;zIndex:10' onMouseOver='this.style.transform="scale(1.1)"' onMouseOut='this.style.transform="scale(1)"' name="close-circle-outline"></ion-icon>
+                          <img style='width:100%;height:100%;objectFit:contain' :src="img" >
                       </div>
+                  </div>
+                  <div v-if='video' style='overflow:hidden;width:100%;position:relative' class="video-pre">
+                      <ion-icon @click='video=null' style='fontSize:20px;cursor:pointer;position:absolute;top:0;right:0;color:orangered;zIndex:10' onMouseOver='this.style.transform="scale(1.1)"' onMouseOut='this.style.transform="scale(1)"' name="close-circle-outline"></ion-icon>
+                      <video style='width:100%;height:100%;objectFit:contain' :src="video" controls></video>
                   </div>
               </div>
               <div style='width:100%;display:flex;justifyContent:flex-end;height:30px' class="control">
                   <ion-icon @click='uploadImages' style='height:100%;fontSize:30px;width:30px;backgroundColor:grey;color:white;borderRadius:2px;cursor:pointer' name="image-outline"></ion-icon>
+                  <ion-icon @click='uploadVideo' style='height:100%;fontSize:30px;width:30px;backgroundColor:lightblue;color:white;borderRadius:2px;cursor:pointer' name="film-outline"></ion-icon>
                   <button @click='postPost' style='color:white;fontWeight:900;height:100%' class="btn btn-sm btn-warning">Post</button>
               </div>
           </div>
@@ -67,6 +72,7 @@ export default {
             placeholder:'What is new, '+this.$store.state.username + " ?",
             postContent:'',
             imagesUpload:[],
+            video:null,
             user:{},
             myfollowers:[],
         }
@@ -74,7 +80,7 @@ export default {
     methods: {
         postPost() {
             //handle add notification soon
-            if ((this.postContent==null || this.postContent.trim()=='') && (this.imagesUpload.length==0)) {
+            if ((this.postContent==null || this.postContent.trim()=='') && (this.imagesUpload.length==0) && (this.video==null)) {
                 this.$bvToast.show('alert-empty-blog')
             }
             else {
@@ -84,7 +90,8 @@ export default {
                     time: -(new Date().getTime()),
                     content:this.postContent,
                     images:this.imagesUpload,
-                    type:'user-post'
+                    type:'user-post',
+                    video:this.video
                 }
                 this.$store.dispatch('loading')
                 db.ref('postsData').push(newPost).then(res => {
@@ -107,6 +114,7 @@ export default {
                 .catch(()=> {
                     this.$store.dispatch('unload')
                 })
+                this.video=null
                 this.postContent=''
                 this.imagesUpload=[]
             }
@@ -116,6 +124,9 @@ export default {
             this.imagesUpload.splice(index,1)
         },
         uploadImages() {
+            if (this.video==null) {
+                return
+            }
             const options = {
             accept: ["image/*"],
             maxFiles: 20,
@@ -128,6 +139,21 @@ export default {
                 this.imagesUpload = [...this.imagesUpload, ...images];
             }
             },
+            };
+            client.picker(options).open();
+        },
+        uploadVideo() {
+            if (this.imagesUpload.length!=0) {
+                 return
+            }
+            const options = {
+                accept: ["video/*"],
+                videoResolution:"640x480",
+                maxFiles: 1,
+                uploadInBackground: false,
+                onUploadDone: (res) => {
+                    this.video=res.filesUploaded[0].url
+                },
             };
             client.picker(options).open();
         }

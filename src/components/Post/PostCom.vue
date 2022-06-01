@@ -36,6 +36,9 @@
         <pre style='max-width:100%;minHeight:50px;wordWrap:break-word;overflowX:auto' class="text">
           {{post.content}}
         </pre>
+        <div v-if='post.video' class="video">
+          <video :src="post.video" controls></video>
+        </div>
         <div class="images">
           <div v-for='(image,index) in postImages' :key='index' class='image'>
             <img style='cursor:pointer' @click='showImage(image)' :src="image" >
@@ -541,6 +544,7 @@ pre {
   border-radius: 3px;
   display: none;
   transition:.1s;
+  z-index: 10;
 }
 .post-com .post-header .control .drop-down.show {
   display: flex;
@@ -612,6 +616,13 @@ pre {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+.post-com .post-content .video {
+  width: 100%;
+}
+.post-com .post-content .video video {
+  width: 100%;
+  object-fit: cover;
 }
 /*react */
 .post-com .post-react {
