@@ -4,13 +4,19 @@
           <div class="sbh-title center">Messages</div>
           <div class="sbh-search center">
               <div class="icon center"><ion-icon name="search-outline"></ion-icon></div>
-              <input @blur='onBlur' @focus="onFocus" placeholder="Search..." type="text">
+              <input :disabled='load' v-model='searchVal' @blur='onBlur' @focus="onFocus" placeholder="Search..." type="text">
           </div>
       </div>
-      <div class="sb-content">
+      <div v-if='searchResults.length==0&&searchVal==""' class="sb-content">
           <div class='loader center' v-if='load'></div>
           <div class='center' v-if='myContacts.length==0&&messages.length'>You don't have any contacts.</div>
-          <contact-user v-for='(contact,index) in myContacts' :key='index' :contact='contact'/>
+          <contact-user v-for='(contact,index) in myContacts' :key='"fullContact"+index' :contact='contact'/>
+      </div>
+      <div v-if='searchResults.length>0' class="sb-content">
+          <contact-user v-for='(contact,index) in searchResults' :key='"searchContact"+index' :contact='contact'/>
+      </div>
+      <div v-if='searchResults.length==0&&searchVal!=""' class="sb-content">
+          <div class='center'>No contacts found.</div>
       </div>
       <div v-if='myContacts.length==0&&messages.length&&$route.name=="messages"' id='waiting-picture'>
           <div id="cat">
@@ -39,8 +45,11 @@ export default {
   components: { ContactUser },
     data() {
         return {
+            searchVal:'',
+            searchResults:[],
             messages:[],
             myContacts:[],
+            contactNameList:[],
             load:true,
             defaultMessage:0,
             cat:cat,
@@ -55,6 +64,38 @@ export default {
                     this.myContacts.push(message)
                 }
             });
+        },
+        myContacts() {
+            this.contactNameList=[]
+            this.myContacts.forEach(c => {
+                if (c.user1==this.$store.state.ukey) {
+                    db.ref('usersInformation').child(c.user2).get().then(res=>{
+                        let contactWithName=c
+                        contactWithName.contactName=res.val().username
+                        this.contactNameList.push(contactWithName)
+                    })
+                }
+                else if (c.user2==this.$store.state.ukey) {
+                    db.ref('usersInformation').child(c.user1).get().then(res=>{
+                        let contactWithName=c
+                        contactWithName.contactName=res.val().username
+                        this.contactNameList.push(contactWithName)
+                    })
+                }
+            });
+        },
+        searchVal(e) {
+            if (e.trim()!=''&&e!=null) {
+                this.searchResults=[]
+                this.contactNameList.forEach(c => {
+                    if (c.contactName.toLowerCase().trim().replace(/\s+/g, "").includes(e.toLowerCase().trim().replace(/\s+/g, ""))) {
+                        this.searchResults.push(c)
+                    }
+                });
+            }
+            else {
+                this.searchResults=[]
+            }
         }
     },
     methods:{

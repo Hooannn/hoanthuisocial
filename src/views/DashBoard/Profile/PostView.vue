@@ -124,7 +124,7 @@ export default {
             this.imagesUpload.splice(index,1)
         },
         uploadImages() {
-            if (this.video==null) {
+            if (this.video!=null) {
                 return
             }
             const options = {

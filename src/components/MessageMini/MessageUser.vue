@@ -1,5 +1,8 @@
 <template>
   <div v-if='messageKey!=""' @click='showMessage' class="message-user">
+      <!--
+      <card-information style='right:100%;left:unset;top:0' class='show' :authorKey='ukey'/>
+      -->
       <img style='width:100%;height:100%;objectFit:cover;borderRadius:15%' :src="user.avatarImg">
       <!-- <span class='username'>{{user.username}}</span> -->
       <div v-if='unseenMsg>0' class='unseen-msg'>{{unseenMsg}}</div>
@@ -9,7 +12,9 @@
 
 <script>
 import db from '../../plugins/firebase'
+import CardInformation from '../Card/CardInformation.vue'
 export default {
+  components: { CardInformation },
     props: {
         ukey:String,
     },
@@ -69,7 +74,7 @@ export default {
     height: 50px;
     border-radius: 50%;
     position: relative;
-    margin:25px 0;
+    margin:25px auto;
     transition: all .2s ease-in-out;
 }
 .message-user:hover {

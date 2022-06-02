@@ -15,7 +15,7 @@
           <span v-if='user.type=="user"' @click='viewProfile'>View Profile</span>
           <span v-if='user.type=="page"' @click='viewPage'>View Page</span>
           <span @click='unfriend ' v-if='type=="friend" && $store.state.ukey==$route.params.key'>Unfriend</span>
-          <span @click='acceptInvite' v-if='type=="friendsrequested" && $store.state.ukey==$route.params.key'>Accept</span>
+          <span @click='acceptInvite' v-if='type=="friendsrequested" && $store.state.ukey==$route.params.key && load==false'>Accept</span>
           <span @click='refuseInvite' v-if='type=="friendsrequested" && $store.state.ukey==$route.params.key'>Refuse</span>
           <span @click='cancleInvite' v-if='type=="friendsrequesting" && $store.state.ukey==$route.params.key'>Cancle</span>
           <span @click='unfollow' v-if='type=="following" && $store.state.ukey==$route.params.key'>Unfollow</span>     
@@ -36,6 +36,9 @@ export default {
   },
   data() {
     return {
+      load:true,
+      messageKey:null,
+      messagesData:[],
       user:{},
       targetFriendRequestedList:[],
       targetFriendList:[],
@@ -99,11 +102,13 @@ export default {
         db.ref('usersInformation').child(this.ukey).child('notifications').push(noti)
         db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend').push(this.ukey).catch(err=>console.log(err))
         db.ref('usersInformation').child(this.ukey).child('friends').child('isfriend').push(this.$store.state.ukey).catch(err=>console.log(err))
-        let newMessage= {
-          user1:this.$store.state.ukey,
-          user2:this.ukey,
+        if (this.messageKey==null) {
+          let newMessage= {
+            user1:this.$store.state.ukey,
+            user2:this.ukey,
+          }
+          db.ref('messagesData').push(newMessage)
         }
-        db.ref('messagesData').push(newMessage)
         let fkey
         e.forEach(element => {
           if (element[".value"]==store.state.ukey) {
@@ -182,7 +187,18 @@ export default {
           }
         });
       });
-    }
+    },
+    messagesData() {
+      this.messageKey=null
+      this.messagesData.forEach(message => {
+        if (message['user1']==this.$store.state.ukey && message['user2']==this.ukey) {
+          this.messageKey=message[".key"]
+        }
+        else if (message['user2']==this.$store.state.ukey && message['user1']==this.ukey) {
+          this.messageKey=message[".key"]
+        }
+      });
+    },
   },
   mounted() {
     this.$rtdbBind('user',db.ref('usersInformation').child(this.ukey))
@@ -190,6 +206,9 @@ export default {
     this.$rtdbBind('targetFriendRequestingList',db.ref('usersInformation').child(this.ukey).child('friends').child('friendrequesting'))
     this.$rtdbBind('targetFriendList',db.ref('usersInformation').child(this.ukey).child('friends').child('isfriend'))
     this.$rtdbBind('myFriendList',db.ref('usersInformation').child(this.$store.state.ukey).child('friends').child('isfriend'))
+    this.$rtdbBind('messagesData',db.ref('messagesData')).then(()=>{
+      this.load=false
+    })
   }
 }
 </script>

@@ -10,10 +10,11 @@
       </div>
       <group-info :groupKey="post.groupKey" v-if='$route.name=="dhome" && myGroups.find(group=>group.groupKey==post.groupKey)'/>
       <div class="post-header">
-        <div @click='viewAuthorProfile' class="author">
-          <div class="avatar"><img style='width:100%;height:100%;objectFit:cover' :src="author.avatarImg"></div>
+        <div class="author">
+          <card-information :authorKey='authorKey'/>
+          <div @click='viewAuthorProfile' class="avatar"><img style='width:100%;height:100%;objectFit:cover' :src="author.avatarImg"></div>
           <div class="infor">
-            <div class="username">{{author.username}}</div>
+            <div @click='viewAuthorProfile' class="username">{{author.username}}</div>
             <div style='display:flex; alignItems:center'>
               <div style='fontSize:13px;color:grey' v-if='post.time==null||post.time==undefined'>Loading...</div>
               <div v-if='post.time!=null||post.time!=undefined' class="time">{{getTime}} </div>
@@ -70,13 +71,14 @@
 </template>
 
 <script>
+import CardInformation from '@/components/Card/CardInformation.vue'
 import EventBus from '../../eventbus'
 import db from '../../plugins/firebase'
 import PostComment from '../Post/PostComment.vue'
 import GroupInfo from './GroupInfo.vue'
 import PostReport from './PostReport.vue'
 export default {
-  components: { PostComment, GroupInfo, PostReport },
+  components: { PostComment, GroupInfo, PostReport, CardInformation },
   props:{
     postKey:String,
     authorKey:String,
@@ -412,10 +414,6 @@ export default {
         }
       }
       //style image
-      if (this.$store.state.ukey!=this.authorKey) {
-        let authorElement=document.querySelector(`div.post-com.${this.postKey} .post-header .author`)
-        authorElement.style.cursor='pointer'
-      }
     }
     //let images =document.querySelectorAll(`#app > div > div.profile-view > div.profile__content > div.container > div.post-view > div.second-col > div.posts-list div.post-com.${this.postKey} > div.post-content > div.images div.image`)
     // add esc event to close image preview
@@ -566,18 +564,28 @@ pre {
   border-bottom-color: rgb(240, 186, 85);
 }
 .post-com .post-header .author{
-  width: 80%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  position: relative;
+}
+.post-com .post-header .author:hover .card-information {
+  width: 350px;
+  visibility: visible;
+  opacity: 1;
+  height: auto;
 }
 .post-com .post-header .author .avatar{
-  width: 30px;
-  height: 30px;
+  max-width: 30px;
+  max-height: 30px;
   overflow: hidden;
   border-radius: 50%;
   margin-right: 9px;
+  cursor: pointer;
+}
+.post-com .post-header .author .avatar:hover {
+  opacity: 0.8;
 }
 .post-com .post-header .author .infor{
   width: 100%;
@@ -589,7 +597,11 @@ pre {
 }
 .post-com .post-header .author .infor .username{
   font-size: 16px;
+  cursor: pointer;
   font-weight: 800;
+}
+.post-com .post-header .author .infor .username:hover {
+  text-decoration: underline;
 }
 .post-com .post-header .author .infor .time{
   font-size: 14px;
@@ -674,5 +686,11 @@ pre {
 }
 .post-com .post-input-comment.show {
   display:flex;
+}
+@media only screen and (max-width: 380px) {
+  /* For mobile phones: */
+    .post-com .post-header .author:hover .card-information {
+      width: 250px;
+    }
 }
 </style>

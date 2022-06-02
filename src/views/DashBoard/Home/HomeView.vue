@@ -69,6 +69,7 @@
       <!-- -->
     </div>
     <div class="second-col">
+      <story-area/>
       <div class="whatsnew">
         <div style='width:95%;margin:0 auto;paddingBottom:10px;borderBottom:1px solid silver' class='wn-f-row center'>
           <div @click='$router.push({name:"post",params:{key:$store.state.ukey}})' onMouseOut='this.style.opacity="1"' onMouseOver='this.style.opacity="0.8"' style='cursor:pointer;maxWidth:40px;maxHeight:40px;borderRadius:50%;overflow:hidden'><img style='width:100%;height:100%;objectFit:cover' :src="$store.state.avatarImg" alt="Ava image"></div>
@@ -132,8 +133,9 @@ import PostCom from '../../../components/Post/PostCom.vue'
 import MakeGroupForm from '../../../components/Groups/MakeGroupForm.vue'
 import db from './../../../plugins/firebase'
 import MakePageForm from '@/components/Page/MakePageForm.vue'
+import StoryArea from '@/components/Stories/StoryArea.vue'
 export default {
-  components: { FooterCom, PostCom, RecommendPerson, MakePost, RecommendGroup, MakeGroupForm, MakePageForm, FooterBar },
+  components: { FooterCom, PostCom, RecommendPerson, MakePost, RecommendGroup, MakeGroupForm, MakePageForm, FooterBar, StoryArea },
   data() {
     return {
       searchInput:'',

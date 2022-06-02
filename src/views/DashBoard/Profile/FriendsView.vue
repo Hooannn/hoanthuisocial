@@ -7,7 +7,7 @@
           </div>
       </div>
       <div v-if='$store.state.ukey==$route.params.key' class="requested-friends">
-          <h5 @click='frqedSlide'><div>Friend Requested Sent <span style='fontSize:13px'>({{friendsRequested.length}})</span></div><i class="fas" :class='{"fa-chevron-down":slide.frqed==false,"fa-chevron-up":slide.frqed==true}'></i></h5>
+          <h5 @click='frqedSlide'><div>Friend Invite <span style='fontSize:13px'>({{friendsRequested.length}})</span></div><i class="fas" :class='{"fa-chevron-down":slide.frqed==false,"fa-chevron-up":slide.frqed==true}'></i></h5>
           <div class='list'>
               <friend-com :type='"friendsrequested"' :class='friend[".key"]' v-for='friend in friendsRequested' :key='friend[".key"]' :ukey='friend[".value"]' :fKey='friend[".key"]'/>
           </div>

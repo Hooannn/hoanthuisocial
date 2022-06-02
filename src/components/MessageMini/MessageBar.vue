@@ -39,10 +39,9 @@ export default {
     flex-direction: column;
     transition: all .3s ease-in-out;
     z-index: 10;
-    overflow-x:hidden;
 }
 .message-bar.show {
-    width: 60px;
+    width: 70px;
     visibility: visible;
     opacity: 1;
 }
