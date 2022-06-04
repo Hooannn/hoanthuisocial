@@ -1,12 +1,13 @@
 <template>
   <div v-if='messageKey!=""' @click='showMessage' class="message-user">
-      <!--
-      <card-information style='right:100%;left:unset;top:0' class='show' :authorKey='ukey'/>
-      -->
-      <img style='width:100%;height:100%;objectFit:cover;borderRadius:15%' :src="user.avatarImg">
+      
+      <card-information style='fontSize:14px;padding:5px 0' :authorKey='ukey'/>
+      
+      <img :src="user.avatarImg">
       <!-- <span class='username'>{{user.username}}</span> -->
       <div v-if='unseenMsg>0' class='unseen-msg'>{{unseenMsg}}</div>
       <div :class='{online:user.status=="Online"}' class="status"></div>
+      {{user.username}}
   </div>
 </template>
 
@@ -28,7 +29,15 @@ export default {
         }
     },
     methods: {
-        showMessage() {
+        showMessage(e) {
+            if (
+                e.target!=document.querySelector(`div.message-user.messagecontact${this.ukey}`)&&
+                e.target!=document.querySelector(`div.message-user.messagecontact${this.ukey}>img`)&&
+                e.target!=document.querySelector(`div.message-user.messagecontact${this.ukey} div.unseenMsg`)&&
+                e.target!=document.querySelector(`div.message-user.messagecontact${this.ukey} div.status`)
+                ) {
+                return
+            }
             if (this.messageKey!='' && this.messageKey!=null) {
                 this.$store.dispatch('addMsgData', this.messageKey)
             }
@@ -70,17 +79,49 @@ export default {
 
 <style>
 .message-user {
+    cursor: pointer;
+    display: flex;
+    width: 100%;
+    position: relative;
+    padding:25px 0;
+    transition: all .2s linear;
+    align-items: center;
+}
+.message-user .card-information .ci-content .cic-body .cicb-image {
+    width: 70px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+.message-user .card-information .ci-content .cic-body .cicb-image>div {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+}
+.message-user .card-information .ci-content .cic-control button {
+    width: 40%;
+    font-size: 13px;
+}
+.message-user .card-information .ci-content .cic-body .cicb-detail>div:first-child {
+    font-weight: bolder;
+    color:steelblue;
+    cursor: pointer;
+    font-size: 16px;
+}
+.message-user>img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    position: relative;
-    margin:25px auto;
-    transition: all .2s ease-in-out;
+    margin:0 10px;
 }
 .message-user:hover {
-    cursor: pointer;
-    width: 55px;
-    height: 55px;
+    background-color:lightblue;
+}
+.message-user:hover .card-information{
+    width: 250px;
+    height: auto;
+    opacity: 1;
+    visibility: visible;
 }
 /*
 .message-user .username{
@@ -117,8 +158,7 @@ export default {
     height: 13px;
     border-radius: 50%;
     position: absolute;
-    bottom: 0px;
-    right: 1px;
+    right:10px;
     background-color:grey;
 }
 .message-user .unseen-msg{

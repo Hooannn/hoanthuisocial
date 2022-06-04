@@ -687,6 +687,13 @@ pre {
 .post-com .post-input-comment.show {
   display:flex;
 }
+/* */
+@media only screen and (max-width: 1024px) {
+  /* For mobile phones: */
+    .post-com .post-header .author:hover .card-information {
+      width: 300px;
+    }
+}
 @media only screen and (max-width: 380px) {
   /* For mobile phones: */
     .post-com .post-header .author:hover .card-information {

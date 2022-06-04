@@ -1,9 +1,9 @@
 <template>
   <div class="message-bar">
-      <message-user v-show='$store.state.currentContact>0' v-for='(user,index) in users' :ukey='user[".key"]' :key='user[".key"]+index'/>
-      <div class='message-user' style='cursor:unset;width:auto;height:auto;fontSize:14px;color:red;borderRadius:10px;textAlign:center;fontWeight:bold' v-if='$store.state.currentContact==0'>
-          You have no contact now.
-      </div>
+        <message-user v-show='$store.state.currentContact>0' v-for='(user,index) in users' :class='"messagecontact"+user[".key"]' :ukey='user[".key"]' :key='user[".key"]+index'/>
+        <div class='message-user' style='justifyContent:center;backgroundColor:transparent;cursor:unset;width:auto;height:auto;fontSize:14px;color:black;borderRadius:10px;textAlign:center;fontWeight:bold;' v-if='$store.state.currentContact==0'>
+          You have no contact in current.
+        </div>
   </div>
 </template>
 
@@ -27,7 +27,6 @@ export default {
 .message-bar {
     height: 95vh;
     max-height: 95vh;
-    overflow-y:auto;
     width: 0;
     opacity: 0;
     visibility: hidden;
@@ -37,11 +36,17 @@ export default {
     top:50px;
     display: flex;
     flex-direction: column;
-    transition: all .3s ease-in-out;
+    transition: all .4s linear;
     z-index: 10;
+    overflow-y:scroll ;
+    overflow-x:hidden;
+    padding-bottom: 200px;
+    background-color:rgb(221, 234, 252);
+    border-left:3px solid lightsteelblue;
+    box-shadow: 0 0 2px 1px rgba(0,0,0,0.3);
 }
 .message-bar.show {
-    width: 70px;
+    width: 260px;
     visibility: visible;
     opacity: 1;
 }

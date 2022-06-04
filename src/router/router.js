@@ -22,6 +22,11 @@ const routes = [
       //   ]
       // },
       {
+        path:'story/:id',
+        name:'story',
+        component:() => import ('../components/Stories/StoryDetail.vue'),
+      },
+      {
         path:'video-call/:id',
         name:'video-call',
         component:() => import ('../components/Modal/VideoCall.vue'),

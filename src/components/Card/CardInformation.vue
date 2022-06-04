@@ -323,6 +323,23 @@ export default {
     display: none;
 }
 /*  */
+@media only screen and (max-width: 1024px) {
+  /* For mobile phones: */
+    .card-information .ci-content .cic-body .cicb-image>div {
+        max-width: 60px;
+        max-height: 60px;
+    }
+    .card-information {
+        font-size: 15px;
+    }
+    .card-information .ci-content .cic-control button {
+        font-size: 13.5px;
+        width: 40%;
+    }
+    .card-information .ci-content .cic-body .cicb-detail>div:first-child {
+        font-size:16px;
+    }
+}
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
     .card-information .ci-content .cic-control .cicc-contact_p {
@@ -334,6 +351,10 @@ export default {
     .card-information .ci-content .cic-body .cicb-image>div {
         max-width: 50px;
         max-height: 50px;
+    }
+    .card-information .ci-content .cic-control button {
+        font-size: 12px;
+        width: 40%;
     }
 }
 </style>

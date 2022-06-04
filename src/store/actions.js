@@ -719,7 +719,7 @@ const actions = {
     //
     let mbControl=document.querySelector('#app > div.dash-board > div.message-bar-control.center')
     let mbCIcon=document.querySelector('#app > div.dash-board > div.message-bar-control.center .icon')
-    let mb=document.querySelector('#app > div.dash-board > div.message-bar')
+    let mb=document.querySelector('#app > div.dash-board > div.message-bar ')
     let usermessage=document.querySelectorAll('#app > div.dash-board > div.message-bar.show > div.message-user')
     usermessage.forEach(usermsg => {
       if (e.target.parentElement != usermsg && e.target!=mbCIcon && e.target!=mbControl && e.target!=mb) {
