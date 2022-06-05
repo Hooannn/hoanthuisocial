@@ -9,8 +9,10 @@
       <div class="sac-cover"></div>
     </div>
     <div v-if='!load && stories.length>0' class="sa-container">
-      <carousel class='sac-carousel' style='position:relative' :autoHeight="true" :dots="false" :autoplay="false" :nav="false" :items=3>
-        <story-card v-for='(s,index) in stories' :key='"Story"+index' :story='s'/>
+      <carousel :responsive="{0:{items:1},500:{items:2},768:{items:1},990:{items:2},1200:{items:3}}" class='sac-carousel' style='position:relative' :dots="false" :autoplay="false" :nav="false" :items=3>
+        <template slot="prev"><span class="prev"><ion-icon onMouseOut='this.style.fontSize="25px"' onMouseOver='this.style.fontSize="28px"' style='zIndex:5;fontSize:25px;position:absolute;left:0;top:50%;transform:translateY(-50%);cursor:pointer;color:orangered' class='previous-icon' name="chevron-back-circle-outline"></ion-icon></span></template>
+          <story-card v-for='(s,index) in stories' :key='"Story"+index' :story='s'/>
+        <template slot="next"><span class="next"><ion-icon onMouseOut='this.style.fontSize="25px"' onMouseOver='this.style.fontSize="28px"' style='zIndex:5;fontSize:25px;position:absolute;right:0;top:50%;transform:translateY(-50%);cursor:pointer;color:orangered' class='next-icon' name="chevron-forward-circle-outline"></ion-icon></span></template>
       </carousel>
     </div>
     <div v-if='load' class="sa-container center">
@@ -23,6 +25,8 @@
 </template>
 
 <script>
+import store from '@/store/store'
+import client from '@/plugins/filestack'
 import db from '@/plugins/firebase'
 import carousel from 'vue-owl-carousel'
 import StoryCard from './StoryCard.vue'
@@ -32,12 +36,80 @@ export default {
       return {
         stories:[],
         load:true,
+        file:null,
+      }
+    },
+    watch:{
+      "$store.state.file" (val) {
+        this.file = val
+      },
+      stories() {
+        this.stories.forEach(story => {
+          if (this.isOverADay(story.time)) {
+            db.ref('stories').child(story[".key"]).update({
+              status:"expired",
+            })
+          }
+        });
+      }
+    },
+    methods:{
+      // onCh(e) {
+      //   let file = e.target.files[0]
+      //   var video = document.createElement('video');
+      //   video.preload = 'metadata';
+
+      //   video.onloadedmetadata = function() {
+      //     window.URL.revokeObjectURL(video.src);
+      //     var duration = video.duration;
+      //     console.log(duration)
+      //   }
+      //   video.src = URL.createObjectURL(file);;
+      // },
+      isOverADay(date) {
+        let now = new Date()
+        let then = new Date(date)
+        let diff = now.getTime() - then.getTime()
+        if (diff > 86400000) {
+          return true
+        }
+        return false
+      },
+      uploadFiles() {
+        const options = {
+            accept: ["image/*","video/*"],
+            maxFiles: 1,
+            uploadInBackground: false,
+            onUploadDone: (res) => {
+            let file=res.filesUploaded[0]
+            if (file.mimetype.substring(0,5)=='image') {
+              store.state.file={
+                url:file.url,
+                duration:15
+              }
+            }
+            else if (file.mimetype.substring(0,5)=='video') {
+              var video = document.createElement('video');
+              video.preload = 'metadata';
+              video.onloadedmetadata = function() {
+                window.URL.revokeObjectURL(video.src);
+                var duration = video.duration;
+                store.state.file={
+                  url:file.url,
+                  duration:duration
+                }
+              }
+              video.src = file.url;
+            }
+          },
+        };
+      client.picker(options).open();
       }
     },
     mounted() {
-      this.$rtdbBind('stories',db.ref('stories')).then(()=>{
+      this.$rtdbBind('stories',db.ref('stories').orderByChild("status").equalTo("active")).then(()=>{
         this.stories = this.stories.sort((a,b)=>{
-          return b.createdAt - a.createdAt
+          return b.time - a.time
         })
         this.load=false
       }).catch(err=>{
@@ -61,6 +133,7 @@ export default {
   display: flex;
   align-items: center;
   height: 220px;
+  width: 100%;
   background-color:rgba(255,255,255,0.5);
   border-radius: 3px;
   box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.2);
@@ -123,12 +196,49 @@ export default {
 /* */
 .stories-area .sa-container {
   height: 100%;
-  width: 100%;
+  width: 75%;
+  align-items: center;
+  display: flex;
 }
 .stories-area .sa-container .sac-carousel {
   height: 220px;
+  width: 100%;
   display: flex;
   align-items: center;
 }
 /* */
+/*  */
+@media only screen and (max-width: 1200px) {
+  /* For mobile phones: */
+    .stories-area .sa-container {
+      width: 70%;
+    }
+}
+@media only screen and (max-width: 990px) {
+  /* For mobile phones: */
+    .stories-area .sa-container {
+      width: 60%;
+    }
+}
+@media only screen and (max-width: 360px) {
+  /* For mobile phones: */
+    .stories-area .sa-container {
+      width: 50%;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .stories-area .sa-container {
+      width: 70%;
+    }
+}
+@media only screen and (max-width: 450px) {
+    .stories-area .sa-container {
+      width: 65%;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .stories-area .sa-container {
+      width: 60%;
+    }
+}
 </style>

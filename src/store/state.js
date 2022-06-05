@@ -33,6 +33,7 @@ const state = {
   getContactVideo:false,
   myVideo:{},
   contactVideo:{},
-  connection:false
+  connection:false,
+  file:null,
 };
 export default state;

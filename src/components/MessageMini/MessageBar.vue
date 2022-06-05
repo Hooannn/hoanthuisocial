@@ -4,6 +4,9 @@
         <div class='message-user' style='justifyContent:center;backgroundColor:transparent;cursor:unset;width:auto;height:auto;fontSize:14px;color:black;borderRadius:10px;textAlign:center;fontWeight:bold;' v-if='$store.state.currentContact==0'>
           You have no contact in current.
         </div>
+        <div style=';width:100%;' class='center'>
+            <button @click='$router.push({name:"messages"})' class="btn btn-dark">Full Message</button>
+        </div>
   </div>
 </template>
 
@@ -40,7 +43,6 @@ export default {
     z-index: 10;
     overflow-y:scroll ;
     overflow-x:hidden;
-    padding-bottom: 200px;
     background-color:rgb(221, 234, 252);
     border-left:3px solid lightsteelblue;
     box-shadow: 0 0 2px 1px rgba(0,0,0,0.3);
