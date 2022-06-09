@@ -1,6 +1,6 @@
 <template>
   <div class="stories-area" >
-    <div class="sa-create">
+    <div @click='showStoryModal' class="sa-create">
       <img :src="$store.state.avatarImg" alt="Image">
       <div class="sac-icon">
         <ion-icon name="add-circle"></ion-icon>
@@ -36,13 +36,9 @@ export default {
       return {
         stories:[],
         load:true,
-        file:null,
       }
     },
     watch:{
-      "$store.state.file" (val) {
-        this.file = val
-      },
       stories() {
         this.stories.forEach(story => {
           if (this.isOverADay(story.time)) {
@@ -66,6 +62,9 @@ export default {
       //   }
       //   video.src = URL.createObjectURL(file);;
       // },
+      showStoryModal() {
+        document.querySelector('#app div.new-story-modal').classList.add('show');
+      },
       isOverADay(date) {
         let now = new Date()
         let then = new Date(date)
@@ -75,36 +74,6 @@ export default {
         }
         return false
       },
-      uploadFiles() {
-        const options = {
-            accept: ["image/*","video/*"],
-            maxFiles: 1,
-            uploadInBackground: false,
-            onUploadDone: (res) => {
-            let file=res.filesUploaded[0]
-            if (file.mimetype.substring(0,5)=='image') {
-              store.state.file={
-                url:file.url,
-                duration:15
-              }
-            }
-            else if (file.mimetype.substring(0,5)=='video') {
-              var video = document.createElement('video');
-              video.preload = 'metadata';
-              video.onloadedmetadata = function() {
-                window.URL.revokeObjectURL(video.src);
-                var duration = video.duration;
-                store.state.file={
-                  url:file.url,
-                  duration:duration
-                }
-              }
-              video.src = file.url;
-            }
-          },
-        };
-      client.picker(options).open();
-      }
     },
     mounted() {
       this.$rtdbBind('stories',db.ref('stories').orderByChild("status").equalTo("active")).then(()=>{

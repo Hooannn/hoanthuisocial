@@ -1,7 +1,7 @@
 <template>
   <div class="story-detail-cover">
         <div @click='$router.go(-1)' class="sdc-close center"><ion-icon name="close-circle-outline"></ion-icon></div>
-        <div class="sd-sidebar"></div>
+        <!--<div class="sd-sidebar"></div>-->
         <div v-if='load' class="sd-main center">
             <div class='sdm-loader'></div>
         </div>
@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div v-if='story.type=="image"' class="sdms-content">
-                    <img style='width:100%;height:100%;objectFit:cover' :src="story.images[0]" alt="Image">
+                    <img style='width:100%;height:100%;objectFit:cover;pointerEvents:none' :src="story.images[0]" alt="Image">
                 </div>
                 <div v-if='story.type=="video"' class="sdms-content">
                     <video autoplay style='width:100%;height:100%;objectFit:cover;pointerEvents:none' :src="story.videos[0]" alt="Video"></video>
@@ -206,12 +206,15 @@ export default {
     color:orange;
     transform: rotate(90deg);
 }
+/*
 .story-detail-cover .sd-sidebar {
     width: 30%;
     height: 100%;
 }
+*/
 .story-detail-cover .sd-main {
-    width: 70%;
+    /*width: 70%;*/
+    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;

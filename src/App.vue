@@ -1,5 +1,6 @@
 <template>
   <div id="app" >
+    <new-story/>
     <coming-call/>
     <theme-modal />
     <image-review/>
@@ -107,8 +108,9 @@ import ComingCall from './components/Modal/ComingCall.vue';
 import ImageReview from './components/Modal/ImageReview.vue';
 import ThemeModal from './components/Modal/ThemeModal.vue';
 import LoadingView from './views/LoadingView.vue';
+import NewStory from './components/Modal/NewStory.vue';
 export default {
-  components: { ToastesContainer, LoadingView, ImageReview, ThemeModal, ComingCall },
+  components: { ToastesContainer, LoadingView, ImageReview, ThemeModal, ComingCall, NewStory },
   firebase:{
     call:db.ref('call')
   },
